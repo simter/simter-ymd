@@ -1,7 +1,9 @@
 package tech.simter.ymd.service
 
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import tech.simter.ymd.dto.YearNode
+import tech.simter.ymd.po.Ymd
 import java.time.Month
 import java.time.MonthDay
 import java.time.Year
@@ -15,6 +17,13 @@ import java.time.YearMonth
  * @author RJ
  */
 interface YmdService {
+  /**
+   * Save or update all the given [ymd] entity.
+   *
+   * Result the mono signal when save successful.
+   */
+  fun save(vararg ymd: Ymd): Mono<Void>
+
   /**
    * Find all years of the specific [type].
    *

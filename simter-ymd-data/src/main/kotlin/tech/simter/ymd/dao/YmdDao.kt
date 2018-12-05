@@ -1,7 +1,9 @@
 package tech.simter.ymd.dao
 
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import tech.simter.ymd.dto.YearNode
+import tech.simter.ymd.po.Ymd
 import tech.simter.ymd.service.YmdService
 import java.time.Month
 import java.time.MonthDay
@@ -16,6 +18,13 @@ import java.time.YearMonth
  * @author RJ
  */
 interface YmdDao {
+  /**
+   * Save or update all the given [ymd] entity.
+   *
+   * Result the mono signal when save successful.
+   */
+  fun save(vararg ymd: Ymd): Mono<Void>
+
   /**
    * Find all years of the specific [type].
    *
