@@ -22,7 +22,12 @@ class YmdDaoImpl @Autowired constructor(
   private val repository: YmdJpaRepository
 ) : YmdDao {
   override fun save(vararg ymd: Ymd): Mono<Void> {
-    TODO("not implemented")
+    return try {
+      repository.saveAll(ymd.asIterable())
+      Mono.empty()
+    } catch (e: Exception) {
+      Mono.error(e)
+    }
   }
 
   override fun findYears(type: String): Flux<Year> {
