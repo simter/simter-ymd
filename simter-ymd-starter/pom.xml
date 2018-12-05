@@ -129,7 +129,7 @@
     <profile>
       <id>dev-reactive-mongo</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
         <spring-active-profiles>dev,db-mongo-embed</spring-active-profiles>
@@ -169,7 +169,7 @@
       <!-- development environment: spring-boot + webflux + hibernate-jpa + hsql) -->
       <id>dev-jpa-hsql</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
         <spring-active-profiles>dev,db-hsql</spring-active-profiles>
