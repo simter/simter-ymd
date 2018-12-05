@@ -8,8 +8,8 @@ import java.io.Serializable
  * @author RJ
  */
 data class YmdPK(
-  val type: String,
-  val year: Int,
+  val type: String = "",
+  val year: Int = 0,
   val month: Int = 0,
   val day: Int = 0
 ) : Serializable
