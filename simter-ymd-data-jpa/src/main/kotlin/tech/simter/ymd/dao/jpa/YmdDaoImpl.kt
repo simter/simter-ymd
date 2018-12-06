@@ -30,7 +30,7 @@ class YmdDaoImpl @Autowired constructor(
   }
 
   override fun findYears(type: String): Flux<Year> {
-    TODO("not implemented")
+    return Flux.fromStream(repository.findYears(type).map { Year.of(it) })
   }
 
   override fun findMonths(type: String, year: Year): Flux<Month> {
