@@ -2,7 +2,6 @@ package tech.simter.ymd.dao
 
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import tech.simter.ymd.dto.YearNode
 import tech.simter.ymd.po.Ymd
 import tech.simter.ymd.service.YmdService
 import java.time.Month
@@ -46,14 +45,4 @@ interface YmdDao {
    * The result is ordered by day desc.
    */
   fun findDays(type: String, yearMonth: YearMonth): Flux<MonthDay>
-
-  /**
-   * Find all years of the specific [type].
-   *
-   * Also find all months of the latest year if it exists.
-   * Then if the latest year has one month at least, continue find all days of the latest month.
-   *
-   * The result is ordered by year desc, month desc, day desc.
-   */
-  fun findYearsWithLatestDay(type: String): Flux<YearNode>
 }

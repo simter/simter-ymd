@@ -6,7 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import tech.simter.ymd.dao.YmdDao
-import tech.simter.ymd.dto.YearNode
+import tech.simter.ymd.dto.YearToMonthDayNode
+import tech.simter.ymd.dto.YearToMonthNode
 import tech.simter.ymd.po.Ymd
 import java.time.Month
 import java.time.MonthDay
@@ -39,7 +40,11 @@ class YmdServiceImpl @Autowired constructor(
     return dao.findDays(type, yearMonth)
   }
 
-  override fun findYearsWithLatestDay(type: String): Flux<YearNode> {
-    return dao.findYearsWithLatestDay(type)
+  override fun findYearsWithLatestMonth(type: String): Flux<YearToMonthNode> {
+    TODO("not implemented")
+  }
+
+  override fun findYearsWithLatestDay(type: String): Flux<YearToMonthDayNode> {
+    TODO("not implemented")
   }
 }
