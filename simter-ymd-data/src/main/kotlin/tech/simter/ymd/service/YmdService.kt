@@ -39,8 +39,7 @@ interface YmdService {
   fun findMonths(type: String, year: Year): Flux<Month>
 
   /**
-   * Find all
-   * days of the specific [type] and [yearMonth].
+   * Find all days of the specific [type] and [yearMonth].
    *
    * The result is ordered by day desc.
    */

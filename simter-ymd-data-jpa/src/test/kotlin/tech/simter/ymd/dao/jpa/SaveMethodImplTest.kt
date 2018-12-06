@@ -7,8 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.test.StepVerifier
 import tech.simter.ymd.dao.YmdDao
-import tech.simter.ymd.dao.jpa.TestUtils.randomYmd
 import tech.simter.ymd.po.YmdPK
+import tech.simter.ymd.TestUtils.randomYmd
 
 /**
  * Test [YmdDaoImpl.save].
