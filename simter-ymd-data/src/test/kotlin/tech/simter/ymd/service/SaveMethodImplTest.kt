@@ -8,7 +8,7 @@ import tech.simter.ymd.dao.YmdDao
 
 @SpringJUnitConfig(YmdServiceImpl::class)
 @MockBean(YmdDao::class)
-class YmdServiceImplTest @Autowired constructor(
+class SaveMethodImplTest @Autowired constructor(
   private val dao: YmdDao,
   private val service: YmdService
 ) {
