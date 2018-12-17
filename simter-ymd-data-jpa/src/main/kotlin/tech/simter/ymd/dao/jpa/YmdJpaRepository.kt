@@ -17,4 +17,9 @@ import java.util.stream.Stream
 interface YmdJpaRepository : JpaRepository<Ymd, YmdPK> {
   @Query("select year from Ymd where type = ?1 and month = 0 and day = 0 order by year desc")
   fun findYears(type: String): Stream<Int>
+
+  @Query("select month from Ymd where type = ?1 and year = ?2 order by month desc")
+  fun findMonths(type: String, year: Int): Stream<Int>
+
+
 }
