@@ -38,6 +38,9 @@ class YmdDaoImpl @Autowired constructor(
   }
 
   override fun findDays(type: String, yearMonth: YearMonth): Flux<MonthDay> {
-    TODO()
+    return Flux.fromStream(
+      repository.findDays(type, yearMonth.year, yearMonth.monthValue)
+        .map { MonthDay.of(yearMonth.month, it) }
+    )
   }
 }
