@@ -63,16 +63,19 @@ class YmdServiceImpl @Autowired constructor(
     return dao.findMonths(type, year)
       .collectList()
       .flatMap { months ->
-        // find latest month's days
-        val latestMonth = months[0]
-        val latestMonthWithDays = dao.findDays(type = type, yearMonth = YearMonth.of(year.value, latestMonth.value))
-          .map { it.dayOfMonth }
-          .collectList()
-          .map { MonthToDayNode(month = latestMonth.value, days = it) }
+        if (months.isEmpty()) Mono.empty()
+        else {
+          // find latest month's days
+          val latestMonth = months[0]
+          val latestMonthWithDays = dao.findDays(type = type, yearMonth = YearMonth.of(year.value, latestMonth.value))
+            .map { it.dayOfMonth }
+            .collectList()
+            .map { MonthToDayNode(month = latestMonth.value, days = if (it.isEmpty()) null else it) }
 
-        // concat with the rest of months
-        latestMonthWithDays.map {
-          listOf(it).plus(months.filterIndexed { index, _ -> index > 0 }.map { m -> MonthToDayNode(month = m.value) })
+          // concat with the rest of months
+          latestMonthWithDays.map {
+            listOf(it).plus(months.filterIndexed { index, _ -> index > 0 }.map { m -> MonthToDayNode(month = m.value) })
+          }
         }
       }.flatMapIterable { it }
   }
