@@ -7,5 +7,5 @@ package tech.simter.ymd.dto
  */
 data class YearToMonthNode(
   val year: Int, // 4 digits
-  val months: List<Int> = listOf() // 1 to 12
+  val months: List<Int>? = null // 1 to 12
 )

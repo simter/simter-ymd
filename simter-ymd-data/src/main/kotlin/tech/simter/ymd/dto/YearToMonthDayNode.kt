@@ -7,5 +7,5 @@ package tech.simter.ymd.dto
  */
 data class YearToMonthDayNode(
   val year: Int,
-  val months: List<MonthToDayNode> = listOf()
+  val months: List<MonthToDayNode>? = null
 )

@@ -9,5 +9,5 @@ import java.time.MonthDay
  */
 data class MonthToDayNode(
   val month: Int, // 1 to 12
-  val days: List<Int> = listOf() // 1 to 31
+  val days: List<Int>? = null // 1 to 31
 )
