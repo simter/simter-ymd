@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import tech.simter.ymd.dao.YmdDao
+import tech.simter.ymd.dto.MonthToDayNode
 import tech.simter.ymd.dto.YearToMonthDayNode
 import tech.simter.ymd.dto.YearToMonthNode
 import tech.simter.ymd.po.Ymd
@@ -40,11 +41,56 @@ class YmdServiceImpl @Autowired constructor(
     return dao.findDays(type, yearMonth)
   }
 
-  override fun findYearsWithLatestMonth(type: String): Flux<YearToMonthNode> {
-    TODO("not implemented")
+  override fun findYearsWithLatestYearMonths(type: String): Flux<YearToMonthNode> {
+    return dao.findYears(type)
+      .collectList()
+      .flatMap { years ->
+        // find latest year's months
+        val latestYear = years[0]
+        val latestYearWithMonths: Mono<YearToMonthNode> = dao.findMonths(type = type, year = latestYear)
+          .map { it.value }
+          .collectList()
+          .map { YearToMonthNode(year = latestYear.value, months = it) }
+
+        // concat with the rest of years
+        latestYearWithMonths.map {
+          listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> YearToMonthNode(year = y.value) })
+        }
+      }.flatMapIterable { it }
   }
 
-  override fun findYearsWithLatestDay(type: String): Flux<YearToMonthDayNode> {
-    TODO("not implemented")
+  override fun findMonthsWithLatestMonthDays(type: String, year: Year): Flux<MonthToDayNode> {
+    return dao.findMonths(type, year)
+      .collectList()
+      .flatMap { months ->
+        // find latest month's days
+        val latestMonth = months[0]
+        val latestMonthWithDays = dao.findDays(type = type, yearMonth = YearMonth.of(year.value, latestMonth.value))
+          .map { it.dayOfMonth }
+          .collectList()
+          .map { MonthToDayNode(month = latestMonth.value, days = it) }
+
+        // concat with the rest of months
+        latestMonthWithDays.map {
+          listOf(it).plus(months.filterIndexed { index, _ -> index > 0 }.map { m -> MonthToDayNode(month = m.value) })
+        }
+      }.flatMapIterable { it }
+  }
+
+  override fun findYearsWithLatestMonthDays(type: String): Flux<YearToMonthDayNode> {
+    return dao.findYears(type)
+      .collectList()
+      .flatMap { years ->
+        // find latest year's months with latest month's days
+        val latestYear = years[0]
+        val latestYearWithMonths = findMonthsWithLatestMonthDays(type = type, year = latestYear)
+          .collectList()
+          .map { YearToMonthDayNode(year = latestYear.value, months = it) }
+
+        // concat with the rest of years
+        latestYearWithMonths.map {
+          listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> YearToMonthDayNode(year = y.value) })
+        }
+      }.flatMapIterable { it }
   }
 }
