@@ -26,7 +26,7 @@ class YmdServiceImpl @Autowired constructor(
   private val dao: YmdDao
 ) : YmdService {
   override fun save(vararg ymd: Ymd): Mono<Void> {
-    TODO("not implemented")
+    return dao.save(*ymd)
   }
 
   override fun findYears(type: String): Flux<Year> {
