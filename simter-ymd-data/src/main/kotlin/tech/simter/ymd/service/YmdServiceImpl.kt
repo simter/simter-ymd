@@ -87,15 +87,18 @@ class YmdServiceImpl @Autowired constructor(
     return dao.findYears(type)
       .collectList()
       .flatMap { years ->
-        // find latest year's months with latest month's days
-        val latestYear = years[0]
-        val latestYearWithMonths = findMonthsWithLatestMonthDays(type = type, year = latestYear)
-          .collectList()
-          .map { YearToMonthDayNode(year = latestYear.value, months = it) }
+        if (years.isEmpty()) Mono.empty()
+        else {
+          // find latest year's months with latest month's days
+          val latestYear = years[0]
+          val latestYearWithMonths = findMonthsWithLatestMonthDays(type = type, year = latestYear)
+            .collectList()
+            .map { YearToMonthDayNode(year = latestYear.value, months = if (it.isEmpty()) null else it) }
 
-        // concat with the rest of years
-        latestYearWithMonths.map {
-          listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> YearToMonthDayNode(year = y.value) })
+          // concat with the rest of years
+          latestYearWithMonths.map {
+            listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> YearToMonthDayNode(year = y.value) })
+          }
         }
       }.flatMapIterable { it }
   }
