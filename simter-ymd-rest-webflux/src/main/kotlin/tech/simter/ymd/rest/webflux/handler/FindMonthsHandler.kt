@@ -1,17 +1,19 @@
 package tech.simter.ymd.rest.webflux.handler
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.*
+import org.springframework.web.reactive.function.server.ServerResponse.noContent
+import org.springframework.web.reactive.function.server.ServerResponse.ok
 import reactor.core.publisher.Mono
 import tech.simter.ymd.service.YmdService
 import java.time.Year
-import java.time.format.DateTimeFormatter
 
 /**
  * Find all months of the specific type and year [FindMonthsHandler]
  *
+ * @author RJ
  * @author XA
  */
 @Component("tech.simter.ymd.rest.webflux.handler.FindMonthsHandler")
@@ -20,13 +22,12 @@ class FindMonthsHandler @Autowired constructor(
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
     val type = request.pathVariable("type")
-    val year = Year.parse(
-      request.queryParam("y").get(), DateTimeFormatter.ofPattern("yyyy"))
+    val year = request.queryParam("y").map { Year.of(it.toInt()) }.get()
 
     return ymdService.findMonths(type, year).collectList()
       .flatMap {
-        if (it.isEmpty()) ServerResponse.noContent().build() // 204
-        else ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8).syncBody(it) // 200
+        if (it.isEmpty()) noContent().build() // 204
+        else ok().contentType(APPLICATION_JSON_UTF8).syncBody(it) // 200
       }
   }
 
