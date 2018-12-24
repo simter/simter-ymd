@@ -6,10 +6,6 @@ import tech.simter.ymd.dto.MonthToDayNode
 import tech.simter.ymd.dto.YearToMonthDayNode
 import tech.simter.ymd.dto.YearToMonthNode
 import tech.simter.ymd.po.Ymd
-import java.time.Month
-import java.time.MonthDay
-import java.time.Year
-import java.time.YearMonth
 
 /**
  * The Service Interface.
@@ -31,21 +27,21 @@ interface YmdService {
    *
    * The result is ordered by year desc.
    */
-  fun findYears(type: String): Flux<Year>
+  fun findYears(type: String): Flux<Int>
 
   /**
    * Find all months of the specific [type] and [year].
    *
    * The result is ordered by month desc.
    */
-  fun findMonths(type: String, year: Year): Flux<Month>
+  fun findMonths(type: String, year: Int): Flux<Int>
 
   /**
-   * Find all days of the specific [type] and [yearMonth].
+   * Find all days of the specific [type], [year] and [month].
    *
    * The result is ordered by day desc.
    */
-  fun findDays(type: String, yearMonth: YearMonth): Flux<MonthDay>
+  fun findDays(type: String, year: Int, month: Int): Flux<Int>
 
   /**
    * Find all years of the specific [type].
@@ -63,7 +59,7 @@ interface YmdService {
    *
    * The result is ordered by month desc, day desc.
    */
-  fun findMonthsWithLatestMonthDays(type: String, year: Year): Flux<MonthToDayNode>
+  fun findMonthsWithLatestMonthDays(type: String, year: Int): Flux<MonthToDayNode>
 
   /**
    * Find all years of the specific [type].

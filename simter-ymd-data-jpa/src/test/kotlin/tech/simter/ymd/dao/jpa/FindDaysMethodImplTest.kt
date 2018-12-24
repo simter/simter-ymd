@@ -25,7 +25,8 @@ class FindDaysMethodImplTest @Autowired constructor(
 ) {
   @Test
   fun `Found nothing`() {
-    StepVerifier.create(dao.findDays("type1", YearMonth.now())).verifyComplete()
+    val ym = YearMonth.now()
+    StepVerifier.create(dao.findDays("type1", ym.year, ym.monthValue)).verifyComplete()
   }
 
   @Test
@@ -49,43 +50,31 @@ class FindDaysMethodImplTest @Autowired constructor(
     repository.saveAll(allYmds)
 
     // invoke and verify t1y1m1
-    StepVerifier.create(dao.findDays(t1, y1m1).collectList())
+    StepVerifier.create(dao.findDays(t1, y1m1.year, y1m1.monthValue).collectList())
       .consumeNextWith {
         assertEquals(t1y1m1Ymds.size, it.size)
-        t1y1m1Ymds.forEachIndexed { index, ymd ->
-          assertEquals(ymd.month, it[index].monthValue)
-          assertEquals(ymd.day, it[index].dayOfMonth)
-        }
+        t1y1m1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
       }.verifyComplete()
 
     // invoke and verify t1y1m2
-    StepVerifier.create(dao.findDays(t1, y1m2).collectList())
+    StepVerifier.create(dao.findDays(t1, y1m2.year, y1m2.monthValue).collectList())
       .consumeNextWith {
         assertEquals(t1y1m2Ymds.size, it.size)
-        t1y1m2Ymds.forEachIndexed { index, ymd ->
-          assertEquals(ymd.month, it[index].monthValue)
-          assertEquals(ymd.day, it[index].dayOfMonth)
-        }
+        t1y1m2Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
       }.verifyComplete()
 
     // invoke and verify t1y2m1
-    StepVerifier.create(dao.findDays(t1, y2m1).collectList())
+    StepVerifier.create(dao.findDays(t1, y2m1.year, y2m1.monthValue).collectList())
       .consumeNextWith {
         assertEquals(t1y2m1Ymds.size, it.size)
-        t1y2m1Ymds.forEachIndexed { index, ymd ->
-          assertEquals(ymd.month, it[index].monthValue)
-          assertEquals(ymd.day, it[index].dayOfMonth)
-        }
+        t1y2m1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
       }.verifyComplete()
 
     // invoke and verify t2y1m1
-    StepVerifier.create(dao.findDays(t2, y1m1).collectList())
+    StepVerifier.create(dao.findDays(t2, y1m1.year, y1m1.monthValue).collectList())
       .consumeNextWith {
         assertEquals(t2y1m1Ymds.size, it.size)
-        t2y1m1Ymds.forEachIndexed { index, ymd ->
-          assertEquals(ymd.month, it[index].monthValue)
-          assertEquals(ymd.day, it[index].dayOfMonth)
-        }
+        t2y1m1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
       }.verifyComplete()
   }
 }

@@ -24,7 +24,6 @@ import tech.simter.ymd.rest.webflux.UnitTestConfiguration
 import tech.simter.ymd.rest.webflux.handler.FindYearsHandler.Companion.REQUEST_PREDICATE
 import tech.simter.ymd.rest.webflux.handler.FindYearsHandlerTest.Cfg
 import tech.simter.ymd.service.YmdService
-import java.time.Year
 
 /**
  * Test [FindYearsHandler]
@@ -62,7 +61,7 @@ class FindYearsHandlerTest @Autowired constructor(
   fun `Found years without query param`() {
     // mock
     val type = randomString()
-    val years = (2 downTo 1).map { Year.of(2000 + it) }
+    val years = (2 downTo 1).map { 2000 + it }
     `when`(ymdService.findYears(type)).thenReturn(Flux.just(*years.toTypedArray()))
 
     // invoke
@@ -72,8 +71,8 @@ class FindYearsHandlerTest @Autowired constructor(
       .expectHeader().contentType(APPLICATION_JSON_UTF8)
       .expectBody()
       .jsonPath("$.length()").isEqualTo(years.size)
-      .jsonPath("$.[0]").isEqualTo(years[0].value)
-      .jsonPath("$.[1]").isEqualTo(years[1].value)
+      .jsonPath("$.[0]").isEqualTo(years[0])
+      .jsonPath("$.[1]").isEqualTo(years[1])
     verify(ymdService).findYears(type)
     verify(ymdService, times(0)).findYearsWithLatestMonthDays(type)
     verify(ymdService, times(0)).findYearsWithLatestYearMonths(type)

@@ -11,7 +11,6 @@ import reactor.test.StepVerifier
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.dao.YmdDao
-import java.time.Year
 
 @SpringJUnitConfig(YmdServiceImpl::class)
 @MockBean(YmdDao::class)
@@ -34,7 +33,7 @@ class FindYearsMethodImplTest @Autowired constructor(
   fun `Found something`() {
     // mock
     val type = randomString()
-    val year = Year.of(randomInt(1900, 3000))
+    val year = randomInt(1900, 3000)
     `when`(dao.findYears(type)).thenReturn(Flux.just(year))
 
     // invoke and verify

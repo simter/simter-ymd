@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import reactor.core.publisher.Mono
 import tech.simter.ymd.service.YmdService
-import java.time.YearMonth
 
 /**
  * Find all days of the specific type, year and month [FindDaysHandler]
@@ -23,12 +22,10 @@ class FindDaysHandler @Autowired constructor(
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
     val type = request.pathVariable("type")
-    val yearMonth = YearMonth.of(
-      request.pathVariable("year").toInt(),
-      request.pathVariable("month").toInt()
-    )
+    val year = request.pathVariable("year").toInt()
+    val month = request.pathVariable("month").toInt()
 
-    return ymdService.findDays(type, yearMonth)
+    return ymdService.findDays(type, year, month)
       .collectList()
       .flatMap {
         if (it.isEmpty()) noContent().build() // 204

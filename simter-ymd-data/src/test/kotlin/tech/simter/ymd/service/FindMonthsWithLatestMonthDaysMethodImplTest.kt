@@ -14,8 +14,6 @@ import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.dao.YmdDao
 import java.time.Month
-import java.time.MonthDay
-import java.time.Year
 
 @SpringJUnitConfig(YmdServiceImpl::class)
 @MockBean(YmdDao::class)
@@ -27,7 +25,7 @@ class FindMonthsWithLatestMonthDaysMethodImplTest @Autowired constructor(
   fun `Found nothing because empty months`() {
     // mock data
     val type = randomString()
-    val year = Year.of(randomInt(1900, 3000))
+    val year = randomInt(1900, 3000)
     `when`(dao.findMonths(type, year)).thenReturn(Flux.empty())
 
     // invoke and verify
@@ -35,19 +33,19 @@ class FindMonthsWithLatestMonthDaysMethodImplTest @Autowired constructor(
       service.findMonthsWithLatestMonthDays(type, year)
     ).verifyComplete()
     verify(dao).findMonths(type, year)
-    verify(dao, times(0)).findDays(any(), any())
+    verify(dao, times(0)).findDays(any(), any(), any())
   }
 
   @Test
   fun `Found with latest month days`() {
     // mock data
     val type = randomString()
-    val year = Year.of(randomInt(1900, 3000))
+    val year = randomInt(1900, 3000)
     val latestMonth = Month.DECEMBER
-    val latestMonthDays = (latestMonth.maxLength() downTo 1).map { MonthDay.of(latestMonth, it) }
-    val months = (latestMonth.value downTo 1).map { Month.of(it) }
+    val latestMonthDays = (latestMonth.maxLength() downTo 1).map { it }
+    val months = (latestMonth.value downTo 1).map { it }
     `when`(dao.findMonths(type, year)).thenReturn(Flux.fromIterable(months))
-    `when`(dao.findDays(type, year.atMonth(latestMonth))).thenReturn(Flux.fromIterable(latestMonthDays))
+    `when`(dao.findDays(type, year, latestMonth.value)).thenReturn(Flux.fromIterable(latestMonthDays))
 
     // invoke and verify
     StepVerifier.create(
@@ -56,28 +54,28 @@ class FindMonthsWithLatestMonthDaysMethodImplTest @Autowired constructor(
       assertEquals(months.size, it.size)
       it.forEachIndexed { monthIndex, actualMonth ->
         val expectedMonth = months[monthIndex]
-        assertEquals(expectedMonth.value, actualMonth.month)
+        assertEquals(expectedMonth, actualMonth.month)
         if (monthIndex == 0) { // with latest days
           assertEquals(latestMonthDays.size, actualMonth.days!!.size)
           actualMonth.days!!.forEachIndexed { dayIndex, actualDay ->
-            assertEquals(latestMonthDays[dayIndex].dayOfMonth, actualDay)
+            assertEquals(latestMonthDays[dayIndex], actualDay)
           }
         } else assertNull(actualMonth.days) // no days
       }
     }.verifyComplete()
     verify(dao).findMonths(type, year)
-    verify(dao).findDays(type, year.atMonth(latestMonth))
+    verify(dao).findDays(type, year, latestMonth.value)
   }
 
   @Test
   fun `Found with months but no latest month days`() {
     // mock data
     val type = randomString()
-    val year = Year.of(randomInt(1900, 3000))
+    val year = randomInt(1900, 3000)
     val latestMonth = Month.DECEMBER
-    val months = (latestMonth.value downTo 1).map { Month.of(it) }
+    val months = (latestMonth.value downTo 1).map { it }
     `when`(dao.findMonths(type, year)).thenReturn(Flux.fromIterable(months))
-    `when`(dao.findDays(type, year.atMonth(latestMonth))).thenReturn(Flux.empty())
+    `when`(dao.findDays(type, year, latestMonth.value)).thenReturn(Flux.empty())
 
     // invoke and verify
     StepVerifier.create(
@@ -86,13 +84,13 @@ class FindMonthsWithLatestMonthDaysMethodImplTest @Autowired constructor(
       assertEquals(months.size, it.size)
       it.forEachIndexed { monthIndex, actualMonth ->
         val expectedMonth = months[monthIndex]
-        assertEquals(expectedMonth.value, actualMonth.month)
+        assertEquals(expectedMonth, actualMonth.month)
         if (monthIndex == 0) {              // with latest days
           assertNull(actualMonth.days)
         } else assertNull(actualMonth.days) // no days
       }
     }.verifyComplete()
     verify(dao).findMonths(type, year)
-    verify(dao).findDays(type, year.atMonth(latestMonth))
+    verify(dao).findDays(type, year, latestMonth.value)
   }
 }

@@ -6,10 +6,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import tech.simter.ymd.dao.YmdDao
 import tech.simter.ymd.po.Ymd
-import java.time.Month
-import java.time.MonthDay
-import java.time.Year
-import java.time.YearMonth
 
 /**
  * The Reactive MongoDB implementation of [YmdDao].
@@ -24,15 +20,15 @@ class YmdDaoImpl @Autowired constructor(
     TODO("not implemented")
   }
 
-  override fun findYears(type: String): Flux<Year> {
+  override fun findYears(type: String): Flux<Int> {
     TODO("not implemented")
   }
 
-  override fun findMonths(type: String, year: Year): Flux<Month> {
+  override fun findMonths(type: String, year: Int): Flux<Int> {
     TODO("not implemented")
   }
 
-  override fun findDays(type: String, yearMonth: YearMonth): Flux<MonthDay> {
+  override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
     TODO("not implemented")
   }
 }

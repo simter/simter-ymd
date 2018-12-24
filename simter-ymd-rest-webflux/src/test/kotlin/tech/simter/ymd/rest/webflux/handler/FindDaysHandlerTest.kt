@@ -21,8 +21,6 @@ import tech.simter.ymd.rest.webflux.UnitTestConfiguration
 import tech.simter.ymd.rest.webflux.handler.FindDaysHandler.Companion.REQUEST_PREDICATE
 import tech.simter.ymd.rest.webflux.handler.FindDaysHandlerTest.Cfg
 import tech.simter.ymd.service.YmdService
-import java.time.MonthDay
-import java.time.YearMonth
 
 /**
  * Test [FindDaysHandler]
@@ -49,14 +47,14 @@ class FindDaysHandlerTest @Autowired constructor(
     val type = randomString()
     val year = randomInt(2000, 3000)
     val month = randomInt(1, 12)
-    `when`(ymdService.findDays(type, YearMonth.of(year, month))).thenReturn(Flux.empty())
+    `when`(ymdService.findDays(type, year, month)).thenReturn(Flux.empty())
 
     // invoke and verify
     client.get().uri("/$type/$year/$month/day")
       .exchange()
       .expectStatus().isNoContent
       .expectBody().isEmpty
-    verify(ymdService).findDays(type, YearMonth.of(year, month))
+    verify(ymdService).findDays(type, year, month)
   }
 
   @Test
@@ -65,8 +63,8 @@ class FindDaysHandlerTest @Autowired constructor(
     val type = randomString()
     val year = randomInt(2000, 3000)
     val month = randomInt(1, 12)
-    val days = (2 downTo 1).map { MonthDay.of(month, it) }
-    `when`(ymdService.findDays(type, YearMonth.of(year, month))).thenReturn(Flux.just(*days.toTypedArray()))
+    val days = (2 downTo 1).map { it }
+    `when`(ymdService.findDays(type, year, month)).thenReturn(Flux.just(*days.toTypedArray()))
 
     // invoke and verify
     client.get().uri("/$type/$year/$month/day")
@@ -78,6 +76,6 @@ class FindDaysHandlerTest @Autowired constructor(
       .jsonPath("$.[0]").isEqualTo(days[0])
       .jsonPath("$.[1]").isEqualTo(days[1])
 
-    verify(ymdService).findDays(type, YearMonth.of(year, month))
+    verify(ymdService).findDays(type, year, month)
   }
 }

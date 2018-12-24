@@ -25,7 +25,7 @@ class FindMonthsMethodImplTest @Autowired constructor(
 ) {
   @Test
   fun `Found nothing`() {
-    StepVerifier.create(dao.findMonths("type1", Year.now())).verifyComplete()
+    StepVerifier.create(dao.findMonths("type1", Year.now().value)).verifyComplete()
   }
 
   @Test
@@ -48,31 +48,31 @@ class FindMonthsMethodImplTest @Autowired constructor(
     repository.saveAll(allYmds)
 
     // invoke and verify t1y1
-    StepVerifier.create(dao.findMonths(t1, y1).collectList())
+    StepVerifier.create(dao.findMonths(t1, y1.value).collectList())
       .consumeNextWith {
         assertEquals(t1y1Ymds.size, it.size)
-        t1y1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index].value) }
+        t1y1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index]) }
       }.verifyComplete()
 
     // invoke and verify t1y2
-    StepVerifier.create(dao.findMonths(t1, y2).collectList())
+    StepVerifier.create(dao.findMonths(t1, y2.value).collectList())
       .consumeNextWith {
         assertEquals(t1y2Ymds.size, it.size)
-        t1y2Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index].value) }
+        t1y2Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index]) }
       }.verifyComplete()
 
     // invoke and verify t2y1
-    StepVerifier.create(dao.findMonths(t2, y1).collectList())
+    StepVerifier.create(dao.findMonths(t2, y1.value).collectList())
       .consumeNextWith {
         assertEquals(t2y1Ymds.size, it.size)
-        t2y1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index].value) }
+        t2y1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index]) }
       }.verifyComplete()
 
     // invoke and verify t2y2
-    StepVerifier.create(dao.findMonths(t2, y2).collectList())
+    StepVerifier.create(dao.findMonths(t2, y2.value).collectList())
       .consumeNextWith {
         assertEquals(t2y2Ymds.size, it.size)
-        t2y2Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index].value) }
+        t2y2Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.month, it[index]) }
       }.verifyComplete()
   }
 }

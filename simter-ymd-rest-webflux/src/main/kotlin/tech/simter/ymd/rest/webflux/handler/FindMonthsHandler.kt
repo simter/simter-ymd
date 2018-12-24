@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import reactor.core.publisher.Mono
 import tech.simter.ymd.service.YmdService
-import java.time.Year
 
 /**
  * Find all months of the specific type and year [FindMonthsHandler]
@@ -22,7 +21,7 @@ class FindMonthsHandler @Autowired constructor(
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
     val type = request.pathVariable("type")
-    val year = Year.of(request.pathVariable("year").toInt())
+    val year = request.pathVariable("year").toInt()
 
     return ymdService.findMonths(type, year).collectList()
       .flatMap {

@@ -4,10 +4,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import tech.simter.ymd.po.Ymd
 import tech.simter.ymd.service.YmdService
-import java.time.Month
-import java.time.MonthDay
-import java.time.Year
-import java.time.YearMonth
 
 /**
  * The Dao Interface.
@@ -29,20 +25,19 @@ interface YmdDao {
    *
    * The result is ordered by year desc.
    */
-  fun findYears(type: String): Flux<Year>
+  fun findYears(type: String): Flux<Int>
 
   /**
    * Find all months of the specific [type] and [year].
    *
    * The result is ordered by month desc.
    */
-  fun findMonths(type: String, year: Year): Flux<Month>
+  fun findMonths(type: String, year: Int): Flux<Int>
 
   /**
-   * Find all
-   * days of the specific [type] and [yearMonth].
+   * Find all days of the specific [type], [year] and [month].
    *
    * The result is ordered by day desc.
    */
-  fun findDays(type: String, yearMonth: YearMonth): Flux<MonthDay>
+  fun findDays(type: String, year: Int, month: Int): Flux<Int>
 }

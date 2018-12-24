@@ -13,7 +13,6 @@ import reactor.test.StepVerifier
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.dao.YmdDao
 import java.time.Month
-import java.time.MonthDay
 import java.time.Year
 
 @SpringJUnitConfig(YmdServiceImpl::class)
@@ -40,12 +39,12 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
     val type = randomString()
     val latestYear = Year.of(2010)
     val latestMonth = Month.DECEMBER
-    val latestYearMonths = (latestMonth.value downTo 1).map { Month.of(it) }
-    val latestMonthDays = (latestMonth.maxLength() downTo 1).map { MonthDay.of(latestMonth, it) }
-    val years = (latestYear.value downTo 2000).map { Year.of(it) }
+    val latestYearMonths = (latestMonth.value downTo 1).map { it }
+    val latestMonthDays = (latestMonth.maxLength() downTo 1).map { it }
+    val years = (latestYear.value downTo 2000).map { it }
     `when`(dao.findYears(type)).thenReturn(Flux.fromIterable(years))
-    `when`(dao.findMonths(type, latestYear)).thenReturn(Flux.fromIterable(latestYearMonths))
-    `when`(dao.findDays(type, latestYear.atMonth(latestMonth))).thenReturn(Flux.fromIterable(latestMonthDays))
+    `when`(dao.findMonths(type, latestYear.value)).thenReturn(Flux.fromIterable(latestYearMonths))
+    `when`(dao.findDays(type, latestYear.value, latestMonth.value)).thenReturn(Flux.fromIterable(latestMonthDays))
 
     // invoke and verify
     StepVerifier.create(
@@ -54,15 +53,15 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
       assertEquals(years.size, it.size)
       it.forEachIndexed { yearIndex, actualYear ->
         val expectedYear = years[yearIndex]
-        assertEquals(expectedYear.value, actualYear.year)
+        assertEquals(expectedYear, actualYear.year)
         if (yearIndex == 0) {                // with latest year months
           assertEquals(latestYearMonths.size, actualYear.months!!.size)
           actualYear.months!!.forEachIndexed { monthIndex, actualMonth ->
-            assertEquals(latestYearMonths[monthIndex].value, actualMonth.month)
+            assertEquals(latestYearMonths[monthIndex], actualMonth.month)
             if (monthIndex == 0) {                 // with latest month days
               assertEquals(latestMonthDays.size, actualMonth.days!!.size)
               actualMonth.days!!.forEachIndexed { dayIndex, actualDay ->
-                assertEquals(latestMonthDays[dayIndex].dayOfMonth, actualDay)
+                assertEquals(latestMonthDays[dayIndex], actualDay)
               }
             } else assertNull(actualMonth.days)    // no days
           }
@@ -70,8 +69,8 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
       }
     }.verifyComplete()
     verify(dao).findYears(type)
-    verify(dao).findMonths(type, latestYear)
-    verify(dao).findDays(type, latestYear.atMonth(latestMonth))
+    verify(dao).findMonths(type, latestYear.value)
+    verify(dao).findDays(type, latestYear.value, latestMonth.value)
   }
 
   @Test
@@ -80,11 +79,11 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
     val type = randomString()
     val latestYear = Year.of(2010)
     val latestMonth = Month.DECEMBER
-    val latestYearMonths = (latestMonth.value downTo 1).map { Month.of(it) }
-    val years = (latestYear.value downTo 2000).map { Year.of(it) }
+    val latestYearMonths = (latestMonth.value downTo 1).map { it }
+    val years = (latestYear.value downTo 2000).map { it }
     `when`(dao.findYears(type)).thenReturn(Flux.fromIterable(years))
-    `when`(dao.findMonths(type, latestYear)).thenReturn(Flux.fromIterable(latestYearMonths))
-    `when`(dao.findDays(type, latestYear.atMonth(latestMonth))).thenReturn(Flux.empty())
+    `when`(dao.findMonths(type, latestYear.value)).thenReturn(Flux.fromIterable(latestYearMonths))
+    `when`(dao.findDays(type, latestYear.value, latestMonth.value)).thenReturn(Flux.empty())
 
     // invoke and verify
     StepVerifier.create(
@@ -93,19 +92,19 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
       assertEquals(years.size, it.size)
       it.forEachIndexed { yearIndex, actualYear ->
         val expectedYear = years[yearIndex]
-        assertEquals(expectedYear.value, actualYear.year)
+        assertEquals(expectedYear, actualYear.year)
         if (yearIndex == 0) {                // with latest year months
           assertEquals(latestYearMonths.size, actualYear.months!!.size)
           actualYear.months!!.forEachIndexed { monthIndex, actualMonth ->
-            assertEquals(latestYearMonths[monthIndex].value, actualMonth.month)
+            assertEquals(latestYearMonths[monthIndex], actualMonth.month)
             assertNull(actualMonth.days)     // no days
           }
         } else assertNull(actualYear.months) // no months
       }
     }.verifyComplete()
     verify(dao).findYears(type)
-    verify(dao).findMonths(type, latestYear)
-    verify(dao).findDays(type, latestYear.atMonth(latestMonth))
+    verify(dao).findMonths(type, latestYear.value)
+    verify(dao).findDays(type, latestYear.value, latestMonth.value)
   }
 
   @Test
@@ -113,9 +112,9 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
     // mock data
     val type = randomString()
     val latestYear = Year.of(2010)
-    val years = (latestYear.value downTo 2000).map { Year.of(it) }
+    val years = (latestYear.value downTo 2000).map { it }
     `when`(dao.findYears(type)).thenReturn(Flux.fromIterable(years))
-    `when`(dao.findMonths(type, latestYear)).thenReturn(Flux.empty())
+    `when`(dao.findMonths(type, latestYear.value)).thenReturn(Flux.empty())
 
     // invoke and verify
     StepVerifier.create(
@@ -123,11 +122,11 @@ class FindYearsWithLatestMonthDaysMethodImplTest @Autowired constructor(
     ).consumeNextWith {
       assertEquals(years.size, it.size)
       it.forEachIndexed { yearIndex, actualYear ->
-        assertEquals(years[yearIndex].value, actualYear.year)
+        assertEquals(years[yearIndex], actualYear.year)
         assertNull(actualYear.months) // no months
       }
     }.verifyComplete()
     verify(dao).findYears(type)
-    verify(dao).findMonths(type, latestYear)
+    verify(dao).findMonths(type, latestYear.value)
   }
 }

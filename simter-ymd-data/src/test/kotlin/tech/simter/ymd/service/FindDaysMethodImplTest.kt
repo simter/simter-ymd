@@ -11,8 +11,7 @@ import reactor.test.StepVerifier
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.dao.YmdDao
-import java.time.MonthDay
-import java.time.YearMonth
+import java.time.Month
 
 @SpringJUnitConfig(YmdServiceImpl::class)
 @MockBean(YmdDao::class)
@@ -24,26 +23,28 @@ class FindDaysMethodImplTest @Autowired constructor(
   fun `Found nothing`() {
     // mock
     val type = randomString()
-    val yearMonth = YearMonth.of(randomInt(1900, 3000), randomInt(1, 12))
-    `when`(dao.findDays(type, yearMonth)).thenReturn(Flux.empty())
+    val year = randomInt(1900, 3000)
+    val month = randomInt(1, 12)
+    `when`(dao.findDays(type, year, month)).thenReturn(Flux.empty())
 
     // invoke and verify
-    StepVerifier.create(service.findDays(type, yearMonth)).verifyComplete()
-    verify(dao).findDays(type, yearMonth)
+    StepVerifier.create(service.findDays(type, year, month)).verifyComplete()
+    verify(dao).findDays(type, year, month)
   }
 
   @Test
   fun `Found something`() {
     // mock
     val type = randomString()
-    val yearMonth = YearMonth.of(randomInt(1900, 3000), randomInt(1, 12))
-    val monthDay = MonthDay.of(yearMonth.month, randomInt(1, yearMonth.month.maxLength()))
-    `when`(dao.findDays(type, yearMonth)).thenReturn(Flux.just(monthDay))
+    val year = randomInt(1900, 3000)
+    val month = randomInt(1, 12)
+    val monthDay = randomInt(1, Month.of(month).maxLength())
+    `when`(dao.findDays(type, year, month)).thenReturn(Flux.just(monthDay))
 
     // invoke and verify
-    StepVerifier.create(service.findDays(type, yearMonth))
+    StepVerifier.create(service.findDays(type, year, month))
       .expectNext(monthDay)
       .verifyComplete()
-    verify(dao).findDays(type, yearMonth)
+    verify(dao).findDays(type, year, month)
   }
 }

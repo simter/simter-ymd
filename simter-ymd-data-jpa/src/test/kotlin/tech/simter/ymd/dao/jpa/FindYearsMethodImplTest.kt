@@ -9,7 +9,6 @@ import reactor.test.StepVerifier
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.TestUtils.randomYmd
 import tech.simter.ymd.dao.YmdDao
-import java.time.Year
 
 /**
  * Test [YmdDaoImpl.save].
@@ -42,10 +41,11 @@ class FindYearsMethodImplTest @Autowired constructor(
     val result = dao.findYears(type)
 
     // verify with desc order
-    StepVerifier.create(result)
-      .expectNext(Year.of(expected[2].year))
-      .expectNext(Year.of(expected[1].year))
-      .expectNext(Year.of(expected[0].year))
-      .verifyComplete()
+    StepVerifier.create(result.collectList())
+      .consumeNextWith {
+        val lastIndex = expected.size - 1
+        assertEquals(expected.size, it.size)
+        expected.forEachIndexed { index, ymd -> assertEquals(ymd.year, it[lastIndex - index]) } // desc
+      }.verifyComplete()
   }
 }

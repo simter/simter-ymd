@@ -6,10 +6,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import tech.simter.ymd.dao.YmdDao
 import tech.simter.ymd.po.Ymd
-import java.time.Month
-import java.time.MonthDay
-import java.time.Year
-import java.time.YearMonth
 
 /**
  * The JPA implementation of [YmdDao].
@@ -29,18 +25,15 @@ class YmdDaoImpl @Autowired constructor(
     }
   }
 
-  override fun findYears(type: String): Flux<Year> {
-    return Flux.fromStream(repository.findYears(type).map { Year.of(it) })
+  override fun findYears(type: String): Flux<Int> {
+    return Flux.fromStream(repository.findYears(type))
   }
 
-  override fun findMonths(type: String, year: Year): Flux<Month> {
-    return Flux.fromStream(repository.findMonths(type, year.value).map { Month.of(it) })
+  override fun findMonths(type: String, year: Int): Flux<Int> {
+    return Flux.fromStream(repository.findMonths(type, year))
   }
 
-  override fun findDays(type: String, yearMonth: YearMonth): Flux<MonthDay> {
-    return Flux.fromStream(
-      repository.findDays(type, yearMonth.year, yearMonth.monthValue)
-        .map { MonthDay.of(yearMonth.month, it) }
-    )
+  override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
+    return Flux.fromStream(repository.findDays(type, year, month))
   }
 }

@@ -21,8 +21,6 @@ import tech.simter.ymd.rest.webflux.UnitTestConfiguration
 import tech.simter.ymd.rest.webflux.handler.FindMonthsHandler.Companion.REQUEST_PREDICATE
 import tech.simter.ymd.rest.webflux.handler.FindMonthsHandlerTest.Cfg
 import tech.simter.ymd.service.YmdService
-import java.time.Month
-import java.time.Year
 
 /**
  * Test [FindMonthsHandler]
@@ -47,11 +45,11 @@ class FindMonthsHandlerTest @Autowired constructor(
   fun `Found nothing`() {
     // mock
     val type = randomString()
-    val year = Year.of(randomInt(2000, 3000))
+    val year = randomInt(2000, 3000)
     `when`(ymdService.findMonths(type, year)).thenReturn(Flux.empty())
 
     // invoke and verify
-    client.get().uri("/$type/${year.value}/month")
+    client.get().uri("/$type/$year/month")
       .exchange()
       .expectStatus().isNoContent
       .expectBody().isEmpty
@@ -62,19 +60,19 @@ class FindMonthsHandlerTest @Autowired constructor(
   fun `Found something`() {
     // mock
     val type = randomString()
-    val year = Year.of(randomInt(2000, 3000))
-    val months = (2 downTo 1).map { Month.of(it) }
+    val year = randomInt(2000, 3000)
+    val months = (2 downTo 1).map { it }
     `when`(ymdService.findMonths(type, year)).thenReturn(Flux.just(*months.toTypedArray()))
 
     // invoke and verify
-    client.get().uri("/$type/${year.value}/month")
+    client.get().uri("/$type/$year/month")
       .exchange()
       .expectStatus().isOk
       .expectHeader().contentType(APPLICATION_JSON_UTF8)
       .expectBody()
       .jsonPath("$.length()").isEqualTo(months.size)
-      .jsonPath("$.[0]").isEqualTo(months[0].value)
-      .jsonPath("$.[1]").isEqualTo(months[1].value)
+      .jsonPath("$.[0]").isEqualTo(months[0])
+      .jsonPath("$.[1]").isEqualTo(months[1])
 
     verify(ymdService).findMonths(type, year)
   }
