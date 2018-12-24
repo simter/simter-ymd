@@ -3,8 +3,8 @@
 | Sn | Url__________________________________| Description
 |----|--------------------------------------|-------------
 | 1  | /{type}/year                         | Find all years of the specific type
-| 2  | /{type}/month?y=2018                 | Find all months of the specific type and year
-| 3  | /{type}/day?ym=201801                | Find all days of the specific type, year and month
+| 2  | /{type}/{year}/month                 | Find all months of the specific type and year
+| 3  | /{type}/{year}/{month}/day           | Find all days of the specific type, year and month
 | 4  | /{type}/year?with-latest-year-months | Find all years of the specific type, also load all months of the latest year
 | 5  | /{type}/year?with-latest-month-days  | Find all years of the specific type, also load all months of the latest year and all days of the latest month
 
@@ -36,13 +36,13 @@ Content-Type : application/json;charset=utf-8
 **Request：**
 
 ```
-GET {context-path}/{type}/month?y=2018
+GET {context-path}/{type}/{year}/month
 ```
 
 | Name | Require | Description
 |------|---------|-------------
 | type | true    | 
-| y    | true    | 4 digits year, such as 2018
+| year | true    | 4 digits year, such as 2018
 
 **Response：**
 
@@ -60,13 +60,14 @@ Content-Type : application/json;charset=utf-8
 **Request：**
 
 ```
-GET {context-path}/{type}/day?ym=201801
+GET {context-path}/{type}/{year}/{month}/day
 ```
 
-| Name | Require | Description
-|------|---------|-------------
-| type | true    | 
-| ym   | true    | 6 digits yearMonth, such as 201801
+| Name  | Require | Description
+|-------|---------|-------------
+| type  | true    | 
+| year  | true    | 6 digits year, such as 2018
+| month | true    | 1 or 2 digits month, such as 1 or 12
 
 **Response：**
 

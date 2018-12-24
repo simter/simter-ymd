@@ -51,7 +51,7 @@ class FindMonthsHandlerTest @Autowired constructor(
     `when`(ymdService.findMonths(type, year)).thenReturn(Flux.empty())
 
     // invoke and verify
-    client.get().uri("/$type/month?y=${year.value}")
+    client.get().uri("/$type/${year.value}/month")
       .exchange()
       .expectStatus().isNoContent
       .expectBody().isEmpty
@@ -67,7 +67,7 @@ class FindMonthsHandlerTest @Autowired constructor(
     `when`(ymdService.findMonths(type, year)).thenReturn(Flux.just(*months.toTypedArray()))
 
     // invoke and verify
-    client.get().uri("/$type/month?y=${year.value}")
+    client.get().uri("/$type/${year.value}/month")
       .exchange()
       .expectStatus().isOk
       .expectHeader().contentType(APPLICATION_JSON_UTF8)

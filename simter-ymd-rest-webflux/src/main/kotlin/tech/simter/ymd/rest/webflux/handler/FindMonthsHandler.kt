@@ -22,7 +22,7 @@ class FindMonthsHandler @Autowired constructor(
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
     val type = request.pathVariable("type")
-    val year = request.queryParam("y").map { Year.of(it.toInt()) }.get()
+    val year = Year.of(request.pathVariable("year").toInt())
 
     return ymdService.findMonths(type, year).collectList()
       .flatMap {
@@ -33,6 +33,6 @@ class FindMonthsHandler @Autowired constructor(
 
   companion object {
     /** The default [RequestPredicate] */
-    val REQUEST_PREDICATE: RequestPredicate = RequestPredicates.GET("/{type}/month")
+    val REQUEST_PREDICATE: RequestPredicate = RequestPredicates.GET("/{type}/{year}/month")
   }
 }
