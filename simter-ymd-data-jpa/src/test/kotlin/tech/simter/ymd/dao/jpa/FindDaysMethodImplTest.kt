@@ -34,19 +34,23 @@ class FindDaysMethodImplTest @Autowired constructor(
   @Test
   fun `Found something`() {
     // init data with specific year、month and day
-    val y1m1d1 = randomYmd(type = type, year = 2015, month = 12, day = 25)
-    val y1m1d2 = randomYmd(type = type, year = 2015, month = 12, day = 24)
-    val y1m2d = randomYmd(type = type, year = 2015, month = 10)
-    val y2md = randomYmd(type = type, year = 2019)
-    repository.saveAll(listOf(y1m1d1, y1m1d2, y1m2d, y2md))
+    val t1y1m1d1 = randomYmd(type = type, year = 2015, month = 12, day = 25)
+    val t1y1m1d2 = randomYmd(type = type, year = 2015, month = 12, day = 24)
+    val t1y1m2d = randomYmd(type = type, year = 2015, month = 10)
+    val t1y2md = randomYmd(type = type, year = 2019)
+    val t2y3m3d3 = randomYmd(type = "ttt", year = 2011, month = 3, day = 2)
+    repository.saveAll(listOf(t1y1m1d1, t1y1m1d2, t1y1m2d, t1y2md, t2y3m3d3))
 
     // invoke and verify
-    StepVerifier.create(dao.findDays(type, YearMonth.of(y1m1d1.year, y1m1d1.month)))
-      .expectNext(MonthDay.of(y1m1d1.month, y1m1d1.day))
-      .expectNext(MonthDay.of(y1m1d2.month, y1m1d2.day))
+    StepVerifier.create(dao.findDays(type, YearMonth.of(t1y1m1d1.year, t1y1m1d1.month)))
+      .expectNext(MonthDay.of(t1y1m1d1.month, t1y1m1d1.day))
+      .expectNext(MonthDay.of(t1y1m1d2.month, t1y1m1d2.day))
       .verifyComplete()
-    StepVerifier.create(dao.findDays(type, YearMonth.of(y2md.year, y2md.month)))
-      .expectNext(MonthDay.of(y2md.month, y2md.day))
+    StepVerifier.create(dao.findDays(type, YearMonth.of(t1y2md.year, t1y2md.month)))
+      .expectNext(MonthDay.of(t1y2md.month, t1y2md.day))
+      .verifyComplete()
+    StepVerifier.create(dao.findDays("ttt", YearMonth.of(t2y3m3d3.year, t2y3m3d3.month)))
+      .expectNext(MonthDay.of(t2y3m3d3.month, t2y3m3d3.day))
       .verifyComplete()
   }
 }

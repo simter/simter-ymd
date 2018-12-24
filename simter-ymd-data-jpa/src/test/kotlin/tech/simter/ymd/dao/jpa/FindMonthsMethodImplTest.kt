@@ -32,23 +32,27 @@ class FindMonthsMethodImplTest @Autowired constructor(
 
   @Test
   fun `Found something`() {
-    // init data with specific year and month
-    val y1m1 = randomYmd(type = type, year = 2018, month = 12)
-    val y1m2 = randomYmd(type = type, year = 2018, month = 11)
-    val y2m1 = randomYmd(type = type, year = 2017, month = 10)
-    val y2m2 = randomYmd(type = type, year = 2017, month = 9)
+    // init data with specific type year and month
+    val t1y1m1 = randomYmd(type = type, year = 2018, month = 12)
+    val t1y1m2 = randomYmd(type = type, year = 2018, month = 11)
+    val t1y2m1 = randomYmd(type = type, year = 2017, month = 10)
+    val t1y2m2 = randomYmd(type = type, year = 2017, month = 9)
+    val t2y3m3 = randomYmd(type = "yyy", year = 2015, month = 2)
 
     // save data
-    repository.saveAll(listOf(y1m1,y1m2,y2m1,y2m2))
+    repository.saveAll(listOf(t1y1m1, t1y1m2, t1y2m1, t1y2m2, t2y3m3))
 
     // invoke and verify
-    StepVerifier.create(dao.findMonths(type, Year.of(y1m1.year)))
-      .expectNext(Month.of(y1m1.month))
-      .expectNext(Month.of(y1m2.month))
+    StepVerifier.create(dao.findMonths(type, Year.of(t1y1m1.year)))
+      .expectNext(Month.of(t1y1m1.month))
+      .expectNext(Month.of(t1y1m2.month))
       .verifyComplete()
-    StepVerifier.create(dao.findMonths(type, Year.of(y2m1.year)))
-      .expectNext(Month.of(y2m1.month))
-      .expectNext(Month.of(y2m2.month))
+    StepVerifier.create(dao.findMonths(type, Year.of(t1y2m1.year)))
+      .expectNext(Month.of(t1y2m1.month))
+      .expectNext(Month.of(t1y2m2.month))
+      .verifyComplete()
+    StepVerifier.create(dao.findMonths("yyy", Year.of(t2y3m3.year)))
+      .expectNext(Month.of(t2y3m3.month))
       .verifyComplete()
   }
 }
