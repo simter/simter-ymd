@@ -15,9 +15,11 @@ import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.RouterFunctions.route
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Flux
+import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.rest.webflux.UnitTestConfiguration
 import tech.simter.ymd.rest.webflux.handler.FindDaysHandler.Companion.REQUEST_PREDICATE
+import tech.simter.ymd.rest.webflux.handler.FindDaysHandlerTest.Cfg
 import tech.simter.ymd.service.YmdService
 import java.time.MonthDay
 import java.time.YearMonth
@@ -26,9 +28,10 @@ import java.time.format.DateTimeFormatter
 /**
  * Test [FindDaysHandler]
  *
+ * @author RJ
  * @author XA
  */
-@SpringJUnitConfig(FindDaysHandler::class, FindDaysHandlerTest.Cfg::class, UnitTestConfiguration::class)
+@SpringJUnitConfig(FindDaysHandler::class, Cfg::class, UnitTestConfiguration::class)
 @MockBean(YmdService::class)
 @WebFluxTest
 class FindDaysHandlerTest @Autowired constructor(
@@ -41,43 +44,40 @@ class FindDaysHandlerTest @Autowired constructor(
     fun theRoute(handler: FindDaysHandler): RouterFunction<ServerResponse> = route(REQUEST_PREDICATE, handler)
   }
 
-  private val type = randomString("type")
-  private val yearMonth = YearMonth.of(2018, 1)
-  private val ym = yearMonth.format(DateTimeFormatter.ofPattern("yyyyMM"))
-  private val url = "/$type/day?ym=$ym"
+  private val yyyyMM = DateTimeFormatter.ofPattern("yyyyMM")!!
 
   @Test
   fun `Found nothing`() {
     // mock
-    `when`(ymdService.findDays(type, yearMonth))
-      .thenReturn(Flux.empty())
+    val type = randomString()
+    val yearMonth = YearMonth.of(randomInt(2000, 3000), randomInt(1, 12))
+    `when`(ymdService.findDays(type, yearMonth)).thenReturn(Flux.empty())
 
-    // invoke
-    client.get()
-      .uri(url)
+    // invoke and verify
+    client.get().uri("/$type/day?ym=${yearMonth.format(yyyyMM)}")
       .exchange()
       .expectStatus().isNoContent
       .expectBody().isEmpty
-
     verify(ymdService).findDays(type, yearMonth)
   }
 
   @Test
   fun `Found something`() {
     // mock
-    val monthDay = (2 downTo 1).map { MonthDay.of(1,5+it) }
-    `when`(ymdService.findDays(type, yearMonth))
-      .thenReturn(Flux.just(*monthDay.toTypedArray()))
+    val type = randomString()
+    val yearMonth = YearMonth.of(randomInt(2000, 3000), randomInt(1, 12))
+    val days = (2 downTo 1).map { MonthDay.of(yearMonth.month, it) }
+    `when`(ymdService.findDays(type, yearMonth)).thenReturn(Flux.just(*days.toTypedArray()))
 
     // invoke and verify
-    client.get().uri(url)
+    client.get().uri("/$type/day?ym=${yearMonth.format(yyyyMM)}")
       .exchange()
       .expectStatus().isOk
       .expectHeader().contentType(APPLICATION_JSON_UTF8)
       .expectBody()
-      .jsonPath("$.length()").isEqualTo(monthDay.size)
-      .jsonPath("$.[0]").isEqualTo(monthDay[0])
-      .jsonPath("$.[1]").isEqualTo(monthDay[1])
+      .jsonPath("$.length()").isEqualTo(days.size)
+      .jsonPath("$.[0]").isEqualTo(days[0])
+      .jsonPath("$.[1]").isEqualTo(days[1])
 
     verify(ymdService).findDays(type, yearMonth)
   }
