@@ -30,8 +30,8 @@ spring:
       hibernate.show_sql: false      # true for log to console directly
     hibernate:
       ddl-auto: ${db.ddl-auto:none}  # none | create | create-drop | update | validate
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+#      naming:
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl #ImplicitNamingStrategyComponentPathImpl
   datasource:
     continue-on-error: false
     sql-script-encoding: UTF-8
