@@ -26,14 +26,14 @@ class YmdDaoImpl @Autowired constructor(
   }
 
   override fun findYears(type: String): Flux<Int> {
-    return Flux.fromStream(repository.findYears(type))
+    return Flux.fromIterable(repository.findYears(type))
   }
 
   override fun findMonths(type: String, year: Int): Flux<Int> {
-    return Flux.fromStream(repository.findMonths(type, year))
+    return Flux.fromIterable(repository.findMonths(type, year))
   }
 
   override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
-    return Flux.fromStream(repository.findDays(type, year, month))
+    return Flux.fromIterable(repository.findDays(type, year, month))
   }
 }
