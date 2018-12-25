@@ -15,12 +15,12 @@ import java.util.stream.Stream
  * @author RJ
  */
 interface YmdJpaRepository : JpaRepository<Ymd, YmdPK> {
-  @Query("select year from Ymd where type = ?1 and month = 0 and day = 0 order by year desc")
+  @Query("select distinct year from Ymd where type = ?1 order by year desc")
   fun findYears(type: String): List<Int>
 
-  @Query("select month from Ymd where type = ?1 and year = ?2 order by month desc")
+  @Query("select distinct month from Ymd where type = ?1 and year = ?2 order by month desc")
   fun findMonths(type: String, year: Int): List<Int>
 
-  @Query("select day from Ymd where type = ?1 and  year = ?2 and month = ?3 order by day desc")
+  @Query("select distinct day from Ymd where type = ?1 and  year = ?2 and month = ?3 order by day desc")
   fun findDays(type: String, year: Int, month: Int): List<Int>
 }

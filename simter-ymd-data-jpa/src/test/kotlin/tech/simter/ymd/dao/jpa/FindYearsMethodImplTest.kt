@@ -31,11 +31,11 @@ class FindYearsMethodImplTest @Autowired constructor(
   @Test
   fun `Found something`() {
     // init data with asc order
-    val expected = (1..3).map { randomYmd(type = type, year = 2000 + it, month = 0, day = 0) }
+    val expected = (1..3).map { randomYmd(type = type, year = 2000 + it) }
     repository.saveAll(expected)
 
     // init one other type
-    repository.save(randomYmd(type = "${type}_not-same", month = 0, day = 0))
+    repository.save(randomYmd(type = "${type}_not-same"))
 
     // invoke
     val result = dao.findYears(type)
