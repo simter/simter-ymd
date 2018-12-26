@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import org.springframework.data.repository.reactive.ReactiveSortingRepository
 import tech.simter.ymd.po.Ymd
-import tech.simter.ymd.po.YmdPK
 
 /**
  * See interfaces [ReactiveSortingRepository], [ReactiveQueryByExampleExecutor], [ReactiveCrudRepository], [ReactiveMongoOperations].
@@ -16,4 +15,4 @@ import tech.simter.ymd.po.YmdPK
  *
  * @author RJ
  */
-interface YmdReactiveRepository : ReactiveCrudRepository<Ymd, YmdPK>
+interface YmdReactiveRepository : ReactiveCrudRepository<Ymd, Int>
