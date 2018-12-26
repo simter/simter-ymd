@@ -11,8 +11,10 @@ const val TABLE_NAME = "st_ymd"
  *
  * @author RJ
  */
+// for jpa
 @javax.persistence.Entity
 @javax.persistence.Table(name = TABLE_NAME)
+// for mongodb
 @org.springframework.data.mongodb.core.mapping.Document(collection = TABLE_NAME)
 data class Ymd(
   @javax.persistence.Id
@@ -21,7 +23,7 @@ data class Ymd(
   var id: Int? = null,
 
   /** The belong type */
-  @Column(nullable = false) val type: String,
+  @Column(nullable = false, length = 50) val type: String,
 
   /** 4 digits year, such as 2018 */
   @Column(nullable = false) val year: Int,
