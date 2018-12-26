@@ -4,16 +4,15 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-
-private const val MODULE = "tech.simter.ymd"
+import tech.simter.ymd.PACKAGE_NAME
 
 /**
  * All configuration for this module.
  *
  * @author RJ
  */
-@Configuration("$MODULE.dao.jpa.ModuleConfiguration")
-@ComponentScan("$MODULE.dao.jpa")
-@EnableJpaRepositories("$MODULE.dao.jpa")
-@EntityScan("$MODULE.po")
+@Configuration("$PACKAGE_NAME.dao.jpa.ModuleConfiguration")
+@ComponentScan("$PACKAGE_NAME.dao.jpa")
+@EnableJpaRepositories("$PACKAGE_NAME.dao.jpa")
+@EntityScan("$PACKAGE_NAME.po")
 class ModuleConfiguration

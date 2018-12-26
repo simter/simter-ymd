@@ -1,10 +1,9 @@
 package tech.simter.ymd.po
 
+import tech.simter.ymd.TABLE_NAME
 import javax.persistence.Column
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType.IDENTITY
-
-const val TABLE_NAME = "st_ymd"
 
 /**
  * The date of massive data.

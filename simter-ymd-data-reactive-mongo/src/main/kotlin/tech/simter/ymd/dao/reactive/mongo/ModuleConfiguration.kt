@@ -9,18 +9,17 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.core.mapping.event.LoggingEventListener
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
-
-private const val MODULE_PACKAGE = "tech.simter.ymd.dao.reactive.mongo"
+import tech.simter.ymd.PACKAGE_NAME
 
 /**
  * All configuration for this module.
  *
  * @author RJ
  */
-@Configuration("$MODULE_PACKAGE.ModuleConfiguration")
-@EnableReactiveMongoRepositories(MODULE_PACKAGE)
-@ComponentScan(MODULE_PACKAGE)
-@EntityScan(basePackages = ["tech.simter.ymd.po"])
+@Configuration("$PACKAGE_NAME.dao.reactive.mongo.ModuleConfiguration")
+@EnableReactiveMongoRepositories("$PACKAGE_NAME.dao.reactive.mongo")
+@ComponentScan("$PACKAGE_NAME.dao.reactive.mongo")
+@EntityScan("$PACKAGE_NAME.po")
 class ModuleConfiguration {
   private val logger = LoggerFactory.getLogger(ModuleConfiguration::class.java)
   @Bean
