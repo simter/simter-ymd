@@ -9,11 +9,10 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.server.router
+import tech.simter.ymd.PACKAGE_NAME
 import tech.simter.ymd.rest.webflux.handler.FindDaysHandler
 import tech.simter.ymd.rest.webflux.handler.FindMonthsHandler
 import tech.simter.ymd.rest.webflux.handler.FindYearsHandler
-
-private const val MODULE = "tech.simter.ymd.rest.webflux"
 
 /**
  * All configuration for this module.
@@ -23,8 +22,8 @@ private const val MODULE = "tech.simter.ymd.rest.webflux"
  *
  * @author RJ
  */
-@Configuration("$MODULE.ModuleConfiguration")
-@ComponentScan(MODULE)
+@Configuration("$PACKAGE_NAME.rest.webflux.ModuleConfiguration")
+@ComponentScan("$PACKAGE_NAME.rest.webflux")
 class ModuleConfiguration @Autowired constructor(
   @Value("\${module.version.simter-ymd:UNKNOWN}") private val version: String,
   @Value("\${module.rest-context-path.simter-ymd:/ymd}") private val contextPath: String,
@@ -40,8 +39,8 @@ class ModuleConfiguration @Autowired constructor(
   }
 
   /** Register a `RouterFunction<ServerResponse>` with all routers for this module */
-  @Bean("$MODULE.Routes")
-  @ConditionalOnMissingBean(name = ["$MODULE.Routes"])
+  @Bean("$PACKAGE_NAME.rest.webflux.Routes")
+  @ConditionalOnMissingBean(name = ["$PACKAGE_NAME.rest.webflux.Routes"])
   fun simterYmdRoutes() = router {
     contextPath.nest {
       // GET {type}/day    Find all days of the specific type, year and month
