@@ -5,7 +5,7 @@ logging:
     root: WARN
 
     #---- simter ----#
-    tech.simter.kv.starter: INFO
+    tech.simter.ymd.starter: INFO
 
     #---- spring ----#
     #org.springframework: WARN
