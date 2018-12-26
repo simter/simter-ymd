@@ -44,19 +44,4 @@
       <artifactId>spring-tx</artifactId>
     </dependency>
   </dependencies>
-  <profiles>
-    <profile>
-      <id>test</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>io.projectreactor</groupId>
-          <artifactId>reactor-test</artifactId>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
 </project>

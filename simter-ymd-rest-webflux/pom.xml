@@ -29,58 +29,50 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
     </dependency>
-  </dependencies>
-  <profiles>
-    <profile>
-      <id>test</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>io.projectreactor</groupId>
-          <artifactId>reactor-test</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.module</groupId>
-          <artifactId>jackson-module-kotlin</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>tech.simter.reactive</groupId>
-          <artifactId>simter-reactive-web</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <!-- json api by jackson-->
-        <dependency>
-          <groupId>org.glassfish</groupId>
-          <artifactId>javax.json</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-kotlin</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>tech.simter.reactive</groupId>
+      <artifactId>simter-reactive-web</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- json api by jackson-->
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr353</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-json</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <!-- use simter-jackson-ext instead -->
+        <exclusion>
           <groupId>com.fasterxml.jackson.datatype</groupId>
-          <artifactId>jackson-datatype-jsr353</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-json</artifactId>
-          <scope>test</scope>
-          <exclusions>
-            <!-- use simter-jackson-ext instead -->
-            <exclusion>
-              <groupId>com.fasterxml.jackson.datatype</groupId>
-              <artifactId>jackson-datatype-jsr310</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>tech.simter</groupId>
-          <artifactId>simter-jackson-ext</artifactId>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
+          <artifactId>jackson-datatype-jsr310</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>tech.simter</groupId>
+      <artifactId>simter-jackson-ext</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

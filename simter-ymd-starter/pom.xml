@@ -48,6 +48,19 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
+
+    <!-- runtime -->
+    <!-- json api by jackson-->
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr353</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -96,36 +109,7 @@
     </plugins>
   </build>
   <profiles>
-    <profile>
-      <id>test</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencies>
-        <!-- test -->
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-test</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>io.projectreactor</groupId>
-          <artifactId>reactor-test</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <!-- json jsr353 by jackson-->
-        <dependency>
-          <groupId>org.glassfish</groupId>
-          <artifactId>javax.json</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.datatype</groupId>
-          <artifactId>jackson-datatype-jsr353</artifactId>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
+    <!-- dev means development, prod means production-->
     <profile>
       <id>dev-reactive-mongo</id>
       <activation>
@@ -166,7 +150,6 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- development environment: spring-boot + webflux + hibernate-jpa + hsql) -->
       <id>dev-jpa-hsql</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -210,7 +193,6 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- production environment: spring-boot + webflux + hibernate-jpa + postgres) -->
       <id>prod-jpa-postgres</id>
       <activation>
         <activeByDefault>false</activeByDefault>
