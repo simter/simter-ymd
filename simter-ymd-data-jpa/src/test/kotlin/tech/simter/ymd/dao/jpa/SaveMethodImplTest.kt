@@ -1,14 +1,13 @@
 package tech.simter.ymd.dao.jpa
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.test.StepVerifier
-import tech.simter.ymd.dao.YmdDao
-import tech.simter.ymd.po.YmdPK
 import tech.simter.ymd.TestUtils.randomYmd
+import tech.simter.ymd.dao.YmdDao
 
 /**
  * Test [YmdDaoImpl.save].
@@ -31,13 +30,15 @@ class SaveMethodImplTest @Autowired constructor(
   fun `Save one`() {
     // init data
     val po = randomYmd()
+    assertNull(po.id)
 
     // invoke
     val result = dao.save(po)
 
     // verify
     StepVerifier.create(result).verifyComplete()
-    assertEquals(po, repository.getOne(YmdPK(type = po.type, year = po.year, month = po.month, day = po.day)))
+    assertNotNull(po.id)
+    assertEquals(po, repository.getOne(po.id!!))
     repository.flush()
   }
 
@@ -46,14 +47,18 @@ class SaveMethodImplTest @Autowired constructor(
     // init data
     val po1 = randomYmd()
     val po2 = randomYmd()
+    assertNull(po1.id)
+    assertNull(po2.id)
 
     // invoke
     val result = dao.save(po1, po2)
 
     // verify
     StepVerifier.create(result).verifyComplete()
-    assertEquals(po1, repository.getOne(YmdPK(type = po1.type, year = po1.year, month = po1.month, day = po1.day)))
-    assertEquals(po2, repository.getOne(YmdPK(type = po2.type, year = po2.year, month = po2.month, day = po2.day)))
+    assertNotNull(po1.id)
+    assertNotNull(po2.id)
+    assertEquals(po1, repository.getOne(po1.id!!))
+    assertEquals(po2, repository.getOne(po2.id!!))
     repository.flush()
   }
 }
