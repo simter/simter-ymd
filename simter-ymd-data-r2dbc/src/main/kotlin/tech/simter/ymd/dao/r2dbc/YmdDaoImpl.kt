@@ -14,21 +14,22 @@ import tech.simter.ymd.po.Ymd
  */
 @Component
 class YmdDaoImpl @Autowired constructor(
-  private val repository: YmdRepository
+  private val repository: YmdRepository,
+  private val repository2: YmdRepositoryByConnectionFactory
 ) : YmdDao {
   override fun save(vararg ymd: Ymd): Mono<Void> {
     return repository.saveAll(ymd.asIterable()).then()
   }
 
   override fun findYears(type: String): Flux<Int> {
-    return repository.findYears(type)
+    return repository2.findYears(type)
   }
 
   override fun findMonths(type: String, year: Int): Flux<Int> {
-    return repository.findMonths(type, year)
+    return repository2.findMonths(type, year)
   }
 
   override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
-    return repository.findDays(type, year, month)
+    return repository2.findDays(type, year, month)
   }
 }

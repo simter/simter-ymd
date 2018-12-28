@@ -10,11 +10,11 @@ logging:
     org.springframework: WARN
 
     #---- simter ----#
-    tech.simter.r2dbc: WARN
+    #tech.simter.r2dbc: WARN
     tech.simter.ymd: WARN
 
     #---- r2dbc ----#
-    io.r2dbc: TRACE
+    io.r2dbc: WARN
     io.r2dbc.postgresql.client.ReactorNettyClient: WARN # debug to show postgres request and Response
     org.springframework.data.r2dbc: WARN
-    org.springframework.data.r2dbc.function.DefaultDatabaseClient: DEBUG # debug to show sql
+    org.springframework.data.r2dbc.function.DefaultDatabaseClient: WARN # debug to show sql
