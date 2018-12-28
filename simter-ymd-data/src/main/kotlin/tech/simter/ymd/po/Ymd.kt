@@ -13,6 +13,8 @@ import javax.persistence.GenerationType.IDENTITY
 // for jpa
 @javax.persistence.Entity
 @javax.persistence.Table(name = TABLE_NAME)
+// for jdbc or r2dbc
+@org.springframework.data.relational.core.mapping.Table(TABLE_NAME)
 // for mongodb
 @org.springframework.data.mongodb.core.mapping.Document(collection = TABLE_NAME)
 data class Ymd(
