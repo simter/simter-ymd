@@ -21,6 +21,7 @@
     <module>simter-ymd-dependencies</module>
     <module>simter-ymd-parent</module>
     <module>simter-ymd-data</module>
+    <module>simter-ymd-data-r2dbc</module>
     <module>simter-ymd-data-jpa</module>
     <module>simter-ymd-data-reactive-mongo</module>
     <module>simter-ymd-rest-webflux</module>
