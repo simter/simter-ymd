@@ -1,12 +1,13 @@
 package tech.simter.ymd.dao.jpa
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
-import reactor.test.StepVerifier
-import tech.simter.util.RandomUtils.randomString
+import reactor.test.test
+import tech.simter.ymd.TestUtils.nextId
+import tech.simter.ymd.TestUtils.nextType
 import tech.simter.ymd.TestUtils.randomYmd
 import tech.simter.ymd.dao.YmdDao
 
@@ -21,31 +22,31 @@ class FindYearsMethodImplTest @Autowired constructor(
   private val repository: YmdJpaRepository,
   val dao: YmdDao
 ) {
-  private val type = randomString("type")
+  @BeforeEach
+  fun clean() {
+    repository.deleteAll()
+    repository.flush()
+  }
+
   @Test
   fun `Found nothing`() {
-    StepVerifier.create(dao.findYears(type)).verifyComplete()
-    assertEquals(0, repository.count())
+    dao.findYears(type = nextType()).test().verifyComplete()
   }
 
   @Test
   fun `Found something`() {
-    // init data with asc order
-    val expected = (1..3).map { randomYmd(type = type, year = 2000 + it) }
-    repository.saveAll(expected)
+    // init data
+    val t1y1 = randomYmd(type = nextType(), year = 2000)
+    val t1y2 = randomYmd(type = t1y1.type, year = 2001)
+    val t1y2c = t1y2.copy(id = nextId())                 // duplicate with t1y2
+    val t2y1 = randomYmd(type = nextType(), year = 2018) // another type
+    val all = listOf(t1y1, t1y2, t1y2c, t2y1)
+    repository.saveAll(all)
+    repository.flush()
 
-    // init one other type
-    repository.save(randomYmd(type = "${type}_not-same"))
-
-    // invoke
-    val result = dao.findYears(type)
-
-    // verify with desc order
-    StepVerifier.create(result.collectList())
-      .consumeNextWith {
-        val lastIndex = expected.size - 1
-        assertEquals(expected.size, it.size)
-        expected.forEachIndexed { index, ymd -> assertEquals(ymd.year, it[lastIndex - index]) } // desc
-      }.verifyComplete()
+    // invoke and verify with desc order
+    dao.findYears(type = t1y1.type).test()
+      .expectNextSequence(listOf(t1y2, t1y1).map { it.year })
+      .verifyComplete()
   }
 }

@@ -12,7 +12,7 @@ import tech.simter.ymd.po.Ymd
  *
  * @author RJ
  */
-interface YmdJpaRepository : JpaRepository<Ymd, Int> {
+interface YmdJpaRepository : JpaRepository<Ymd, String> {
   @Query("select distinct year from Ymd where type = ?1 order by year desc")
   fun findYears(type: String): List<Int>
 
