@@ -1,7 +1,7 @@
 package tech.simter.ymd
 
+import tech.simter.util.RandomUtils.nextId
 import tech.simter.util.RandomUtils.randomInt
-import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.po.Ymd
 
 /**
@@ -12,16 +12,28 @@ import tech.simter.ymd.po.Ymd
 object TestUtils {
   /** Generate a random [Ymd] instance */
   fun randomYmd(
-    type: String = randomString("t"),
+    id: String = nextId(),
+    type: String = nextType(),
     year: Int = randomInt(2000, 2099), // 4 digits,
     month: Int = randomInt(1, 12),
     day: Int = randomInt(1, 20)
   ): Ymd {
     return Ymd(
+      id = id,
       type = type,
       year = year,
       month = month,
       day = day
     )
+  }
+
+  /** Generate a next [Ymd] type */
+  fun nextType(): String {
+    return "type${nextId("type")}"
+  }
+
+  /** Generate a next [Ymd] id */
+  fun nextId(): String {
+    return "id${nextId("id")}"
   }
 }

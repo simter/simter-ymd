@@ -4,20 +4,45 @@ import io.r2dbc.spi.Connection
 import io.r2dbc.spi.ConnectionFactory
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.core.publisher.toMono
 import tech.simter.ymd.TABLE_NAME
+import tech.simter.ymd.po.Ymd
 
 /**
  * @author RJ
  */
-@Repository
-class YmdRepositoryByConnectionFactory @Autowired constructor(
+@Component
+class CustomizedYmdRepositoryImpl @Autowired constructor(
   private val connectionFactory: ConnectionFactory
-) {
-  private val logger = LoggerFactory.getLogger(YmdRepositoryByConnectionFactory::class.java)
-  fun findYears(type: String): Flux<Int> {
+) : CustomizedYmdRepository {
+  private val logger = LoggerFactory.getLogger(CustomizedYmdRepository::class.java)
+
+  private fun connection(): Mono<Connection> {
+    return Mono.from(connectionFactory.create())
+  }
+
+  override fun save(entity: Ymd): Mono<Ymd> {
+    return this.connection()
+      .flatMapMany { c ->
+        c.createStatement("insert into $TABLE_NAME(id, type, year, month, day) values($1, $2, $3, $4, $5)")
+          .bind("$1", entity.id)
+          .bind("$2", entity.type)
+          .bind("$3", entity.year)
+          .bind("$4", entity.month)
+          .bind("$5", entity.day)
+          .add()
+          .execute()
+      }.then(entity.toMono())
+  }
+
+  override fun saveAll(entities: Iterable<Ymd>): Flux<Ymd> {
+    return Flux.fromIterable(entities).concatMap { this.save(it) }
+  }
+
+  override fun findYears(type: String): Flux<Int> {
     return this.connection()
       .flatMapMany { c ->
         Flux.from(
@@ -31,7 +56,7 @@ class YmdRepositoryByConnectionFactory @Autowired constructor(
       }
   }
 
-  fun findMonths(type: String, year: Int): Flux<Int> {
+  override fun findMonths(type: String, year: Int): Flux<Int> {
     return this.connection()
       .flatMapMany { c ->
         Flux.from(
@@ -44,7 +69,7 @@ class YmdRepositoryByConnectionFactory @Autowired constructor(
       }
   }
 
-  fun findDays(type: String, year: Int, month: Int): Flux<Int> {
+  override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
     logger.debug("type={}, year={}, month={}", type, year, month)
     return this.connection()
       .flatMapMany { c ->
@@ -57,9 +82,5 @@ class YmdRepositoryByConnectionFactory @Autowired constructor(
             .execute()
         ).flatMap { it.map { row, _ -> row.get("day")?.toString()?.toInt() } }
       }
-  }
-
-  private fun connection(): Mono<Connection> {
-    return Mono.from(connectionFactory.create())
   }
 }

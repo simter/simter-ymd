@@ -15,6 +15,6 @@ logging:
 
     #---- r2dbc ----#
     io.r2dbc: WARN
-    io.r2dbc.postgresql.client.ReactorNettyClient: WARN # debug to show postgres request and Response
+    io.r2dbc.postgresql.client.ReactorNettyClient: WARN # DEBUG to show postgres request and Response
     org.springframework.data.r2dbc: WARN
-    org.springframework.data.r2dbc.function.DefaultDatabaseClient: WARN # debug to show sql
+    org.springframework.data.r2dbc.function.DefaultDatabaseClient: WARN # DEBUG to show sql
