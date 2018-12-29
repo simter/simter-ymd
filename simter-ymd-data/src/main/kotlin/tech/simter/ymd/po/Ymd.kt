@@ -2,8 +2,6 @@ package tech.simter.ymd.po
 
 import tech.simter.ymd.TABLE_NAME
 import javax.persistence.Column
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType.IDENTITY
 
 /**
  * The date of massive data.
@@ -18,11 +16,6 @@ import javax.persistence.GenerationType.IDENTITY
 // for mongodb
 @org.springframework.data.mongodb.core.mapping.Document(collection = TABLE_NAME)
 data class Ymd(
-  @javax.persistence.Id
-  @org.springframework.data.annotation.Id
-  @GeneratedValue(strategy = IDENTITY)
-  var id: Int? = null,
-
   /** The belong type */
   @Column(nullable = false, length = 50) val type: String,
 
@@ -33,5 +26,20 @@ data class Ymd(
   @Column(nullable = false) val month: Int = 0,
 
   /** day from 1 to 31. 0 means ignored */
-  @Column(nullable = false) val day: Int = 0
-)
+  @Column(nullable = false) val day: Int = 0,
+
+  @javax.persistence.Id
+  @org.springframework.data.annotation.Id
+  val id: String = uid(type, year, month, day)
+) {
+  @get:javax.persistence.Transient
+  @get:org.springframework.data.annotation.Transient
+  val uid: String
+    get() = uid(type, year, month, day)
+
+  companion object {
+    fun uid(type: String, year: Int, month: Int, day: Int): String {
+      return "$type:$year:$month:$day"
+    }
+  }
+}
