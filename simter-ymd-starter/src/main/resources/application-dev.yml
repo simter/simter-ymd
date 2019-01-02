@@ -6,6 +6,8 @@ logging:
 
     #---- simter ----#
     tech.simter.ymd.starter: INFO
+    tech.simter.r2dbc: INFO # DEBUG to show R2dbcProperties, INFO to show executing sql script
+    tech.simter.ymd: WARN
 
     #---- spring ----#
     #org.springframework: WARN

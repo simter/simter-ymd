@@ -13,12 +13,7 @@
   <packaging>jar</packaging>
   <description>micro-service Starter</description>
   <properties>
-    <db.platform>no-name</db.platform>
-    <db.init-mode>never</db.init-mode>
-    <db.ddl-auto>none</db.ddl-auto>
     <db.host>localhost</db.host>
-    <db.port>~</db.port>
-    <db.name>test_ymd</db.name>
     <db.username>test</db.username>
     <db.password>password</db.password>
   </properties>
@@ -109,61 +104,45 @@
     </plugins>
   </build>
   <profiles>
-    <!-- dev means development, prod means production-->
     <profile>
-      <id>dev-reactive-mongo</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <properties>
-        <spring-active-profiles>dev,db-mongo-embed</spring-active-profiles>
-        <db.platform>mongo-embed</db.platform>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>tech.simter</groupId>
-          <artifactId>simter-ymd-data-reactive-mongo</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>de.flapdoodle.embed</groupId>
-          <artifactId>de.flapdoodle.embed.mongo</artifactId>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>prod-reactive-mongo</id>
-      <properties>
-        <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
-        <spring-active-profiles>prod,db-mongo</spring-active-profiles>
-        <db.host>localhost</db.host>
-        <db.port>27017</db.port>
-        <db.name>st_ymd</db.name>
-        <db.username>ymd</db.username>
-        <db.password>password</db.password>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>tech.simter</groupId>
-          <artifactId>simter-ymd-data-reactive-mongo</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>dev-jpa-hsql</id>
+      <id>dev</id>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <spring-active-profiles>dev,db-hsql</spring-active-profiles>
-        <db.platform>hsql</db.platform>
-        <db.init-mode>never</db.init-mode>
-        <db.ddl-auto>create-drop</db.ddl-auto>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <app.env>dev</app.env>
+        <db.name>test_st_ymd</db.name>
+        <!-- never|always|embedded -->
+        <db.init-mode>always</db.init-mode>
+        <!-- none|create-drop -->
+        <jpa.ddl-auto>create-drop</jpa.ddl-auto>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
+        <app.env>prod</app.env>
         <db.host>localhost</db.host>
+        <db.name>st_ymd</db.name>
+        <!-- never|always|embedded -->
+        <db.init-mode>never</db.init-mode>
+        <!-- none|create-drop -->
+        <jpa.ddl-auto>none</jpa.ddl-auto>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>jpa-hsql</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <app.dao>jpa-hsql</app.dao>
+        <db.platform>hsql</db.platform>
         <db.port>~</db.port>
-        <db.name>test_ymd</db.name>
-        <db.username>test</db.username>
-        <db.password>password</db.password>
+        <jpa.dialect>org.hibernate.dialect.HSQLDialect</jpa.dialect>
       </properties>
       <dependencies>
         <dependency>
@@ -193,21 +172,12 @@
       </dependencies>
     </profile>
     <profile>
-      <id>prod-jpa-postgres</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
+      <id>jpa-postgres</id>
       <properties>
-        <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
-        <spring-active-profiles>prod,db-postgres</spring-active-profiles>
+        <app.dao>jpa-postgres</app.dao>
         <db.platform>postgres</db.platform>
-        <db.init-mode>never</db.init-mode>
-        <db.ddl-auto>none</db.ddl-auto>
-        <db.host>localhost</db.host>
         <db.port>5432</db.port>
-        <db.name>st_ymd</db.name>
-        <db.username>ymd</db.username>
-        <db.password>password</db.password>
+        <jpa.dialect>org.hibernate.dialect.PostgresPlusDialect</jpa.dialect>
       </properties>
       <dependencies>
         <dependency>
@@ -233,6 +203,83 @@
         <dependency>
           <groupId>org.postgresql</groupId>
           <artifactId>postgresql</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>reactive-mongo-embedded</id>
+      <properties>
+        <app.dao>reactive-mongo-embedded</app.dao>
+        <db.platform>mongo-embedded</db.platform>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>tech.simter</groupId>
+          <artifactId>simter-ymd-data-reactive-mongo</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>de.flapdoodle.embed</groupId>
+          <artifactId>de.flapdoodle.embed.mongo</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>reactive-mongo</id>
+      <properties>
+        <app.dao>reactive-mongo</app.dao>
+        <db.platform>mongo</db.platform>
+        <db.port>27017</db.port>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>tech.simter</groupId>
+          <artifactId>simter-ymd-data-reactive-mongo</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>reactive-h2</id>
+      <properties>
+        <app.dao>reactive-h2</app.dao>
+        <db.platform>h2</db.platform>
+        <db.url>./target/${db.name}</db.url>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>tech.simter</groupId>
+          <artifactId>simter-ymd-data-r2dbc</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.r2dbc</groupId>
+          <artifactId>r2dbc-h2</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+        <!-- embedded h2 -->
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>reactive-postgres</id>
+      <properties>
+        <app.dao>reactive-postgres</app.dao>
+        <db.platform>postgres</db.platform>
+        <db.port>5432</db.port>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>tech.simter</groupId>
+          <artifactId>simter-ymd-data-r2dbc</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.r2dbc</groupId>
+          <artifactId>r2dbc-postgresql</artifactId>
+          <scope>runtime</scope>
         </dependency>
       </dependencies>
     </profile>
