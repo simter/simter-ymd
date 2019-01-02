@@ -1,7 +1,5 @@
 package tech.simter.ymd.dao.r2dbc
 
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,12 +36,10 @@ class SaveMethodImplTest @Autowired constructor(
   fun `Save one`() {
     // init data
     val po = randomYmd()
-    assertNull(po.id)
 
     // invoke and verify
     dao.save(po).test().verifyComplete()
-    assertNotNull(po.id)
-    repository.findById(po.id!!).test().expectNext(po).verifyComplete()
+    repository.findById(po.id).test().expectNext(po).verifyComplete()
   }
 
   @Test
@@ -51,14 +47,10 @@ class SaveMethodImplTest @Autowired constructor(
     // init data
     val po1 = randomYmd()
     val po2 = randomYmd()
-    assertNull(po1.id)
-    assertNull(po2.id)
 
     // invoke
     dao.save(po1, po2).test().verifyComplete()
-    assertNotNull(po1.id)
-    assertNotNull(po2.id)
-    repository.findById(po1.id!!).test().expectNext(po1).verifyComplete()
-    repository.findById(po2.id!!).test().expectNext(po2).verifyComplete()
+    repository.findById(po1.id).test().expectNext(po1).verifyComplete()
+    repository.findById(po2.id).test().expectNext(po2).verifyComplete()
   }
 }

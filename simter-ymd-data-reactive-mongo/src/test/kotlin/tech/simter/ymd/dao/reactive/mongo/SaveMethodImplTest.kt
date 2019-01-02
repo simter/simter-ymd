@@ -1,10 +1,9 @@
-package tech.simter.ymd.dao.jpa
+package tech.simter.ymd.dao.reactive.mongo
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.test.test
 import tech.simter.ymd.TestUtils.randomYmd
@@ -15,22 +14,21 @@ import tech.simter.ymd.dao.YmdDao
  *
  * @author RJ
  */
-@SpringJUnitConfig(ModuleConfiguration::class)
-@DataJpaTest
+@SpringJUnitConfig(UnitTestConfiguration::class)
+@DataMongoTest
 class SaveMethodImplTest @Autowired constructor(
-  private val repository: YmdJpaRepository,
-  val dao: YmdDao
+  private val repository: YmdRepository,
+  private val dao: YmdDao
 ) {
   @BeforeEach
   fun clean() {
-    repository.deleteAll()
-    repository.flush()
+    repository.deleteAll().test().verifyComplete()
   }
 
   @Test
   fun `Save nothing`() {
     dao.save().test().verifyComplete()
-    assertEquals(0, repository.count())
+    repository.count().test().expectNext(0).verifyComplete()
   }
 
   @Test
@@ -40,8 +38,7 @@ class SaveMethodImplTest @Autowired constructor(
 
     // invoke and verify
     dao.save(po).test().verifyComplete()
-    assertEquals(po, repository.getOne(po.id))
-    repository.flush()
+    repository.findById(po.id).test().expectNext(po).verifyComplete()
   }
 
   @Test
@@ -50,10 +47,9 @@ class SaveMethodImplTest @Autowired constructor(
     val po1 = randomYmd()
     val po2 = randomYmd()
 
-    // invoke and verify
+    // invoke
     dao.save(po1, po2).test().verifyComplete()
-    assertEquals(po1, repository.getOne(po1.id))
-    assertEquals(po2, repository.getOne(po2.id))
-    repository.flush()
+    repository.findById(po1.id).test().expectNext(po1).verifyComplete()
+    repository.findById(po2.id).test().expectNext(po2).verifyComplete()
   }
 }

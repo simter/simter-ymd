@@ -1,6 +1,5 @@
 package tech.simter.ymd.dao.r2dbc
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -8,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import reactor.test.test
-import tech.simter.util.RandomUtils
+import tech.simter.ymd.TestUtils.nextId
+import tech.simter.ymd.TestUtils.nextType
 import tech.simter.ymd.TestUtils.randomYmd
 import tech.simter.ymd.dao.YmdDao
-import java.time.YearMonth
 
 /**
  * Test [YmdDaoImpl.findDays]
@@ -31,52 +30,26 @@ class FindDaysMethodImplTest @Autowired constructor(
 
   @Test
   fun `Found nothing`() {
-    val ym = YearMonth.now()
-    dao.findDays("type1", ym.year, ym.monthValue).test().verifyComplete()
+    dao.findDays(type = nextType(), year = 2000, month = 1).test().verifyComplete()
   }
 
   @Test
   fun `Found something`() {
-    // init data with specific type, year, month and day
-    val t1 = "t1"
-    val t2 = "t2"                                                  // another type
-    val y1m1 = YearMonth.of(RandomUtils.randomInt(2000, 3000), RandomUtils.randomInt(1, 11))
-    val y1m2 = y1m1.plusMonths(1)                   // same year but another month
-    val y2m1 = YearMonth.of(y1m1.year.plus(1), y1m1.month)  // another year month
-    val t1y1m1Ymds = (20 downTo 15).map { randomYmd(type = t1, year = y1m1.year, month = y1m1.monthValue, day = it) }
-    val t1y1m2Ymds = (14 downTo 10).map { randomYmd(type = t1, year = y1m2.year, month = y1m2.monthValue, day = it) }
-    val t1y2m1Ymds = (9 downTo 1).map { randomYmd(type = t1, year = y2m1.year, month = y2m1.monthValue, day = it) }
-    val t2y1m1Ymds = t1y1m1Ymds.map { it.copy(type = t2) }
+    // init data
+    val t1y1m1d1 = randomYmd(type = nextType(), year = 2001, month = 1, day = 1)
+    val t1y1m1d2 = randomYmd(type = t1y1m1d1.type, year = 2001, month = 1, day = 2)
+    val t1y1m1d2c = t1y1m1d2.copy(id = nextId())                                   // duplicate with t1y1m1d2
+    val t1y1m2d = randomYmd(type = t1y1m1d1.type, year = 2001, month = 2, day = 3) // another month
+    val t1y2md = randomYmd(type = t1y1m1d1.type, year = 2002, month = 3, day = 4)  // another year
+    val t2ymd = randomYmd(type = nextType(), year = 2003, month = 4, day = 5)      // another type
+    val all = listOf(t1y1m1d1, t1y1m1d2, t1y1m1d2c, t1y1m2d, t1y2md, t2ymd)
+    repository.saveAll(all).test()
+      .expectNextCount(all.size.toLong())
+      .verifyComplete()
 
-    // save init data
-    val allYmds = t1y1m1Ymds.toMutableList()
-    allYmds.addAll(t1y1m2Ymds)
-    allYmds.addAll(t1y2m1Ymds)
-    allYmds.addAll(t2y1m1Ymds)
-    repository.saveAll(allYmds).test().expectNextCount(allYmds.size.toLong()).verifyComplete()
-
-    // invoke and verify t1y1m1
-    dao.findDays(t1, y1m1.year, y1m1.monthValue).collectList().test().consumeNextWith {
-      assertEquals(t1y1m1Ymds.size, it.size)
-      t1y1m1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
-    }.verifyComplete()
-
-    // invoke and verify t1y1m2
-    dao.findDays(t1, y1m2.year, y1m2.monthValue).collectList().test().consumeNextWith {
-      assertEquals(t1y1m2Ymds.size, it.size)
-      t1y1m2Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
-    }.verifyComplete()
-
-    // invoke and verify t1y2m1
-    dao.findDays(t1, y2m1.year, y2m1.monthValue).collectList().test().consumeNextWith {
-      assertEquals(t1y2m1Ymds.size, it.size)
-      t1y2m1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
-    }.verifyComplete()
-
-    // invoke and verify t2y1m1
-    dao.findDays(t2, y1m1.year, y1m1.monthValue).collectList().test().consumeNextWith {
-      assertEquals(t2y1m1Ymds.size, it.size)
-      t2y1m1Ymds.forEachIndexed { index, ymd -> assertEquals(ymd.day, it[index]) }
-    }.verifyComplete()
+    // invoke and verify with desc order
+    dao.findDays(type = t1y1m1d1.type, year = t1y1m1d1.year, month = t1y1m1d1.month).test()
+      .expectNextSequence(listOf(t1y1m1d2, t1y1m1d1).map { it.day })
+      .verifyComplete()
   }
 }

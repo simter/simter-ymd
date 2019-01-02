@@ -1,9 +1,9 @@
-package tech.simter.ymd.dao.jpa
+package tech.simter.ymd.dao.reactive.mongo
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.test.test
 import tech.simter.ymd.TestUtils.nextId
@@ -15,18 +15,16 @@ import tech.simter.ymd.dao.YmdDao
  * Test [YmdDaoImpl.findMonths]
  *
  * @author RJ
- * @author XA
  */
-@SpringJUnitConfig(ModuleConfiguration::class)
-@DataJpaTest
+@SpringJUnitConfig(UnitTestConfiguration::class)
+@DataMongoTest
 class FindMonthsMethodImplTest @Autowired constructor(
-  private val repository: YmdJpaRepository,
-  val dao: YmdDao
+  private val repository: YmdRepository,
+  private val dao: YmdDao
 ) {
   @BeforeEach
   fun clean() {
-    repository.deleteAll()
-    repository.flush()
+    repository.deleteAll().test().verifyComplete()
   }
 
   @Test
@@ -43,8 +41,9 @@ class FindMonthsMethodImplTest @Autowired constructor(
     val t1y2m = randomYmd(type = t1y1m1.type, year = 2002, month = 3) // another year
     val t2ym = randomYmd(type = nextType(), year = 2003, month = 4)   // another type
     val all = listOf(t1y1m1, t1y1m2, t1y1m2c, t1y2m, t2ym)
-    repository.saveAll(all)
-    repository.flush()
+    repository.saveAll(all).test()
+      .expectNextCount(all.size.toLong())
+      .verifyComplete()
 
     // invoke and verify with desc order
     dao.findMonths(type = t1y1m1.type, year = t1y1m1.year).test()
