@@ -28,6 +28,12 @@
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-r2dbc</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.microsoft.sqlserver</groupId>
+          <artifactId>mssql-jdbc</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- test -->
