@@ -28,13 +28,51 @@
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-r2dbc</artifactId>
-    </dependency>
-
-    <!-- test -->
-    <dependency>
-      <groupId>io.r2dbc</groupId>
-      <artifactId>r2dbc-postgresql</artifactId>
-      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.microsoft.sqlserver</groupId>
+          <artifactId>mssql-jdbc</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
+  <profiles>
+    <profile>
+      <id>h2</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <db.platform>h2</db.platform>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>io.r2dbc</groupId>
+          <artifactId>r2dbc-h2</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>postgres</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <db.platform>postgres</db.platform>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>io.r2dbc</groupId>
+          <artifactId>r2dbc-postgresql</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>
