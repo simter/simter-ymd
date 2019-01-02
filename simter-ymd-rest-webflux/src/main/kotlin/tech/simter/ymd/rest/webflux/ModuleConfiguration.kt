@@ -43,11 +43,11 @@ class ModuleConfiguration @Autowired constructor(
   @ConditionalOnMissingBean(name = ["$PACKAGE_NAME.rest.webflux.Routes"])
   fun simterYmdRoutes() = router {
     contextPath.nest {
-      // GET {type}/day    Find all days of the specific type, year and month
+      // GET /{type}/{year}/{month}/day    Find all days of the specific type, year and month
       FindDaysHandler.REQUEST_PREDICATE.invoke(findDaysHandler::handle)
-      // GET /{type}/month Find all months of the specific type and year
+      // GET /{type}/{year}/month          Find all months of the specific type and year
       FindMonthsHandler.REQUEST_PREDICATE.invoke(findMonthsHandler::handle)
-      // GET /{type}/year  Find all years of the specific type
+      // GET /{type}/year                  Find all years of the specific type
       FindYearsHandler.REQUEST_PREDICATE.invoke(findYearsHandler::handle)
       // GET /
       GET("/") { ok().contentType(TEXT_PLAIN).syncBody("simter-ymd-$version") }
