@@ -8,6 +8,7 @@
 | 4  | GET    | /{type}/year?with-latest-year-months | Find all years of the specific type, also load all months of the latest year
 | 5  | GET    | /{type}/year?with-latest-month-days  | Find all years of the specific type, also load all months of the latest year and all days of the latest month
 | 6  | POST   | /                                    | Create a new Ymd record
+| 7  | POST   | /{type}                              | Batch create multiple Ymd records for a specify type
 
 ### 1. Find all years of the specific type
 
@@ -188,4 +189,28 @@ Content-Type : application/json;charset=UTF-8
 400 BadRequest
 
 "Missing type value!" or "Missing year value!"
+```
+
+### 7. Batch create multiple Ymd records for a specify type
+
+**Request：**
+
+```
+POST {context-path}/{type}
+Content-Type : application/json;charset=UTF-8
+
+[{year, month, day}, ...]
+```
+
+| Name  | Require | Description
+|-------|---------|-------------
+| type  | true    | Max len 50 char string
+| year  | true    | 4 digits year number
+| month | false   | from 1 to 12 number, default 0 means ignored
+| day   | false   | from 1 to max 31 number (base on the max month day), default 0 means ignored
+
+**Response：(Success)**
+
+```
+204 NoContent
 ```
