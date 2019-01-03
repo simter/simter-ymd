@@ -1,12 +1,3 @@
-db:
-  platform: @db.platform@
-  init-mode: @db.init-mode@
-  ddl-auto: @db.ddl-auto@
-  host: @db.host@
-  port: @db.port@
-  name: @db.name@
-  username: @db.username@
-  password: @db.password@
 module:
   version:
     simter-ymd: @project.version@
@@ -21,20 +12,10 @@ spring:
   main:
     banner-mode: 'off'
   profiles:
-    active: @spring-active-profiles@
+    active:
+      - @app.env@
+      - @app.dao@
   application:
     name: @project.artifactId@-@project.version@
-  jpa:
-    open-in-view: false
-    properties:
-      hibernate.show_sql: false      # true for log to console directly
-    hibernate:
-      ddl-auto: ${db.ddl-auto:none}  # none | create | create-drop | update | validate
-#      naming:
-#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl #ImplicitNamingStrategyComponentPathImpl
-  datasource:
-    continue-on-error: false
-    sql-script-encoding: UTF-8
-    initialization-mode: ${db.init-mode} # embedded|always|never
   jackson:
     default-property-inclusion: NON_EMPTY # see enum of com.fasterxml.jackson.annotation.JsonInclude.Include
