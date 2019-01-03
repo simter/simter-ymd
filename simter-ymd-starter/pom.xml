@@ -135,9 +135,6 @@
 
     <profile>
       <id>jpa-hsql</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <properties>
         <app.dao>jpa-hsql</app.dao>
         <db.platform>hsql</db.platform>
@@ -209,6 +206,9 @@
 
     <profile>
       <id>reactive-mongo-embedded</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <properties>
         <app.dao>reactive-mongo-embedded</app.dao>
         <db.platform>mongo-embedded</db.platform>
