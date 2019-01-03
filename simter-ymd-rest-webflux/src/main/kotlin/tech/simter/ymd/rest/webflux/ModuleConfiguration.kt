@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.server.router
 import tech.simter.ymd.PACKAGE_NAME
-import tech.simter.ymd.rest.webflux.handler.FindDaysHandler
-import tech.simter.ymd.rest.webflux.handler.FindMonthsHandler
-import tech.simter.ymd.rest.webflux.handler.FindYearsHandler
+import tech.simter.ymd.rest.webflux.handler.*
 
 /**
  * All configuration for this module.
@@ -29,7 +27,9 @@ class ModuleConfiguration @Autowired constructor(
   @Value("\${module.rest-context-path.simter-ymd:/ymd}") private val contextPath: String,
   private val findDaysHandler: FindDaysHandler,
   private val findMonthsHandler: FindMonthsHandler,
-  private val findYearsHandler: FindYearsHandler
+  private val findYearsHandler: FindYearsHandler,
+  private val createHandler: CreateHandler,
+  private val batchCreateByTypeHandler: BatchCreateByTypeHandler
 ) {
   private val logger = LoggerFactory.getLogger(ModuleConfiguration::class.java)
 
@@ -49,6 +49,10 @@ class ModuleConfiguration @Autowired constructor(
       FindMonthsHandler.REQUEST_PREDICATE.invoke(findMonthsHandler::handle)
       // GET /{type}/year                  Find all years of the specific type
       FindYearsHandler.REQUEST_PREDICATE.invoke(findYearsHandler::handle)
+      // POST /{                           Create a new Ymd record
+      CreateHandler.REQUEST_PREDICATE.invoke(createHandler::handle)
+      // POST /{                           Batch create multiple Ymd records.
+      BatchCreateByTypeHandler.REQUEST_PREDICATE.invoke(batchCreateByTypeHandler::handle)
       // GET /
       GET("/") { ok().contentType(TEXT_PLAIN).syncBody("simter-ymd-$version") }
     }
