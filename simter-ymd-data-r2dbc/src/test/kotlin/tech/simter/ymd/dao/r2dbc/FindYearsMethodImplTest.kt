@@ -37,8 +37,8 @@ class FindYearsMethodImplTest @Autowired constructor(
   fun `Found something`() {
     // init data
     val t1y1 = randomYmd(type = nextType(), year = 2000)
-    val t1y2 = randomYmd(type = t1y1.type, year = 2001)
-    val t1y2c = t1y2.copy(id = nextId())                 // duplicate with t1y2
+    val t1y2 = randomYmd(type = t1y1.type, year = 2001, day = 1)
+    val t1y2c = t1y2.copy(id = nextId(), day = 2)        // duplicate year with t1y2
     val t2y1 = randomYmd(type = nextType(), year = 2018) // another type
     val all = listOf(t1y1, t1y2, t1y2c, t2y1)
     repository.saveAll(all).test()
