@@ -1,5 +1,9 @@
 # simter-ymd changelog
 
+## 0.3.0 2019-01-10
+
+- Upgrade to simter platform 1.0.0
+
 ## 0.2.0 2019-01-03
 
 - Change id to String type, not auto generate, default uid
