@@ -156,7 +156,6 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON_UTF8)
-      .syncBody("")
       .exchange()
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")

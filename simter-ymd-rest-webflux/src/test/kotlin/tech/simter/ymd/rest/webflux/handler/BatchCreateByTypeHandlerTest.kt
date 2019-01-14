@@ -79,7 +79,6 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
     // invoke and verify with empty body
     client.post().uri("/$type")
       .contentType(APPLICATION_JSON_UTF8)
-      .syncBody("")
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
     verify(service, times(0)).save(any())
