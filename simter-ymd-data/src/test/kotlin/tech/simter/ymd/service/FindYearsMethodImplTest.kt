@@ -1,19 +1,19 @@
 package tech.simter.ymd.service
 
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.core.publisher.Flux
-import reactor.test.StepVerifier
+import reactor.test.test
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.dao.YmdDao
 
 @SpringJUnitConfig(YmdServiceImpl::class)
-@MockBean(YmdDao::class)
+@MockkBean(YmdDao::class)
 class FindYearsMethodImplTest @Autowired constructor(
   private val dao: YmdDao,
   private val service: YmdService
@@ -22,11 +22,11 @@ class FindYearsMethodImplTest @Autowired constructor(
   fun `Found nothing`() {
     // mock
     val type = randomString()
-    `when`(dao.findYears(type)).thenReturn(Flux.empty())
+    every { dao.findYears(type) } returns Flux.empty()
 
     // invoke and verify
-    StepVerifier.create(service.findYears(type)).verifyComplete()
-    verify(dao).findYears(type)
+    service.findYears(type).test().verifyComplete()
+    verify(exactly = 1) { dao.findYears(type) }
   }
 
   @Test
@@ -34,12 +34,10 @@ class FindYearsMethodImplTest @Autowired constructor(
     // mock
     val type = randomString()
     val year = randomInt(1900, 3000)
-    `when`(dao.findYears(type)).thenReturn(Flux.just(year))
+    every { dao.findYears(type) } returns Flux.just(year)
 
     // invoke and verify
-    StepVerifier.create(service.findYears(type))
-      .expectNext(year)
-      .verifyComplete()
-    verify(dao).findYears(type)
+    service.findYears(type).test().expectNext(year).verifyComplete()
+    verify(exactly = 1) { dao.findYears(type) }
   }
 }

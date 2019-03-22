@@ -1,19 +1,19 @@
 package tech.simter.ymd.service
 
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.core.publisher.Flux
-import reactor.test.StepVerifier
+import reactor.test.test
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.dao.YmdDao
 
 @SpringJUnitConfig(YmdServiceImpl::class)
-@MockBean(YmdDao::class)
+@MockkBean(YmdDao::class)
 class FindMonthsMethodImplTest @Autowired constructor(
   private val dao: YmdDao,
   private val service: YmdService
@@ -23,11 +23,11 @@ class FindMonthsMethodImplTest @Autowired constructor(
     // mock
     val type = randomString()
     val year = randomInt(1900, 3000)
-    `when`(dao.findMonths(type, year)).thenReturn(Flux.empty())
+    every { dao.findMonths(type, year) } returns Flux.empty()
 
     // invoke and verify
-    StepVerifier.create(service.findMonths(type, year)).verifyComplete()
-    verify(dao).findMonths(type, year)
+    service.findMonths(type, year).test().verifyComplete()
+    verify(exactly = 1) { dao.findMonths(type, year) }
   }
 
   @Test
@@ -36,12 +36,12 @@ class FindMonthsMethodImplTest @Autowired constructor(
     val type = randomString()
     val year = randomInt(1900, 3000)
     val month = randomInt(1, 12)
-    `when`(dao.findMonths(type, year)).thenReturn(Flux.just(month))
+    every { dao.findMonths(type, year) } returns Flux.just(month)
 
     // invoke and verify
-    StepVerifier.create(service.findMonths(type, year))
+    service.findMonths(type, year).test()
       .expectNext(month)
       .verifyComplete()
-    verify(dao).findMonths(type, year)
+    verify(exactly = 1) { dao.findMonths(type, year) }
   }
 }
