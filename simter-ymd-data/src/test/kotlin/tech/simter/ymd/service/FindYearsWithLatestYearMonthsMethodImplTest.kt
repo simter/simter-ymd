@@ -1,6 +1,7 @@
 package tech.simter.ymd.service
 
 import com.ninjasquad.springmockk.MockkBean
+import com.ninjasquad.springmockk.MockkBeans
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -9,14 +10,22 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.test
+import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.util.RandomUtils.randomString
+import tech.simter.ymd.OPERATION_READ
+import tech.simter.ymd.PACKAGE_NAME
 import tech.simter.ymd.dao.YmdDao
 import java.time.Year
 
 @SpringJUnitConfig(YmdServiceImpl::class)
-@MockkBean(YmdDao::class)
+@MockkBeans(
+  MockkBean(YmdDao::class),
+  MockkBean(ModuleAuthorizer::class, name = "$PACKAGE_NAME.service.ModuleAuthorizer")
+)
 class FindYearsWithLatestYearMonthsMethodImplTest @Autowired constructor(
+  private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao,
   private val service: YmdService
 ) {
@@ -25,10 +34,14 @@ class FindYearsWithLatestYearMonthsMethodImplTest @Autowired constructor(
     // mock data
     val type = randomString()
     every { dao.findYears(type) } returns Flux.empty()
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_READ) } returns Mono.empty()
 
     // invoke and verify
     service.findYearsWithLatestYearMonths(type).test().verifyComplete()
-    verify(exactly = 1) { dao.findYears(type) }
+    verify(exactly = 1) {
+      moduleAuthorizer.verifyHasPermission(OPERATION_READ)
+      dao.findYears(type)
+    }
     verify(exactly = 0) { dao.findMonths(any(), any()) }
   }
 
@@ -41,6 +54,7 @@ class FindYearsWithLatestYearMonthsMethodImplTest @Autowired constructor(
     val years = (latestYear.value downTo 2000).map { it }
     every { dao.findYears(type) } returns Flux.fromIterable(years)
     every { dao.findMonths(type, latestYear.value) } returns Flux.fromIterable(latestYearMonths)
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_READ) } returns Mono.empty()
 
     // invoke and verify
     service.findYearsWithLatestYearMonths(type).collectList()
@@ -58,6 +72,7 @@ class FindYearsWithLatestYearMonthsMethodImplTest @Autowired constructor(
         }
       }.verifyComplete()
     verify(exactly = 1) {
+      moduleAuthorizer.verifyHasPermission(OPERATION_READ)
       dao.findYears(type)
       dao.findMonths(type, latestYear.value)
     }
@@ -71,6 +86,7 @@ class FindYearsWithLatestYearMonthsMethodImplTest @Autowired constructor(
     val years = (latestYear.value downTo 2000).map { it }
     every { dao.findYears(type) } returns Flux.fromIterable(years)
     every { dao.findMonths(type, latestYear.value) } returns Flux.empty()
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_READ) } returns Mono.empty()
 
     // invoke and verify
     service.findYearsWithLatestYearMonths(type).collectList()
@@ -82,6 +98,7 @@ class FindYearsWithLatestYearMonthsMethodImplTest @Autowired constructor(
         }
       }.verifyComplete()
     verify(exactly = 1) {
+      moduleAuthorizer.verifyHasPermission(OPERATION_READ)
       dao.findYears(type)
       dao.findMonths(type, latestYear.value)
     }
