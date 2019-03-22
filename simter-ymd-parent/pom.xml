@@ -30,7 +30,15 @@
       <dependency>
         <groupId>tech.simter</groupId>
         <artifactId>simter-dependencies</artifactId>
-        <version>1.1.0</version>
+        <version>${simter-dependencies.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- junit5 -->
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit5.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
