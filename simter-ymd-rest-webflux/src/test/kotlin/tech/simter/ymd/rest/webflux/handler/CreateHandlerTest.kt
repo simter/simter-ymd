@@ -1,14 +1,12 @@
 package tech.simter.ymd.rest.webflux.handler
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.verify
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.times
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
@@ -31,7 +29,7 @@ import javax.json.Json
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class, CreateHandler::class, CreateHandlerTest.Cfg::class)
-@MockBean(YmdService::class)
+@MockkBean(YmdService::class)
 @WebFluxTest
 class CreateHandlerTest @Autowired constructor(
   private val client: WebTestClient,
@@ -52,7 +50,7 @@ class CreateHandlerTest @Autowired constructor(
       .add("year", ymd.year)
       .add("month", ymd.month)
       .add("day", ymd.day)
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -60,7 +58,7 @@ class CreateHandlerTest @Autowired constructor(
       .syncBody(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(service).save(any())
+    verify(exactly = 1) { service.save(any()) }
   }
 
   @Test
@@ -71,7 +69,7 @@ class CreateHandlerTest @Autowired constructor(
       .add("type", ymd.type)
       .add("year", ymd.year)
       .add("month", ymd.month)
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -79,7 +77,7 @@ class CreateHandlerTest @Autowired constructor(
       .syncBody(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(service).save(any())
+    verify(exactly = 1) { service.save(any()) }
   }
 
   @Test
@@ -89,7 +87,7 @@ class CreateHandlerTest @Autowired constructor(
     val data = Json.createObjectBuilder()
       .add("type", ymd.type)
       .add("year", ymd.year)
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -97,13 +95,13 @@ class CreateHandlerTest @Autowired constructor(
       .syncBody(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(service).save(any())
+    verify(exactly = 1) { service.save(any()) }
   }
 
   @Test
   fun `Failed by missing type`() {
     // mock
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -115,7 +113,7 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
 
     // invoke and verify
     client.post().uri("/")
@@ -127,13 +125,13 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
   }
 
   @Test
   fun `Failed by missing year`() {
     // mock
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -145,13 +143,13 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing year value!", responseBody)
       }
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
   }
 
   @Test
   fun `Failed by empty body`() {
     // mock
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -162,7 +160,7 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
 
     // invoke and verify
     client.post().uri("/")
@@ -173,6 +171,6 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
   }
 }

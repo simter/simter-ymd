@@ -1,11 +1,11 @@
 package tech.simter.ymd.rest.webflux.handler
 
-import com.nhaarman.mockito_kotlin.verify
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
@@ -29,7 +29,7 @@ import tech.simter.ymd.service.YmdService
  * @author XA
  */
 @SpringJUnitConfig(FindMonthsHandler::class, Cfg::class, UnitTestConfiguration::class)
-@MockBean(YmdService::class)
+@MockkBean(YmdService::class)
 @WebFluxTest
 class FindMonthsHandlerTest @Autowired constructor(
   private val client: WebTestClient,
@@ -46,14 +46,14 @@ class FindMonthsHandlerTest @Autowired constructor(
     // mock
     val type = randomString()
     val year = randomInt(2000, 3000)
-    `when`(ymdService.findMonths(type, year)).thenReturn(Flux.empty())
+    every { ymdService.findMonths(type, year) } returns Flux.empty()
 
     // invoke and verify
     client.get().uri("/$type/$year/month")
       .exchange()
       .expectStatus().isNoContent
       .expectBody().isEmpty
-    verify(ymdService).findMonths(type, year)
+    verify(exactly = 1) { ymdService.findMonths(type, year) }
   }
 
   @Test
@@ -62,7 +62,7 @@ class FindMonthsHandlerTest @Autowired constructor(
     val type = randomString()
     val year = randomInt(2000, 3000)
     val months = (2 downTo 1).map { it }
-    `when`(ymdService.findMonths(type, year)).thenReturn(Flux.just(*months.toTypedArray()))
+    every { ymdService.findMonths(type, year) } returns Flux.just(*months.toTypedArray())
 
     // invoke and verify
     client.get().uri("/$type/$year/month")
@@ -74,6 +74,6 @@ class FindMonthsHandlerTest @Autowired constructor(
       .jsonPath("$.[0]").isEqualTo(months[0])
       .jsonPath("$.[1]").isEqualTo(months[1])
 
-    verify(ymdService).findMonths(type, year)
+    verify(exactly = 1) { ymdService.findMonths(type, year) }
   }
 }
