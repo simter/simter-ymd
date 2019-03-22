@@ -1,21 +1,30 @@
 package tech.simter.ymd.service
 
 import com.ninjasquad.springmockk.MockkBean
+import com.ninjasquad.springmockk.MockkBeans
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.test
+import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
+import tech.simter.ymd.OPERATION_READ
+import tech.simter.ymd.PACKAGE_NAME
 import tech.simter.ymd.dao.YmdDao
 import java.time.Month
 
 @SpringJUnitConfig(YmdServiceImpl::class)
-@MockkBean(YmdDao::class)
+@MockkBeans(
+  MockkBean(YmdDao::class),
+  MockkBean(ModuleAuthorizer::class, name = "$PACKAGE_NAME.service.ModuleAuthorizer")
+)
 class FindDaysMethodImplTest @Autowired constructor(
+  private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao,
   private val service: YmdService
 ) {
@@ -26,10 +35,14 @@ class FindDaysMethodImplTest @Autowired constructor(
     val year = randomInt(1900, 3000)
     val month = randomInt(1, 12)
     every { dao.findDays(type, year, month) } returns Flux.empty()
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_READ) } returns Mono.empty()
 
     // invoke and verify
     service.findDays(type, year, month).test().verifyComplete()
-    verify(exactly = 1) { dao.findDays(type, year, month) }
+    verify(exactly = 1) {
+      moduleAuthorizer.verifyHasPermission(OPERATION_READ)
+      dao.findDays(type, year, month)
+    }
   }
 
   @Test
@@ -40,11 +53,15 @@ class FindDaysMethodImplTest @Autowired constructor(
     val month = randomInt(1, 12)
     val monthDay = randomInt(1, Month.of(month).maxLength())
     every { dao.findDays(type, year, month) } returns Flux.just(monthDay)
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_READ) } returns Mono.empty()
 
     // invoke and verify
     service.findDays(type, year, month).test()
       .expectNext(monthDay)
       .verifyComplete()
-    verify(exactly = 1) { dao.findDays(type, year, month) }
+    verify(exactly = 1) {
+      moduleAuthorizer.verifyHasPermission(OPERATION_READ)
+      dao.findDays(type, year, month)
+    }
   }
 }
