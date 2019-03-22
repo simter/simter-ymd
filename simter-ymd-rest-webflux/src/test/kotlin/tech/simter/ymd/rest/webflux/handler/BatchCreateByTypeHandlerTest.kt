@@ -1,13 +1,11 @@
 package tech.simter.ymd.rest.webflux.handler
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.verify
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.times
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
@@ -30,7 +28,7 @@ import javax.json.Json
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class, BatchCreateByTypeHandler::class, BatchCreateByTypeHandlerTest.Cfg::class)
-@MockBean(YmdService::class)
+@MockkBean(YmdService::class)
 @WebFluxTest
 class BatchCreateByTypeHandlerTest @Autowired constructor(
   private val client: WebTestClient,
@@ -60,7 +58,7 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
           .add("day", it.day)
       )
     }
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(*anyVararg()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/$type")
@@ -68,26 +66,26 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
       .syncBody(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(service).save(any())
+    verify(exactly = 1) { service.save(*anyVararg()) }
   }
 
   @Test
   fun `Success with empty body`() {
     // mock
-    `when`(service.save(any())).thenReturn(Mono.empty())
+    every { service.save(any()) } returns Mono.empty()
 
     // invoke and verify with empty body
     client.post().uri("/$type")
       .contentType(APPLICATION_JSON_UTF8)
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
 
     // invoke and verify without body
     client.post().uri("/$type")
       .contentType(APPLICATION_JSON_UTF8)
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(service, times(0)).save(any())
+    verify(exactly = 0) { service.save(any()) }
   }
 }

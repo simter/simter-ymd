@@ -1,12 +1,11 @@
 package tech.simter.ymd.rest.webflux.handler
 
-import com.nhaarman.mockito_kotlin.verify
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.times
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
@@ -31,7 +30,7 @@ import tech.simter.ymd.service.YmdService
  * @author RJ
  */
 @SpringJUnitConfig(FindYearsHandler::class, Cfg::class, UnitTestConfiguration::class)
-@MockBean(YmdService::class)
+@MockkBean(YmdService::class)
 @WebFluxTest
 class FindYearsHandlerTest @Autowired constructor(
   private val client: WebTestClient,
@@ -47,14 +46,14 @@ class FindYearsHandlerTest @Autowired constructor(
   fun `Found nothing`() {
     // mock
     val type = randomString()
-    `when`(ymdService.findYears(type)).thenReturn(Flux.empty())
+    every { ymdService.findYears(type) } returns Flux.empty()
 
     // invoke
     client.get().uri("/$type/year")
       .exchange()
       .expectStatus().isNoContent
       .expectBody().isEmpty
-    verify(ymdService).findYears(type)
+    verify(exactly = 1) { ymdService.findYears(type) }
   }
 
   @Test
@@ -62,7 +61,7 @@ class FindYearsHandlerTest @Autowired constructor(
     // mock
     val type = randomString()
     val years = (2 downTo 1).map { 2000 + it }
-    `when`(ymdService.findYears(type)).thenReturn(Flux.just(*years.toTypedArray()))
+    every { ymdService.findYears(type) } returns Flux.just(*years.toTypedArray())
 
     // invoke
     client.get().uri("/$type/year")
@@ -73,9 +72,11 @@ class FindYearsHandlerTest @Autowired constructor(
       .jsonPath("$.length()").isEqualTo(years.size)
       .jsonPath("$.[0]").isEqualTo(years[0])
       .jsonPath("$.[1]").isEqualTo(years[1])
-    verify(ymdService).findYears(type)
-    verify(ymdService, times(0)).findYearsWithLatestMonthDays(type)
-    verify(ymdService, times(0)).findYearsWithLatestYearMonths(type)
+    verify(exactly = 1) { ymdService.findYears(type) }
+    verify(exactly = 0) {
+      ymdService.findYearsWithLatestMonthDays(type)
+      ymdService.findYearsWithLatestYearMonths(type)
+    }
   }
 
   @Test
@@ -87,7 +88,7 @@ class FindYearsHandlerTest @Autowired constructor(
       YearToMonthNode(year = 2009, months = latestYearMonths),
       YearToMonthNode(year = 2008)
     )
-    `when`(ymdService.findYearsWithLatestYearMonths(type)).thenReturn(Flux.just(*years.toTypedArray()))
+    every { ymdService.findYearsWithLatestYearMonths(type) } returns Flux.just(*years.toTypedArray())
 
     // invoke
     client.get().uri("/$type/year?with-latest-year-months")
@@ -102,9 +103,11 @@ class FindYearsHandlerTest @Autowired constructor(
       .jsonPath("$.[0].months.[1]").isEqualTo(years[0].months!![1])
       .jsonPath("$.[1].year").isEqualTo(years[1].year)
       .jsonPath("$.[1].months").doesNotExist()
-    verify(ymdService, times(0)).findYears(type)
-    verify(ymdService, times(0)).findYearsWithLatestMonthDays(type)
-    verify(ymdService).findYearsWithLatestYearMonths(type)
+    verify(exactly = 0) {
+      ymdService.findYears(type)
+      ymdService.findYearsWithLatestMonthDays(type)
+    }
+    verify(exactly = 1) { ymdService.findYearsWithLatestYearMonths(type) }
   }
 
   @Test
@@ -119,7 +122,7 @@ class FindYearsHandlerTest @Autowired constructor(
       YearToMonthDayNode(year = 2009, months = latestYearMonths),
       YearToMonthDayNode(year = 2008)
     )
-    `when`(ymdService.findYearsWithLatestMonthDays(type)).thenReturn(Flux.just(*years.toTypedArray()))
+    every { ymdService.findYearsWithLatestMonthDays(type) } returns Flux.just(*years.toTypedArray())
 
     // invoke
     client.get().uri("/$type/year?with-latest-month-days")
@@ -138,8 +141,8 @@ class FindYearsHandlerTest @Autowired constructor(
       .jsonPath("$.[0].months.[1].days").doesNotExist()
       .jsonPath("$.[1].year").isEqualTo(years[1].year)
       .jsonPath("$.[1].months").doesNotExist()
-    verify(ymdService, times(0)).findYears(type)
-    verify(ymdService).findYearsWithLatestMonthDays(type)
-    verify(ymdService, times(0)).findYearsWithLatestYearMonths(type)
+    verify(exactly = 0) { ymdService.findYears(type) }
+    verify(exactly = 1) { ymdService.findYearsWithLatestMonthDays(type) }
+    verify(exactly = 0) { ymdService.findYearsWithLatestYearMonths(type) }
   }
 }
