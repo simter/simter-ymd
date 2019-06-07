@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>tech.simter</groupId>
-    <artifactId>simter-ymd-build</artifactId>
+    <groupId>tech.simter.ymd</groupId>
+    <artifactId>simter-ymd</artifactId>
     <version>${revision}</version>
     <relativePath>..</relativePath>
   </parent>
@@ -20,7 +20,7 @@
     <dependencies>
       <!-- simter-ymd -->
       <dependency>
-        <groupId>tech.simter</groupId>
+        <groupId>tech.simter.ymd</groupId>
         <artifactId>simter-ymd-dependencies</artifactId>
         <version>${simter-ymd.version}</version>
         <type>pom</type>
@@ -73,7 +73,6 @@
       <dependency>
         <groupId>de.flapdoodle.embed</groupId>
         <artifactId>de.flapdoodle.embed.mongo</artifactId>
-        <version>${flapdoodle-embed-mongo.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>tech.simter</groupId>
+    <groupId>tech.simter.ymd</groupId>
     <artifactId>simter-ymd-parent</artifactId>
     <version>${revision}</version>
     <relativePath>../simter-ymd-parent</relativePath>
@@ -215,7 +215,7 @@
       </properties>
       <dependencies>
         <dependency>
-          <groupId>tech.simter</groupId>
+          <groupId>tech.simter.ymd</groupId>
           <artifactId>simter-ymd-data-reactive-mongo</artifactId>
         </dependency>
         <dependency>
@@ -248,7 +248,7 @@
       </properties>
       <dependencies>
         <dependency>
-          <groupId>tech.simter</groupId>
+          <groupId>tech.simter.ymd</groupId>
           <artifactId>simter-ymd-data-r2dbc</artifactId>
         </dependency>
         <dependency>
@@ -273,7 +273,7 @@
       </properties>
       <dependencies>
         <dependency>
-          <groupId>tech.simter</groupId>
+          <groupId>tech.simter.ymd</groupId>
           <artifactId>simter-ymd-data-r2dbc</artifactId>
         </dependency>
         <dependency>
