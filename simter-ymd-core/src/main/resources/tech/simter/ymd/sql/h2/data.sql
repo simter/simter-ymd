@@ -1,4 +1,1 @@
-/**
- * Data initialize script.
- * @author RJ
- */
+select 0;

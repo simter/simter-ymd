@@ -1,7 +1,7 @@
 package tech.simter.ymd.rest.webflux.handler
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.HandlerFunction
 import org.springframework.web.reactive.function.server.RequestPredicate
@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import reactor.core.publisher.Mono
-import tech.simter.ymd.service.YmdService
+import tech.simter.ymd.core.YmdService
 
 /**
  *  Find all years of the specific type [FindYearsHandler]
@@ -39,7 +39,7 @@ class FindYearsHandler @Autowired constructor(
     return years.collectList()
       .flatMap {
         if (it.isEmpty()) noContent().build() // 204
-        else ok().contentType(APPLICATION_JSON_UTF8).syncBody(it) // 200
+        else ok().contentType(APPLICATION_JSON).syncBody(it) // 200
       }
   }
 

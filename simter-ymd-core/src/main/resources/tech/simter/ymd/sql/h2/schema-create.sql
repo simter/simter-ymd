@@ -1,7 +1,3 @@
-/**
- * Create table script.
- * @author RJ
- */
 create table st_ymd (
   id    varchar(36) primary key,
   type  varchar(100) not null comment 'the belong type identity',

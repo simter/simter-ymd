@@ -1,12 +1,12 @@
 package tech.simter.ymd
 
-import tech.simter.ymd.po.Ymd
+import tech.simter.ymd.core.Ymd
 
 /** The module's package name */
-const val PACKAGE_NAME = "tech.simter.ymd"
+const val PACKAGE = "tech.simter.ymd"
 
 /** The [Ymd] entity's table name */
-const val TABLE_NAME = "st_ymd"
+const val TABLE_YMD = "st_ymd"
 
 /** The operation name */
 const val OPERATION_READ = "READ"
