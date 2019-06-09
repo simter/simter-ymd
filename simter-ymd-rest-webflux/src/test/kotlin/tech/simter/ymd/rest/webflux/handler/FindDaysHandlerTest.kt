@@ -1,26 +1,18 @@
 package tech.simter.ymd.rest.webflux.handler
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.reactive.function.server.RouterFunction
-import org.springframework.web.reactive.function.server.RouterFunctions.route
-import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Flux
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
+import tech.simter.ymd.core.YmdService
 import tech.simter.ymd.rest.webflux.UnitTestConfiguration
-import tech.simter.ymd.rest.webflux.handler.FindDaysHandler.Companion.REQUEST_PREDICATE
-import tech.simter.ymd.rest.webflux.handler.FindDaysHandlerTest.Cfg
-import tech.simter.ymd.service.YmdService
 
 /**
  * Test [FindDaysHandler]
@@ -28,19 +20,12 @@ import tech.simter.ymd.service.YmdService
  * @author RJ
  * @author XA
  */
-@SpringJUnitConfig(FindDaysHandler::class, Cfg::class, UnitTestConfiguration::class)
-@MockkBean(YmdService::class)
+@SpringJUnitConfig(UnitTestConfiguration::class)
 @WebFluxTest
 class FindDaysHandlerTest @Autowired constructor(
   private val client: WebTestClient,
   private val ymdService: YmdService
 ) {
-  @Configuration
-  class Cfg {
-    @Bean
-    fun theRoute(handler: FindDaysHandler): RouterFunction<ServerResponse> = route(REQUEST_PREDICATE, handler)
-  }
-
   @Test
   fun `Found nothing`() {
     // mock
@@ -70,7 +55,7 @@ class FindDaysHandlerTest @Autowired constructor(
     client.get().uri("/$type/$year/$month/day")
       .exchange()
       .expectStatus().isOk
-      .expectHeader().contentType(APPLICATION_JSON_UTF8)
+      .expectHeader().contentType(APPLICATION_JSON)
       .expectBody()
       .jsonPath("$.length()").isEqualTo(days.size)
       .jsonPath("$.[0]").isEqualTo(days[0])

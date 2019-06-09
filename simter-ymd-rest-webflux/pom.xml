@@ -2,14 +2,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>tech.simter</groupId>
+    <groupId>tech.simter.ymd</groupId>
     <artifactId>simter-ymd-parent</artifactId>
     <version>${revision}</version>
     <relativePath>../simter-ymd-parent</relativePath>
   </parent>
   <artifactId>simter-ymd-rest-webflux</artifactId>
   <packaging>jar</packaging>
-  <description>Rest API By WebFlux</description>
+  <description>Rest API Implementation By WebFlux</description>
   <developers>
     <developer>
       <name>RJ.Hwang</name>
@@ -18,8 +18,12 @@
   </developers>
   <dependencies>
     <dependency>
-      <groupId>tech.simter</groupId>
-      <artifactId>simter-ymd-data</artifactId>
+      <groupId>tech.simter.reactive</groupId>
+      <artifactId>simter-reactive-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tech.simter.ymd</groupId>
+      <artifactId>simter-ymd-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -32,21 +36,11 @@
 
     <!-- test -->
     <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-kotlin</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>tech.simter.reactive</groupId>
-      <artifactId>simter-reactive-web</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- json api by jackson-->
+    <!-- json jsr353 by jackson-->
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
@@ -58,20 +52,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-json</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <!-- use simter-jackson-ext instead -->
-        <exclusion>
-          <groupId>com.fasterxml.jackson.datatype</groupId>
-          <artifactId>jackson-datatype-jsr310</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>tech.simter</groupId>
-      <artifactId>simter-jackson-ext</artifactId>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

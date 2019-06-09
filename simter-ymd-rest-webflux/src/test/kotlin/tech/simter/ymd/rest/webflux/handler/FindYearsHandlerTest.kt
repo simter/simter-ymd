@@ -1,47 +1,32 @@
 package tech.simter.ymd.rest.webflux.handler
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.reactive.function.server.RouterFunction
-import org.springframework.web.reactive.function.server.RouterFunctions.route
-import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Flux
 import tech.simter.util.RandomUtils.randomString
-import tech.simter.ymd.dto.MonthToDayNode
-import tech.simter.ymd.dto.YearToMonthDayNode
-import tech.simter.ymd.dto.YearToMonthNode
+import tech.simter.ymd.core.YmdService
+import tech.simter.ymd.impl.ImmutableMonthWithItsDays
+import tech.simter.ymd.impl.ImmutableYearWithItsMonthDays
+import tech.simter.ymd.impl.ImmutableYearWithItsMonths
 import tech.simter.ymd.rest.webflux.UnitTestConfiguration
-import tech.simter.ymd.rest.webflux.handler.FindYearsHandler.Companion.REQUEST_PREDICATE
-import tech.simter.ymd.rest.webflux.handler.FindYearsHandlerTest.Cfg
-import tech.simter.ymd.service.YmdService
 
 /**
  * Test [FindYearsHandler]
  *
  * @author RJ
  */
-@SpringJUnitConfig(FindYearsHandler::class, Cfg::class, UnitTestConfiguration::class)
-@MockkBean(YmdService::class)
+@SpringJUnitConfig(UnitTestConfiguration::class)
 @WebFluxTest
 class FindYearsHandlerTest @Autowired constructor(
   private val client: WebTestClient,
   private val ymdService: YmdService
 ) {
-  @Configuration
-  class Cfg {
-    @Bean
-    fun theRoute(handler: FindYearsHandler): RouterFunction<ServerResponse> = route(REQUEST_PREDICATE, handler)
-  }
-
   @Test
   fun `Found nothing`() {
     // mock
@@ -67,7 +52,7 @@ class FindYearsHandlerTest @Autowired constructor(
     client.get().uri("/$type/year")
       .exchange()
       .expectStatus().isOk
-      .expectHeader().contentType(APPLICATION_JSON_UTF8)
+      .expectHeader().contentType(APPLICATION_JSON)
       .expectBody()
       .jsonPath("$.length()").isEqualTo(years.size)
       .jsonPath("$.[0]").isEqualTo(years[0])
@@ -85,8 +70,8 @@ class FindYearsHandlerTest @Autowired constructor(
     val type = randomString()
     val latestYearMonths = listOf(2, 1)
     val years = listOf(
-      YearToMonthNode(year = 2009, months = latestYearMonths),
-      YearToMonthNode(year = 2008)
+      ImmutableYearWithItsMonths(year = 2009, months = latestYearMonths),
+      ImmutableYearWithItsMonths(year = 2008)
     )
     every { ymdService.findYearsWithLatestYearMonths(type) } returns Flux.just(*years.toTypedArray())
 
@@ -94,7 +79,7 @@ class FindYearsHandlerTest @Autowired constructor(
     client.get().uri("/$type/year?with-latest-year-months")
       .exchange()
       .expectStatus().isOk
-      .expectHeader().contentType(APPLICATION_JSON_UTF8)
+      .expectHeader().contentType(APPLICATION_JSON)
       .expectBody()
       .jsonPath("$.length()").isEqualTo(years.size)
       .jsonPath("$.[0].year").isEqualTo(years[0].year)
@@ -115,12 +100,12 @@ class FindYearsHandlerTest @Autowired constructor(
     // mock
     val type = randomString()
     val latestYearMonths = listOf(
-      MonthToDayNode(month = 2, days = listOf(9, 8)),
-      MonthToDayNode(month = 1)
+      ImmutableMonthWithItsDays(month = 2, days = listOf(9, 8)),
+      ImmutableMonthWithItsDays(month = 1)
     )
     val years = listOf(
-      YearToMonthDayNode(year = 2009, months = latestYearMonths),
-      YearToMonthDayNode(year = 2008)
+      ImmutableYearWithItsMonthDays(year = 2009, months = latestYearMonths),
+      ImmutableYearWithItsMonthDays(year = 2008)
     )
     every { ymdService.findYearsWithLatestMonthDays(type) } returns Flux.just(*years.toTypedArray())
 
@@ -128,7 +113,7 @@ class FindYearsHandlerTest @Autowired constructor(
     client.get().uri("/$type/year?with-latest-month-days")
       .exchange()
       .expectStatus().isOk
-      .expectHeader().contentType(APPLICATION_JSON_UTF8)
+      .expectHeader().contentType(APPLICATION_JSON)
       .expectBody()
       .jsonPath("$.length()").isEqualTo(years.size)
       .jsonPath("$.[0].year").isEqualTo(years[0].year)

@@ -1,21 +1,40 @@
-module:
-  version:
-    simter-ymd: @project.version@
-  rest-context-path:
-    simter-ymd: /ymd
+module.version:
+  simter: @simter.version@
+  simter-ymd: @project.version@
+module.authorization.simter-ymd.defaultPermission: "Allow"   # Allow|Deny
+simter.jwt:
+  secret-key: @simter.jwt.secret-key@
+  require-authorized: @simter.jwt.require-authorized@
+  exclude-paths: /static/
+spring:
+  main.banner-mode: 'off'
+  profiles.active:
+    - database
+    - jpa-@db.jpa-implementation@
+  application.name: @project.artifactId@-@project.version@
 server:
   port: ${port:8084}
-  servlet:
-    context-path: /
+  servlet.context-path: /
   server-header: @project.artifactId@-@project.version@
-spring:
-  main:
-    banner-mode: 'off'
-  profiles:
-    active:
-      - @app.env@
-      - @app.dao@
-  application:
-    name: @project.artifactId@-@project.version@
-  jackson:
-    default-property-inclusion: NON_EMPTY # see enum of com.fasterxml.jackson.annotation.JsonInclude.Include
+logging:
+  file: @logging.file@
+  level: # TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+    root: ERROR
+    tech.simter.ymd: WARN
+    tech.simter.ymd.starter: INFO # INFO - show active profiles and started time
+
+    #---- spring ----#
+    #org.springframework: WARN
+
+    #---- spring-boot ----#
+    #org.springframework.boot: WARN
+    org.springframework.boot.context.embedded: TRACE
+    org.springframework.boot.web.embedded.netty.NettyWebServer: INFO # INFO - show server port
+
+    #---- spring reactive ----#
+    #org.springframework.http.client.reactive: DEBUG
+    #org.springframework.http.server.reactive: DEBUG
+    #org.springframework.web.reactive: DEBUG # debug to show mapped and matches routes
+
+    #---- reactor ----#
+    #reactor.ipc.netty: DEBUG # debug to show request/response

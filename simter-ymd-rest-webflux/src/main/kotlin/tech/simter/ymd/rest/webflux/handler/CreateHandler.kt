@@ -3,7 +3,7 @@ package tech.simter.ymd.rest.webflux.handler
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN_VALUE
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.*
@@ -12,8 +12,9 @@ import org.springframework.web.reactive.function.server.RequestPredicates.conten
 import org.springframework.web.reactive.function.server.ServerResponse.badRequest
 import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import reactor.core.publisher.Mono
-import tech.simter.ymd.po.Ymd
-import tech.simter.ymd.service.YmdService
+import tech.simter.ymd.core.Ymd
+import tech.simter.ymd.core.YmdService
+import tech.simter.ymd.impl.ImmutableYmd
 
 /**
  * The [HandlerFunction] for create a new [Ymd] record.
@@ -34,7 +35,7 @@ class CreateHandler @Autowired constructor(
       }
       // convert to ymd
       .map {
-        Ymd(
+        ImmutableYmd(
           type = it["type"] as String,
           year = it["year"] as Int,
           month = (it["month"] as? Int) ?: 0,
@@ -51,6 +52,6 @@ class CreateHandler @Autowired constructor(
   }
 
   companion object {
-    val REQUEST_PREDICATE: RequestPredicate = POST("/").and(contentType(APPLICATION_JSON_UTF8))
+    val REQUEST_PREDICATE: RequestPredicate = POST("/").and(contentType(APPLICATION_JSON))
   }
 }

@@ -1,41 +1,33 @@
-# Simter YMD Modules
+# simter-ymd
 
-A module for manage massive data date.
+A Date Manager for Massive Data
+
+## Maven Modules
+
+| Sn | Name                          | Type | Parent                        | Remark
+|----|-------------------------------|------|-------------------------------|--------
+| 1  | [simter-ymd]            | pom  | [simter-build]                | Build these modules and define global properties and pluginManagement
+| 2  | simter-ymd-bom          | pom  | simter-ymd              | Bom
+| 3  | simter-ymd-parent       | pom  | simter-ymd              | Define global dependencies and plugins
+| 4  | simter-ymd-core         | jar  | simter-ymd-parent       | Core API: [Ymd], [YmdDao] and [YmdService]
+| 5  | simter-ymd-dao-mongo    | jar  | simter-ymd-parent       | [YmdDao] Implementation By Reactive MongoDB
+| 6  | simter-ymd-dao-jpa      | jar  | simter-ymd-parent       | [YmdDao] Implementation By R2DBC
+| 7  | simter-ymd-rest-webflux | jar  | simter-ymd-parent       | [Rest API] Implementation By WebFlux
+| 8  | simter-ymd-starter      | jar  | simter-ymd-parent       | Microservice Starter
 
 ## Requirement
 
 - Maven 3.6+
 - Kotlin 1.3+
 - Java 8+
-- Spring Framework 5+
-- Spring Boot 2+
-- Reactor 3+
-
-## Maven Modules
-
-Sn | Name                             | Parent                  | Remark
----|----------------------------------|-------------------------|--------
-1  | [simter-ymd-build]               | [simter-build:0.7.0]    | Build modules and define global properties and pluginManagement
-2  | [simter-ymd-dependencies]        | simter-ymd-build        | Define global dependencyManagement
-3  | [simter-ymd-parent]              | simter-ymd-dependencies | All sub modules parent module, Define global dependencies and plugins
-4  | [simter-ymd-data]                | simter-ymd-parent       | Define Service and Dao Interfaces
-5  | [simter-ymd-data-reactive-mongo] | simter-ymd-parent       | Dao Implementation By Reactive MongoDB
-6  | [simter-ymd-data-r2dbc]          | simter-ymd-parent       | Dao Implementation By [R2DBC]
-7  | [simter-ymd-data-jpa]            | simter-ymd-parent       | Dao Implementation By JPA
-8  | [simter-ymd-rest-webflux]        | simter-ymd-parent       | Rest API By WebFlux
-9  | [simter-ymd-starter]             | simter-ymd-parent       | MicroService Starter
-
-> Remark : Module 1, 2, 3 all has maven-enforcer-plugin and flatten-maven-plugin config. Other modules must not configure them.
+- Spring Framework 5.1+
+- Spring Boot 2.1+
+- Reactor 3.2+
 
 
-[simter-build:0.7.0]: https://github.com/simter/simter-build/tree/0.7.0
-[simter-ymd-build]: https://github.com/simter/simter-ymd
-[simter-ymd-dependencies]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-dependencies
-[simter-ymd-parent]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-parent
-[simter-ymd-data]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-data
-[simter-ymd-data-jpa]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-data-jpa
-[simter-ymd-data-reactive-mongo]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-data-reactive-mongo
-[simter-ymd-data-r2dbc]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-data-r2dbc
-[simter-ymd-rest-webflux]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-rest-webflux
-[simter-ymd-starter]: https://github.com/simter/simter-ymd/tree/master/simter-ymd-starter
-[R2DBC]: https://github.com/spring-projects/spring-data-r2dbc
+[simter-build]: https://github.com/simter/simter-build
+[simter-ymd]: https://github.com/simter/simter-ymd
+[Ymd]: https://github.com/simter/simter-ymd/blob/master/simter-ymd-core/src/main/kotlin/tech/simter/ymd/core/Ymd.kt
+[YmdDao]: https://github.com/simter/simter-ymd/blob/master/simter-ymd-core/src/main/kotlin/tech/simter/ymd/core/YmdDao.kt
+[YmdService]: https://github.com/simter/simter-ymd/blob/master/simter-ymd-core/src/main/kotlin/tech/simter/ymd/core/YmdService.kt
+[Rest API]: ./docs/rest-api.md
