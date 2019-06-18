@@ -1,7 +1,7 @@
 package tech.simter.ymd.impl.dao.jpa
 
-import tech.simter.util.RandomUtils
 import tech.simter.util.RandomUtils.randomInt
+import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.impl.dao.jpa.po.YmdPo
 
@@ -13,7 +13,7 @@ import tech.simter.ymd.impl.dao.jpa.po.YmdPo
 object TestHelper {
   /** Generate a random [Ymd] instance */
   fun randomYmd(
-    type: String = nextType(),
+    type: String = randomType(),
     year: Int = randomInt(2000, 2099), // 4 digits,
     month: Int = randomInt(1, 12),
     day: Int = randomInt(1, 20)
@@ -27,12 +27,8 @@ object TestHelper {
   }
 
   /** Generate a next [Ymd] type */
-  fun nextType(): String {
-    return "type${RandomUtils.nextId("type")}"
-  }
-
-  /** Generate a next [Ymd] id */
-  fun nextId(): String {
-    return "id${RandomUtils.nextId("id")}"
+  fun randomType(): String {
+    val s = randomString()
+    return s.substring(0, 5) + s.substring(s.length - 5)
   }
 }

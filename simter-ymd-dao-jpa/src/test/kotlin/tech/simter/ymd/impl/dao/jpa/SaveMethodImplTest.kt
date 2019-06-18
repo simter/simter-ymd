@@ -1,14 +1,15 @@
 package tech.simter.ymd.impl.dao.jpa
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
+import tech.simter.reactive.test.jpa.ReactiveDataJpaTest
+import tech.simter.reactive.test.jpa.TestEntityManager
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.impl.dao.jpa.TestHelper.randomYmd
+import tech.simter.ymd.impl.dao.jpa.po.YmdPo
 
 /**
  * Test [YmdDaoImpl.save].
@@ -16,21 +17,20 @@ import tech.simter.ymd.impl.dao.jpa.TestHelper.randomYmd
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
-@DataJpaTest
+@ReactiveDataJpaTest
 class SaveMethodImplTest @Autowired constructor(
-  private val repository: YmdJpaRepository,
+  val rem: TestEntityManager,
   val dao: YmdDao
 ) {
-  @BeforeEach
-  fun clean() {
-    repository.deleteAll()
-    repository.flush()
-  }
-
   @Test
   fun `Save nothing`() {
+    val expected = rem.querySingle { em ->
+      em.createQuery("select count(t) from YmdPo t", Long::class.javaObjectType)
+    }.get()
     dao.save().test().verifyComplete()
-    assertEquals(0, repository.count())
+    assertEquals(expected, rem.querySingle { em ->
+      em.createQuery("select count(t) from YmdPo t", Long::class.javaObjectType)
+    }.get())
   }
 
   @Test
@@ -40,8 +40,7 @@ class SaveMethodImplTest @Autowired constructor(
 
     // invoke and verify
     dao.save(po).test().verifyComplete()
-    assertEquals(po, repository.getOne(po.id))
-    repository.flush()
+    assertEquals(po, rem.find(YmdPo::class.java, po.id).get())
   }
 
   @Test
@@ -52,8 +51,7 @@ class SaveMethodImplTest @Autowired constructor(
 
     // invoke and verify
     dao.save(po1, po2).test().verifyComplete()
-    assertEquals(po1, repository.getOne(po1.id))
-    assertEquals(po2, repository.getOne(po2.id))
-    repository.flush()
+    assertEquals(po1, rem.find(YmdPo::class.java, po1.id).get())
+    assertEquals(po2, rem.find(YmdPo::class.java, po2.id).get())
   }
 }
