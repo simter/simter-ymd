@@ -1,5 +1,14 @@
 # simter-ymd changelog
 
+## 0.5.0 2019-06-18
+
+- Upgrade to simter-1.2.0-M6
+- change unit test code to use MockK and SpringMockK
+- Support use ModuleAuthorizer to verify permission when call service method
+- Rename groupId to tech.simter.ymd
+- Refactor module structure to make core api simplify and clear. [#5](https://github.com/simter/simter-ymd/issues/5)
+- Wrap block dao implementation to reactor scheduler. [#4](https://github.com/simter/simter-ymd/issues/4)
+
 ## 0.4.0 2019-01-14
 
 - Upgrade to simter-build-1.1.0 and simter-dependencies-1.1.0
