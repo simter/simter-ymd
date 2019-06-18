@@ -1,6 +1,6 @@
 # simter-ymd
 
-A Date Manager for Massive Data
+A Date Management for Massive Data.
 
 ## Maven Modules
 
