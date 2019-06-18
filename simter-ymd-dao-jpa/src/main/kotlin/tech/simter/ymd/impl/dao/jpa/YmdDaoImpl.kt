@@ -1,9 +1,10 @@
 package tech.simter.ymd.impl.dao.jpa
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import tech.simter.reactive.jpa.ReactiveJpaWrapper
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.impl.dao.jpa.po.YmdPo
@@ -13,28 +14,24 @@ import tech.simter.ymd.impl.dao.jpa.po.YmdPo
  *
  * @author RJ
  */
-@Component
+@Repository
 class YmdDaoImpl @Autowired constructor(
-  private val repository: YmdJpaRepository
+  private val blockDao: YmdBlockDao,
+  private val wrapper: ReactiveJpaWrapper
 ) : YmdDao {
   override fun save(vararg ymd: Ymd): Mono<Void> {
-    return try {
-      repository.saveAll(ymd.map { YmdPo.from(it) })
-      Mono.empty()
-    } catch (e: Exception) {
-      Mono.error(e)
-    }
+    return wrapper.fromRunnable { blockDao.save(*ymd.map { YmdPo.from(it) }.toTypedArray()) }
   }
 
   override fun findYears(type: String): Flux<Int> {
-    return Flux.fromIterable(repository.findYears(type))
+    return wrapper.fromIterable { blockDao.findYears(type) }
   }
 
   override fun findMonths(type: String, year: Int): Flux<Int> {
-    return Flux.fromIterable(repository.findMonths(type, year))
+    return wrapper.fromIterable { blockDao.findMonths(type, year) }
   }
 
   override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
-    return Flux.fromIterable(repository.findDays(type, year, month))
+    return wrapper.fromIterable { blockDao.findDays(type, year, month) }
   }
 }

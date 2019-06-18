@@ -69,6 +69,7 @@ class AppConfiguration @Autowired constructor(
   private val startTime = OffsetDateTime.now()
   private val rootPage: String = """
     <h2>Simter YMD Micro Service</h2>
+    <div>A Date Management for Massive Data.</div>
     <div>Start at : $startTime</div>
     <div>Version : $ymdVersion</div>
     <ul>
