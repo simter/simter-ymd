@@ -1,5 +1,12 @@
 # simter-ymd changelog
 
+## 0.6.0 2019-09-11
+
+- Upgrade to simter-1.2.0
+- Use stable spring version on main branch
+- Use milestone spring version for r2dbc
+- Support jpa-eclipselink-x profiles on starter module
+
 ## 0.5.0 2019-06-18
 
 - Upgrade to simter-1.2.0-M6
