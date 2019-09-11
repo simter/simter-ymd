@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.kotlin.test.test
+import reactor.test.test
 import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.reactive.security.ReactiveSecurityService
 import tech.simter.reactive.security.properties.LogicStrategy
