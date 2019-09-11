@@ -784,4 +784,14 @@
       </dependencies>
     </profile>
   </profiles>
+  <url>https://github.com/simter/simter-ymd/tree/master/simter-ymd-starter</url>
+  <scm>
+    <url>https://github.com/simter/simter-ymd.git</url>
+  </scm>
+  <developers>
+    <developer>
+      <name>RJ.Hwang</name>
+      <email>rongjihuang@gmail.com</email>
+    </developer>
+  </developers>
 </project>
