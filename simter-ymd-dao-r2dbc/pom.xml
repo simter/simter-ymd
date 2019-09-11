@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -10,12 +11,6 @@
   <artifactId>simter-ymd-dao-r2dbc</artifactId>
   <packaging>jar</packaging>
   <description>Dao Implementation By R2DBC</description>
-  <developers>
-    <developer>
-      <name>RJ.Hwang</name>
-      <email>rongjihuang@gmail.com</email>
-    </developer>
-  </developers>
   <properties>
     <db.platform>none</db.platform>
     <db.host>localhost</db.host>
@@ -26,6 +21,10 @@
     <db.url>~</db.url>
     <db.init-mode>never</db.init-mode>
     <db.continue-on-error>false</db.continue-on-error>
+    <spring.version>${spring.milestone.version}</spring.version>
+    <spring-data-releasetrain.version>${spring-data-releasetrain.milestone.version}</spring-data-releasetrain.version>
+    <spring-boot.version>${spring-boot.milestone.version}</spring-boot.version>
+    <reactor.version>${reactor.milestone.version}</reactor.version>
   </properties>
   <dependencies>
     <dependency>
@@ -123,4 +122,14 @@
       </dependencies>
     </profile>
   </profiles>
+  <url>https://github.com/simter/simter-ymd/tree/master/simter-ymd-dao-r2dbc</url>
+  <scm>
+    <url>https://github.com/simter/simter-ymd.git</url>
+  </scm>
+  <developers>
+    <developer>
+      <name>RJ.Hwang</name>
+      <email>rongjihuang@gmail.com</email>
+    </developer>
+  </developers>
 </project>

@@ -1,5 +1,7 @@
 # simter-ymd-dao-jpa
 
+The [YmdDao] implementation by [JPA].
+
 ## JPA Provider
 
 | Name          | Supported |
@@ -92,3 +94,5 @@ mvn test -P {profile-name}
 [simter-embedded-database-ext]: https://github.com/simter/simter-embedded-database-ext
 [Hibernate]: https://hibernate.org
 [EclipseLink]: https://www.eclipse.org/eclipselink
+[JPA]: https://jcp.org/en/jsr/detail?id=338
+[YmdDao]: https://github.com/simter/simter-ymd/blob/master/simter-ymd-core/src/main/kotlin/tech/simter/ymd/core/YmdDao.kt
