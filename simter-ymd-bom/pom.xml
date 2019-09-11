@@ -38,11 +38,6 @@
         <artifactId>simter-ymd-rest-webflux</artifactId>
         <version>${simter-ymd.version}</version>
       </dependency>
-      <dependency>
-        <groupId>tech.simter.ymd</groupId>
-        <artifactId>simter-ymd-starter</artifactId>
-        <version>${simter-ymd.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
   <url>https://github.com/simter/simter-ymd/tree/master/simter-ymd-bom</url>
