@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import reactor.kotlin.test.test
+import reactor.test.test
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.impl.dao.r2dbc.TestHelper.randomYmd
 
