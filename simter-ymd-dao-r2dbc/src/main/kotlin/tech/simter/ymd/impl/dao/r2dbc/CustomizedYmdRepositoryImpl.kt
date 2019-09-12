@@ -26,7 +26,7 @@ class CustomizedYmdRepositoryImpl @Autowired constructor(
   override fun save(entity: YmdPo): Mono<YmdPo> {
     return this.connection()
       .flatMapMany { c ->
-        c.createStatement("insert into $TABLE_YMD(id, type, year, month, day) values($1, $2, $3, $4, $5)")
+        c.createStatement("insert into $TABLE_YMD(id, t, y, m, d) values($1, $2, $3, $4, $5)")
           .bind("$1", entity.id)
           .bind("$2", entity.type)
           .bind("$3", entity.year)
@@ -45,13 +45,13 @@ class CustomizedYmdRepositoryImpl @Autowired constructor(
     return this.connection()
       .flatMapMany { c ->
         Flux.from(
-          c.createStatement("select distinct year from $TABLE_YMD" +
-            " where type = $1 order by year desc")
+          c.createStatement("select distinct y from $TABLE_YMD" +
+            " where t = $1 order by y desc")
             .bind("$1", type)
             .execute()
           // TODO : Cannot decode value of type java.lang.Integer
           //).flatMap { it.map { row, _ -> row.get("year", Integer::class.java)?.toInt() } }
-        ).flatMap { it.map { row, _ -> row.get("year")?.toString()?.toInt() } }
+        ).flatMap { it.map { row, _ -> row.get("y")?.toString()?.toInt() } }
       }
   }
 
@@ -59,12 +59,12 @@ class CustomizedYmdRepositoryImpl @Autowired constructor(
     return this.connection()
       .flatMapMany { c ->
         Flux.from(
-          c.createStatement("select distinct month from $TABLE_YMD" +
-            " where type = $1 and year = $2 order by month desc")
+          c.createStatement("select distinct m from $TABLE_YMD" +
+            " where t = $1 and y = $2 order by m desc")
             .bind("$1", type)
             .bind("$2", year)
             .execute()
-        ).flatMap { it.map { row, _ -> row.get("month")?.toString()?.toInt() } }
+        ).flatMap { it.map { row, _ -> row.get("m")?.toString()?.toInt() } }
       }
   }
 
@@ -73,13 +73,13 @@ class CustomizedYmdRepositoryImpl @Autowired constructor(
     return this.connection()
       .flatMapMany { c ->
         Flux.from(
-          c.createStatement("select distinct day from $TABLE_YMD" +
-            " where type = $1 and year = $2 and month = $3 order by day desc")
+          c.createStatement("select distinct d from $TABLE_YMD" +
+            " where t = $1 and y = $2 and m = $3 order by d desc")
             .bind("$1", type)
             .bind("$2", year)
             .bind("$3", month)
             .execute()
-        ).flatMap { it.map { row, _ -> row.get("day")?.toString()?.toInt() } }
+        ).flatMap { it.map { row, _ -> row.get("d")?.toString()?.toInt() } }
       }
   }
 }
