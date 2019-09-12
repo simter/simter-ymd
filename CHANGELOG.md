@@ -1,5 +1,13 @@
 # simter-ymd changelog
 
+## 0.7.0 2019-09-12
+
+- Rename table `st_ymd` columns `type, year, month, day` to `t, y , m, d`
+
+> Execute script [postgres\upgrade-0.3.0-0.7.0.sql] to do the upgrade.
+
+[postgres\upgrade-0.3.0-0.7.0.sql]: 
+
 ## 0.6.0 2019-09-11
 
 - Upgrade to simter-1.2.0
