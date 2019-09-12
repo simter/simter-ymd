@@ -1,6 +1,7 @@
 package tech.simter.ymd.impl.dao.r2dbc.po
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import tech.simter.ymd.TABLE_YMD
 import tech.simter.ymd.core.Ymd
@@ -12,9 +13,13 @@ import tech.simter.ymd.core.Ymd
  */
 @Table(TABLE_YMD)
 data class YmdPo(
+  @Column("t")
   override val type: String,
+  @Column("y")
   override val year: Int,
+  @Column("m")
   override val month: Int = 0,
+  @Column("d")
   override val day: Int = 0,
   /** Only use as spring-data entity id */
   @Id

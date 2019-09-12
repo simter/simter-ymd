@@ -15,13 +15,13 @@ import javax.persistence.Table
 @Entity
 @Table(name = TABLE_YMD)
 data class YmdPo(
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, name = "t", length = 50)
   override val type: String,
-  @Column(nullable = false)
+  @Column(nullable = false, name = "y")
   override val year: Int,
-  @Column(nullable = false)
+  @Column(nullable = false, name = "m")
   override val month: Int = 0,
-  @Column(nullable = false)
+  @Column(nullable = false, name = "d")
   override val day: Int = 0,
   /** Only use as jpa entity id */
   @Id
