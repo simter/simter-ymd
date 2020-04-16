@@ -41,7 +41,7 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON)
-      .syncBody(data.build().toString())
+      .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
     verify(exactly = 1) { service.save(any()) }
@@ -60,7 +60,7 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON)
-      .syncBody(data.build().toString())
+      .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
     verify(exactly = 1) { service.save(any()) }
@@ -78,7 +78,7 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON)
-      .syncBody(data.build().toString())
+      .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
     verify(exactly = 1) { service.save(any()) }
@@ -92,7 +92,7 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON)
-      .syncBody("""{"year": 2019, "month": 1}""")
+      .bodyValue("""{"year": 2019, "month": 1}""")
       .exchange()
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
@@ -104,7 +104,7 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON)
-      .syncBody("{}") // empty json
+      .bodyValue("{}") // empty json
       .exchange()
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
@@ -122,7 +122,7 @@ class CreateHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/")
       .contentType(APPLICATION_JSON)
-      .syncBody("""{"type": "test", "month": 1}""")
+      .bodyValue("""{"type": "test", "month": 1}""")
       .exchange()
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")

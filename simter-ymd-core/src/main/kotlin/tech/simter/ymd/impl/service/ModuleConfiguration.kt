@@ -10,6 +10,7 @@ import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.reactive.security.ReactiveSecurityService
 import tech.simter.reactive.security.properties.ModuleAuthorizeProperties
 import tech.simter.reactive.security.properties.PermissionStrategy.Allow
+import tech.simter.ymd.AUTHORIZER_KEY
 import tech.simter.ymd.PACKAGE
 
 /**
@@ -22,18 +23,18 @@ import tech.simter.ymd.PACKAGE
 @ComponentScan
 class ModuleConfiguration {
   /**
-   * Starter should config yml key `module.authorization.simter-ymd` to support specific role control,
+   * Starter should config yml key [AUTHORIZER_KEY] to support specific role control,
    * otherwise the [ModuleConfiguration.moduleAuthorizer] would allow anything default.
    */
-  @Bean("$PACKAGE.ModuleAuthorizeProperties")
-  @ConfigurationProperties(prefix = "module.authorization.simter-ymd")
+  @Bean("$AUTHORIZER_KEY.properties")
+  @ConfigurationProperties(prefix = AUTHORIZER_KEY)
   fun moduleAuthorizeProperties(): ModuleAuthorizeProperties {
     return ModuleAuthorizeProperties(defaultPermission = Allow)
   }
 
-  @Bean("$PACKAGE.ModuleAuthorizer")
+  @Bean("$AUTHORIZER_KEY.authorizer")
   fun moduleAuthorizer(
-    @Qualifier("$PACKAGE.ModuleAuthorizeProperties")
+    @Qualifier("$AUTHORIZER_KEY.properties")
     properties: ModuleAuthorizeProperties,
     securityService: ReactiveSecurityService
   ): ModuleAuthorizer {

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.test.test
+import reactor.kotlin.test.test
 import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString

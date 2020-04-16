@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.test.test
+import reactor.kotlin.test.test
 import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.reactive.security.ReactiveSecurityService
 import tech.simter.reactive.security.properties.LogicStrategy
@@ -22,14 +22,15 @@ import tech.simter.ymd.impl.service.ModuleConfiguration
 import java.util.*
 
 /**
- * See `application.yml` key `module.authorization.simter-ymd` value.
+ * See `application.yml` key [AUTHORIZER_KEY] value.
  */
 @SpringBootTest(classes = [ModuleConfiguration::class])
 @MockkBean(YmdDao::class, ReactiveSecurityService::class)
 class ModuleAuthorizerConfigTest @Autowired constructor(
   private val properties: ModuleAuthorizeProperties,
   private val securityService: ReactiveSecurityService,
-  @Qualifier("$PACKAGE.ModuleAuthorizer") private val moduleAuthorizer: ModuleAuthorizer,
+  @Qualifier("$AUTHORIZER_KEY.authorizer")
+  private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao,
   private val service: YmdService
 ) {

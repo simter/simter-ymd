@@ -39,7 +39,7 @@ class FindYearsHandler @Autowired constructor(
     return years.collectList()
       .flatMap {
         if (it.isEmpty()) noContent().build() // 204
-        else ok().contentType(APPLICATION_JSON).syncBody(it) // 200
+        else ok().contentType(APPLICATION_JSON).bodyValue(it) // 200
       }
   }
 

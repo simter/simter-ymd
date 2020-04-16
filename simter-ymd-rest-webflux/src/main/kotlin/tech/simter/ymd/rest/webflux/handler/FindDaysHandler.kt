@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.*
+import org.springframework.web.reactive.function.server.RequestPredicates.GET
 import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import org.springframework.web.reactive.function.server.ServerResponse.ok
 import reactor.core.publisher.Mono
@@ -28,12 +29,12 @@ class FindDaysHandler @Autowired constructor(
       .collectList()
       .flatMap {
         if (it.isEmpty()) noContent().build() // 204
-        else ok().contentType(APPLICATION_JSON).syncBody(it) // 200
+        else ok().contentType(APPLICATION_JSON).bodyValue(it) // 200
       }
   }
 
   companion object {
     /** The default [RequestPredicate] */
-    val REQUEST_PREDICATE: RequestPredicate = RequestPredicates.GET("/{type}/{year}/{month}/day")
+    val REQUEST_PREDICATE: RequestPredicate = GET("/{type}/{year}/{month}/day")
   }
 }

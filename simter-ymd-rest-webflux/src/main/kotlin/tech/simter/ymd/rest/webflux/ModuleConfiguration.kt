@@ -16,15 +16,15 @@ import tech.simter.ymd.rest.webflux.handler.*
  * All configuration for this module.
  *
  * Register a `RouterFunction<ServerResponse>` with all routers for this module.
- * The default context-path of this router can be config by property `module.rest-context-path.simter-ymd`.
+ * The default context-path of this router is '/ymd'. And can be config by property `simter-ymd.rest-context-path`.
  *
  * @author RJ
  */
 @Configuration("$PACKAGE.rest.webflux.ModuleConfiguration")
 @ComponentScan
 class ModuleConfiguration @Autowired constructor(
-  @Value("\${module.version.simter-ymd:UNKNOWN}") private val version: String,
-  @Value("\${module.rest-context-path.simter-ymd:/ymd}") private val contextPath: String,
+  @Value("\${simter-ymd.version:UNKNOWN}") private val version: String,
+  @Value("\${simter-ymd.rest-context-path:/ymd}") private val contextPath: String,
   private val findDaysHandler: FindDaysHandler,
   private val findMonthsHandler: FindMonthsHandler,
   private val findYearsHandler: FindYearsHandler,
@@ -34,8 +34,7 @@ class ModuleConfiguration @Autowired constructor(
   private val logger = LoggerFactory.getLogger(ModuleConfiguration::class.java)
 
   init {
-    logger.warn("module.version.simter-ymd='{}'", version)
-    logger.warn("module.rest-context-path.simter-ymd='{}'", contextPath)
+    logger.warn("simter-ymd.rest-context-path='{}'", contextPath)
   }
 
   /** Register a `RouterFunction<ServerResponse>` with all routers for this module */
@@ -54,7 +53,7 @@ class ModuleConfiguration @Autowired constructor(
       // POST /{                           Batch create multiple Ymd records.
       BatchCreateByTypeHandler.REQUEST_PREDICATE.invoke(batchCreateByTypeHandler::handle)
       // GET /
-      GET("/") { ok().contentType(TEXT_PLAIN).syncBody("simter-ymd-rest-webflux-$version") }
+      GET("/") { ok().contentType(TEXT_PLAIN).bodyValue("simter-ymd-rest-webflux-$version") }
     }
   }
 }
