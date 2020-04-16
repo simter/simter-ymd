@@ -1,5 +1,14 @@
 # simter-ymd changelog
 
+## 0.8.0 2020-04-17
+
+- Log main config property on the starter with info level
+- Rename property 'module.rest-context-path.simter-ymd' to 'simter-ymd.rest-context-path'
+- Polishing unit test code to avoid deprecated warning
+- Rename property 'module.authorization.simter-ymd' to 'simter-ymd.authorization'
+- Polishing Maven module config
+- Upgrade to simter-1.3.0-M13
+
 ## 0.7.0 2019-09-12
 
 - Rename table `st_ymd` columns `type, year, month, day` to `t, y , m, d`
