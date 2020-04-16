@@ -6,15 +6,10 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import tech.simter.reactive.security.ModuleAuthorizer
+import tech.simter.ymd.AUTHORIZER_KEY
 import tech.simter.ymd.OPERATION_READ
 import tech.simter.ymd.OPERATION_SAVE
-import tech.simter.ymd.PACKAGE
-import tech.simter.ymd.core.Ymd
-import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.core.YmdService
-import tech.simter.ymd.core.MonthWithItsDays
-import tech.simter.ymd.core.YearWithItsMonthDays
-import tech.simter.ymd.core.YearWithItsMonths
+import tech.simter.ymd.core.*
 import tech.simter.ymd.impl.ImmutableMonthWithItsDays
 import tech.simter.ymd.impl.ImmutableYearWithItsMonthDays
 import tech.simter.ymd.impl.ImmutableYearWithItsMonths
@@ -26,7 +21,7 @@ import tech.simter.ymd.impl.ImmutableYearWithItsMonths
  */
 @Service
 class YmdServiceImpl @Autowired constructor(
-  @Qualifier("$PACKAGE.ModuleAuthorizer")
+  @Qualifier("$AUTHORIZER_KEY.authorizer")
   private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao
 ) : YmdService {
