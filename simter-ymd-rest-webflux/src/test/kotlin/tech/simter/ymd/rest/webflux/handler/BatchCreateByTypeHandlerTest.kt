@@ -49,7 +49,7 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
     // invoke and verify
     client.post().uri("/$type")
       .contentType(APPLICATION_JSON)
-      .syncBody(data.build().toString())
+      .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
     verify(exactly = 1) { service.save(*anyVararg()) }

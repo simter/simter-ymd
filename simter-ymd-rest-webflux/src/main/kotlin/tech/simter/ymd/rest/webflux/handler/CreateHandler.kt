@@ -47,7 +47,7 @@ class CreateHandler @Autowired constructor(
       // response
       .then(noContent().build())
       .onErrorResume(IllegalStateException::class.java) {
-        badRequest().contentType(MediaType.valueOf("$TEXT_PLAIN_VALUE;charset=UTF-8")).syncBody(it.message ?: "")
+        badRequest().contentType(MediaType.valueOf("$TEXT_PLAIN_VALUE;charset=UTF-8")).bodyValue(it.message ?: "")
       }
   }
 

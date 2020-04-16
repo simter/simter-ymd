@@ -54,7 +54,7 @@ class ModuleConfiguration @Autowired constructor(
       // POST /{                           Batch create multiple Ymd records.
       BatchCreateByTypeHandler.REQUEST_PREDICATE.invoke(batchCreateByTypeHandler::handle)
       // GET /
-      GET("/") { ok().contentType(TEXT_PLAIN).syncBody("simter-ymd-rest-webflux-$version") }
+      GET("/") { ok().contentType(TEXT_PLAIN).bodyValue("simter-ymd-rest-webflux-$version") }
     }
   }
 }
