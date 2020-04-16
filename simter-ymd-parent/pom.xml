@@ -45,7 +45,7 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-framework-bom</artifactId>
-        <version>${spring.version}</version>
+        <version>${spring-framework.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -70,7 +70,7 @@
       </dependency>
       <dependency>
         <groupId>org.springframework.boot.experimental</groupId>
-        <artifactId>spring-boot-dependencies-r2dbc</artifactId>
+        <artifactId>spring-boot-bom-r2dbc</artifactId>
         <version>${spring-boot-r2dbc.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -103,16 +103,15 @@
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-reflect</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.projectreactor.kotlin</groupId>
+      <artifactId>reactor-kotlin-extensions</artifactId>
+    </dependency>
 
     <!-- test -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-launcher</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

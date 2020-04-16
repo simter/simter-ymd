@@ -4,5 +4,4 @@ logging:
   level: # TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
     root: ERROR
     tech.simter.ymd: ERROR
-
-module.rest-context-path.simter-ymd: /
+simter-ymd.rest-context-path: /

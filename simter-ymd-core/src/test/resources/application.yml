@@ -1,5 +1,5 @@
 spring.main.banner-mode: 'off'
-module.authorization.simter-ymd:
+simter-ymd.authorization:
   defaultPermission: "Deny"   # Allow, Deny
   operations:                 # READ, SAVE, DELETE
     READ:
@@ -13,4 +13,4 @@ logging:
   file: target/test.log
   level: # TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
     root: ERROR
-    tech.simter.kv: WARN
+    tech.simter.ymd: WARN
