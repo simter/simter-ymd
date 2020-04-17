@@ -4,7 +4,7 @@ create table st_ymd (
   y  smallint     not null,
   m  smallint     not null default 0,
   d  smallint     not null default 0,
-  constraint st_ymd_uid unique (y, y, m, d)
+  constraint st_ymd_uid unique (t, y, m, d)
 );
 comment on table st_ymd is 'the date of massive data';
 comment on column st_ymd.t is 'the belong type identity';
