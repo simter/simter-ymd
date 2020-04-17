@@ -13,12 +13,18 @@ import tech.simter.ymd.impl.dao.jpa.po.YmdPo
  * @author RJ
  */
 interface YmdJpaRepository : JpaRepository<YmdPo, String> {
-  @Query("select distinct year from YmdPo where type = ?1 order by year desc")
+  @Query("select distinct t.year from YmdPo t" +
+    " where t.type = ?1" +
+    " order by t.year desc")
   fun findYears(type: String): List<Int>
 
-  @Query("select distinct month from YmdPo where type = ?1 and year = ?2 order by month desc")
+  @Query("select distinct t.month from YmdPo t" +
+    " where t.type = ?1 and t.year = ?2" +
+    " order by t.month desc")
   fun findMonths(type: String, year: Int): List<Int>
 
-  @Query("select distinct day from YmdPo where type = ?1 and  year = ?2 and month = ?3 order by day desc")
+  @Query("select distinct t.day from YmdPo t" +
+    " where t.type = ?1 and t.year = ?2 and t.month = ?3" +
+    " order by t.day desc")
   fun findDays(type: String, year: Int, month: Int): List<Int>
 }
