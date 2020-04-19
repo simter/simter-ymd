@@ -1,14 +1,22 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.Sort
+import org.springframework.data.r2dbc.core.DatabaseClient
+import org.springframework.data.r2dbc.core.isEquals
+import org.springframework.data.r2dbc.query.Criteria.where
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import reactor.kotlin.test.test
+import tech.simter.ymd.TABLE_YMD
+import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.r2dbc.TestHelper.randomYmd
+import tech.simter.ymd.impl.dao.r2dbc.TestHelper.clean
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Test [YmdDaoImpl.save].
@@ -18,39 +26,65 @@ import tech.simter.ymd.impl.dao.r2dbc.TestHelper.randomYmd
 @SpringBootTest(classes = [UnitTestConfiguration::class])
 @ExtendWith(SpringExtension::class)
 class SaveMethodImplTest @Autowired constructor(
-  private val repository: YmdRepository,
+  private val client: DatabaseClient,
   val dao: YmdDao
 ) {
   @BeforeEach
   fun clean() {
-    repository.deleteAll().test().verifyComplete()
+    clean(client = client)
   }
 
   @Test
   fun `Save nothing`() {
     dao.save().test().verifyComplete()
-    repository.count().test().expectNext(0).verifyComplete()
+    client.execute("select count(*) from $TABLE_YMD")
+      .map { row -> row.get(0, Long::class.javaObjectType) }
+      .one()
+      .test()
+      .expectNext(0).verifyComplete()
   }
 
   @Test
   fun `Save one`() {
     // init data
-    val po = randomYmd()
+    val ymd = randomYmd()
 
-    // invoke and verify
-    dao.save(po).test().verifyComplete()
-    repository.findById(po.id).test().expectNext(po).verifyComplete()
+    // save it
+    dao.save(ymd).test().verifyComplete()
+
+    // verify saved
+    client.select()
+      .from(TABLE_YMD)
+      .matching(where("t").isEquals(ymd.type))
+      .`as`(YmdPo::class.java)
+      .fetch()
+      .one()
+      .map { it as Ymd }
+      .test()
+      .assertNext { assertThat(ymd).isEqualToComparingFieldByField(it) }
+      .verifyComplete()
   }
 
   @Test
   fun `Save two`() {
     // init data
-    val po1 = randomYmd()
-    val po2 = randomYmd()
+    val ymd1 = randomYmd(year = 2000)
+    val ymd2 = randomYmd(year = 2001)
 
-    // invoke
-    dao.save(po1, po2).test().verifyComplete()
-    repository.findById(po1.id).test().expectNext(po1).verifyComplete()
-    repository.findById(po2.id).test().expectNext(po2).verifyComplete()
+    // save them
+    dao.save(ymd1, ymd2).test().verifyComplete()
+
+    // verify saved
+    client.select()
+      .from(TABLE_YMD)
+      .orderBy(Sort.Order.asc("y"))
+      .`as`(YmdPo::class.java)
+      .fetch()
+      .all()
+      .map { it as Ymd }
+      .test()
+      .assertNext { assertThat(ymd1).isEqualToComparingFieldByField(it) }
+      .assertNext { assertThat(ymd2).isEqualToComparingFieldByField(it) }
+      .verifyComplete()
   }
 }

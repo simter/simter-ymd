@@ -1,4 +1,4 @@
-package tech.simter.ymd.impl.dao.r2dbc.po
+package tech.simter.ymd.impl.dao.r2dbc
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
@@ -24,16 +24,4 @@ data class YmdPo(
   /** Only use as spring-data entity id */
   @Id
   val id: String = Ymd.uid(type, year, month, day)
-) : Ymd {
-  companion object {
-    fun from(ymd: Ymd): YmdPo {
-      return if (ymd is YmdPo) ymd
-      else YmdPo(
-        type = ymd.type,
-        year = ymd.year,
-        month = ymd.month,
-        day = ymd.day
-      )
-    }
-  }
-}
+) : Ymd
