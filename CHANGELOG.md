@@ -1,5 +1,20 @@
 # simter-ymd changelog
 
+## 0.9.0 2020-04-20
+
+- Rename `YmdService|Dao.save(...)` to `.create(...)` - this is a broken api change
+- Add integration test for rest-api
+- User `DatabaseClient` instead of `ConnectionFactory` to implement `YmdDao` on dao-r2dbc module
+- Initial `simter-ymd-test` module for unit test
+- Polishing jpql to compatible with EclipseLink
+- Add mssql SQL
+- Add mysql SQL
+- Add hsql SQL
+- Add derby SQL
+- Polishing h2 and postgres SQL
+- Fixed compile error after upgrade
+- Upgrade to simter-1.3.0-M14 (kotlin-1.3.70+)
+
 ## 0.8.0 2020-04-17
 
 - Log main config property on the starter with info level
