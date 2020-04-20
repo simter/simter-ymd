@@ -13,7 +13,7 @@ import tech.simter.ymd.impl.ImmutableYmd
 object TestHelper {
   /** Generate a random [Ymd] instance */
   fun randomYmd(
-    type: String = randomString("t"),
+    type: String = randomString(),
     year: Int = randomInt(2000, 2099), // 4 digits,
     month: Int = randomInt(1, 12),
     day: Int = randomInt(1, 20)
