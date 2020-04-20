@@ -20,6 +20,11 @@
       </dependency>
       <dependency>
         <groupId>tech.simter.ymd</groupId>
+        <artifactId>simter-ymd-test</artifactId>
+        <version>${simter-ymd.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>tech.simter.ymd</groupId>
         <artifactId>simter-ymd-dao-mongo</artifactId>
         <version>${simter-ymd.version}</version>
       </dependency>

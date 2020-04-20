@@ -23,6 +23,7 @@
     <module>simter-ymd-bom</module>
     <module>simter-ymd-parent</module>
     <module>simter-ymd-core</module>
+    <module>simter-ymd-test</module>
     <module>simter-ymd-dao-mongo</module>
     <module>simter-ymd-dao-r2dbc</module>
     <module>simter-ymd-dao-jpa</module>
