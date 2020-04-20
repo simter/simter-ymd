@@ -15,58 +15,58 @@ import tech.simter.ymd.core.YmdService
 import tech.simter.ymd.impl.service.TestHelper.randomYmd
 
 /**
- * Test [YmdServiceImpl.save].
+ * Test [YmdServiceImpl.create].
  *
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
-class SaveMethodImplTest @Autowired constructor(
+class CreateMethodImplTest @Autowired constructor(
   private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao,
   private val service: YmdService
 ) {
   @Test
-  fun `Save nothing`() {
+  fun `Create nothing`() {
     // mock
-    every { dao.save() } returns Mono.empty()
+    every { dao.create() } returns Mono.empty()
     every { moduleAuthorizer.verifyHasPermission(OPERATION_SAVE) } returns Mono.empty()
 
     // invoke and verify
-    service.save().test().verifyComplete()
+    service.create().test().verifyComplete()
     verify(exactly = 1) {
       moduleAuthorizer.verifyHasPermission(OPERATION_SAVE)
-      dao.save()
+      dao.create()
     }
   }
 
   @Test
-  fun `Save one`() {
+  fun `Create one`() {
     // mock
     val po = randomYmd()
-    every { dao.save(po) } returns Mono.empty()
+    every { dao.create(po) } returns Mono.empty()
     every { moduleAuthorizer.verifyHasPermission(OPERATION_SAVE) } returns Mono.empty()
 
     // invoke and verify
-    service.save(po).test().verifyComplete()
+    service.create(po).test().verifyComplete()
     verify(exactly = 1) {
       moduleAuthorizer.verifyHasPermission(OPERATION_SAVE)
-      dao.save(po)
+      dao.create(po)
     }
   }
 
   @Test
-  fun `Save two`() {
+  fun `Create two`() {
     // mock
     val po1 = randomYmd()
     val po2 = randomYmd()
-    every { dao.save(po1, po2) } returns Mono.empty()
+    every { dao.create(po1, po2) } returns Mono.empty()
     every { moduleAuthorizer.verifyHasPermission(OPERATION_SAVE) } returns Mono.empty()
 
     // invoke and verify
-    service.save(po1, po2).test().verifyComplete()
+    service.create(po1, po2).test().verifyComplete()
     verify(exactly = 1) {
       moduleAuthorizer.verifyHasPermission(OPERATION_SAVE)
-      dao.save(po1, po2)
+      dao.create(po1, po2)
     }
   }
 }

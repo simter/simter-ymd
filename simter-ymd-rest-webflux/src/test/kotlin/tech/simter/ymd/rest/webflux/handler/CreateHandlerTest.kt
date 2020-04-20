@@ -36,7 +36,7 @@ class CreateHandlerTest @Autowired constructor(
       .add("year", ymd.year)
       .add("month", ymd.month)
       .add("day", ymd.day)
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -44,7 +44,7 @@ class CreateHandlerTest @Autowired constructor(
       .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(exactly = 1) { service.save(any()) }
+    verify(exactly = 1) { service.create(any()) }
   }
 
   @Test
@@ -55,7 +55,7 @@ class CreateHandlerTest @Autowired constructor(
       .add("type", ymd.type)
       .add("year", ymd.year)
       .add("month", ymd.month)
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -63,7 +63,7 @@ class CreateHandlerTest @Autowired constructor(
       .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(exactly = 1) { service.save(any()) }
+    verify(exactly = 1) { service.create(any()) }
   }
 
   @Test
@@ -73,7 +73,7 @@ class CreateHandlerTest @Autowired constructor(
     val data = Json.createObjectBuilder()
       .add("type", ymd.type)
       .add("year", ymd.year)
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -81,13 +81,13 @@ class CreateHandlerTest @Autowired constructor(
       .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(exactly = 1) { service.save(any()) }
+    verify(exactly = 1) { service.create(any()) }
   }
 
   @Test
   fun `Failed by missing type`() {
     // mock
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -99,7 +99,7 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
 
     // invoke and verify
     client.post().uri("/")
@@ -111,13 +111,13 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
   }
 
   @Test
   fun `Failed by missing year`() {
     // mock
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -129,13 +129,13 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing year value!", responseBody)
       }
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
   }
 
   @Test
   fun `Failed by empty body`() {
     // mock
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/")
@@ -146,7 +146,7 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
 
     // invoke and verify
     client.post().uri("/")
@@ -157,6 +157,6 @@ class CreateHandlerTest @Autowired constructor(
       .expectBody(String::class.java).returnResult().apply {
         assertEquals("Missing type value!", responseBody)
       }
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
   }
 }

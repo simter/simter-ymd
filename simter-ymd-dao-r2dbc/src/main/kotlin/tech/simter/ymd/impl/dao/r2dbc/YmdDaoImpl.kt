@@ -19,7 +19,7 @@ import tech.simter.ymd.core.YmdDao
 class YmdDaoImpl @Autowired constructor(
   private val databaseClient: DatabaseClient
 ) : YmdDao {
-  override fun save(vararg ymd: Ymd): Mono<Void> {
+  override fun create(vararg ymd: Ymd): Mono<Void> {
     return ymd.toFlux()
       .flatMap { create(it) }
       .then()

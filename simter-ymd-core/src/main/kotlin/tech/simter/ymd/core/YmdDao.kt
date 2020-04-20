@@ -12,11 +12,11 @@ import reactor.core.publisher.Mono
  */
 interface YmdDao {
   /**
-   * Save or update all the given [ymd] entity.
+   * Create all the given [ymd] instance.
    *
-   * Result the mono signal when save successful.
+   * Result the mono signal when create successful.
    */
-  fun save(vararg ymd: Ymd): Mono<Void>
+  fun create(vararg ymd: Ymd): Mono<Void>
 
   /**
    * Find all years of the specific [type].

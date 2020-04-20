@@ -17,7 +17,7 @@ import tech.simter.ymd.impl.dao.mongo.po.YmdPo
 class YmdDaoImpl @Autowired constructor(
   private val repository: YmdRepository
 ) : YmdDao {
-  override fun save(vararg ymd: Ymd): Mono<Void> {
+  override fun create(vararg ymd: Ymd): Mono<Void> {
     return repository.saveAll(ymd.map { YmdPo.from(it) }).then()
   }
 

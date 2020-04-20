@@ -10,13 +10,13 @@ import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.impl.dao.mongo.TestHelper.randomYmd
 
 /**
- * Test [YmdDaoImpl.save].
+ * Test [YmdDaoImpl.create].
  *
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @DataMongoTest
-class SaveMethodImplTest @Autowired constructor(
+class CreateMethodImplTest @Autowired constructor(
   private val repository: YmdRepository,
   private val dao: YmdDao
 ) {
@@ -26,29 +26,29 @@ class SaveMethodImplTest @Autowired constructor(
   }
 
   @Test
-  fun `Save nothing`() {
-    dao.save().test().verifyComplete()
+  fun `Create nothing`() {
+    dao.create().test().verifyComplete()
     repository.count().test().expectNext(0).verifyComplete()
   }
 
   @Test
-  fun `Save one`() {
+  fun `Create one`() {
     // init data
     val po = randomYmd()
 
     // invoke and verify
-    dao.save(po).test().verifyComplete()
+    dao.create(po).test().verifyComplete()
     repository.findById(po.id).test().expectNext(po).verifyComplete()
   }
 
   @Test
-  fun `Save two`() {
+  fun `Create two`() {
     // init data
     val po1 = randomYmd()
     val po2 = randomYmd()
 
     // invoke
-    dao.save(po1, po2).test().verifyComplete()
+    dao.create(po1, po2).test().verifyComplete()
     repository.findById(po1.id).test().expectNext(po1).verifyComplete()
     repository.findById(po2.id).test().expectNext(po2).verifyComplete()
   }

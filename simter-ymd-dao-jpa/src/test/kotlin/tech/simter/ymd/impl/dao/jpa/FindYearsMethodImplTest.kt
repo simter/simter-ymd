@@ -11,7 +11,7 @@ import tech.simter.ymd.impl.dao.jpa.TestHelper.randomType
 import tech.simter.ymd.impl.dao.jpa.TestHelper.randomYmd
 
 /**
- * Test [YmdDaoImpl.save].
+ * Test [YmdDaoImpl.create].
  *
  * @author RJ
  */

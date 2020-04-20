@@ -43,7 +43,7 @@ class CreateHandler @Autowired constructor(
         )
       }
       // save
-      .flatMap { service.save(it) }
+      .flatMap { service.create(it) }
       // response
       .then(noContent().build())
       .onErrorResume(IllegalStateException::class.java) {

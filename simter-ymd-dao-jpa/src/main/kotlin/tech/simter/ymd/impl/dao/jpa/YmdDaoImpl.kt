@@ -19,7 +19,7 @@ class YmdDaoImpl @Autowired constructor(
   private val blockDao: YmdBlockDao,
   private val wrapper: ReactiveJpaWrapper
 ) : YmdDao {
-  override fun save(vararg ymd: Ymd): Mono<Void> {
+  override fun create(vararg ymd: Ymd): Mono<Void> {
     return wrapper.fromRunnable { blockDao.save(*ymd.map { YmdPo.from(it) }.toTypedArray()) }
   }
 

@@ -25,9 +25,9 @@ class YmdServiceImpl @Autowired constructor(
   private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao
 ) : YmdService {
-  override fun save(vararg ymd: Ymd): Mono<Void> {
+  override fun create(vararg ymd: Ymd): Mono<Void> {
     return moduleAuthorizer.verifyHasPermission(OPERATION_SAVE).then(
-      dao.save(*ymd)
+      dao.create(*ymd)
     )
   }
 

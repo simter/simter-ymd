@@ -19,13 +19,13 @@ import tech.simter.ymd.impl.dao.r2dbc.TestHelper.clean
 import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
- * Test [YmdDaoImpl.save].
+ * Test [YmdDaoImpl.create].
  *
  * @author RJ
  */
 @SpringBootTest(classes = [UnitTestConfiguration::class])
 @ExtendWith(SpringExtension::class)
-class SaveMethodImplTest @Autowired constructor(
+class CreateMethodImplTest @Autowired constructor(
   private val client: DatabaseClient,
   val dao: YmdDao
 ) {
@@ -35,8 +35,8 @@ class SaveMethodImplTest @Autowired constructor(
   }
 
   @Test
-  fun `Save nothing`() {
-    dao.save().test().verifyComplete()
+  fun `Create nothing`() {
+    dao.create().test().verifyComplete()
     client.execute("select count(*) from $TABLE_YMD")
       .map { row -> row.get(0, Long::class.javaObjectType) }
       .one()
@@ -45,12 +45,12 @@ class SaveMethodImplTest @Autowired constructor(
   }
 
   @Test
-  fun `Save one`() {
+  fun `Create one`() {
     // init data
     val ymd = randomYmd()
 
     // save it
-    dao.save(ymd).test().verifyComplete()
+    dao.create(ymd).test().verifyComplete()
 
     // verify saved
     client.select()
@@ -66,13 +66,13 @@ class SaveMethodImplTest @Autowired constructor(
   }
 
   @Test
-  fun `Save two`() {
+  fun `Create two`() {
     // init data
     val ymd1 = randomYmd(year = 2000)
     val ymd2 = randomYmd(year = 2001)
 
     // save them
-    dao.save(ymd1, ymd2).test().verifyComplete()
+    dao.create(ymd1, ymd2).test().verifyComplete()
 
     // verify saved
     client.select()

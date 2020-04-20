@@ -37,7 +37,7 @@ class BatchCreateByTypeHandler @Autowired constructor(
         }
       }
       // save
-      .flatMap { service.save(*it.toTypedArray()) }
+      .flatMap { service.create(*it.toTypedArray()) }
       // response
       .then(noContent().build())
   }

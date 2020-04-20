@@ -44,7 +44,7 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
           .add("day", it.day)
       )
     }
-    every { service.save(*anyVararg()) } returns Mono.empty()
+    every { service.create(*anyVararg()) } returns Mono.empty()
 
     // invoke and verify
     client.post().uri("/$type")
@@ -52,26 +52,26 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
       .bodyValue(data.build().toString())
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(exactly = 1) { service.save(*anyVararg()) }
+    verify(exactly = 1) { service.create(*anyVararg()) }
   }
 
   @Test
   fun `Success with empty body`() {
     // mock
-    every { service.save(any()) } returns Mono.empty()
+    every { service.create(any()) } returns Mono.empty()
 
     // invoke and verify with empty body
     client.post().uri("/$type")
       .contentType(APPLICATION_JSON)
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
 
     // invoke and verify without body
     client.post().uri("/$type")
       .contentType(APPLICATION_JSON)
       .exchange()
       .expectStatus().isNoContent.expectBody().isEmpty
-    verify(exactly = 0) { service.save(any()) }
+    verify(exactly = 0) { service.create(any()) }
   }
 }
