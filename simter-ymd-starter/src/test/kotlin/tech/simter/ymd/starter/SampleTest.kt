@@ -1,6 +1,6 @@
 package tech.simter.ymd.starter
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 
@@ -13,6 +13,6 @@ class SampleTest {
   @Test
   fun test() {
     logger.debug("test log config")
-    assertEquals(2, 1 + 1)
+    assertThat(1 + 1).isEqualTo(2)
   }
 }

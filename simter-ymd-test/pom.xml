@@ -40,6 +40,12 @@
       <artifactId>simter-reactive-web</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- json jsr353 by jackson-->
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <properties>
     <server.url>http://localhost:8084/ymd</server.url>
@@ -84,7 +90,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <excludes>
-                <exclude>none</exclude>
+                <exclude>**/SampleTest</exclude>
               </excludes>
               <includes>
                 <include>**/*Test</include>

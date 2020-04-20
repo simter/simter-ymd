@@ -67,10 +67,4 @@ nohup java -jar {package-name}.jar > /dev/null &
 
 ## Run Integration Test
 
-Run test in the real server.
-
-1. Start server. Such as `mvn spring-boot:run`
-2. Run [IntegrationTest.kt]
-
-
-[IntegrationTest.kt]: https://github.com/simter/simter-ymd/blob/master/simter-ymd-starter/src/test/kotlin/tech/simter/ymd/starter/IntegrationTest.kt
+Run test in the real server. See [simter-ymd-test/README.md](../simter-ymd-test/README.md).
