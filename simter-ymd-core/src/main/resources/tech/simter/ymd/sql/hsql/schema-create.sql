@@ -1,9 +1,9 @@
 create table st_ymd (
-  id varchar(36)  primary key,
-  t  varchar(100) not null,
-  y  smallint     not null,
-  m  smallint     not null default 0,
-  d  smallint     not null default 0,
+  id varchar(36)        primary key,
+  t  varchar(100)       not null,
+  y  smallint           not null,
+  m  smallint default 0 not null,
+  d  smallint default 0 not null,
   constraint st_ymd_uid unique (t, y, m, d)
 );
 comment on table st_ymd is 'the date of massive data';
