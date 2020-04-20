@@ -1,9 +1,9 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
-import tech.simter.util.RandomUtils.nextId
-import tech.simter.util.RandomUtils.randomInt
+import org.springframework.data.r2dbc.core.DatabaseClient
+import tech.simter.ymd.TABLE_YMD
 import tech.simter.ymd.core.Ymd
-import tech.simter.ymd.impl.dao.r2dbc.po.YmdPo
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Provide public method of test
@@ -11,28 +11,35 @@ import tech.simter.ymd.impl.dao.r2dbc.po.YmdPo
  * @author RJ
  */
 object TestHelper {
-  /** Generate a random [Ymd] instance */
-  fun randomYmd(
-    type: String = nextType(),
-    year: Int = randomInt(2000, 2099), // 4 digits,
-    month: Int = randomInt(1, 12),
-    day: Int = randomInt(1, 20)
-  ): YmdPo {
-    return YmdPo(
-      type = type,
-      year = year,
-      month = month,
-      day = day
-    )
+  /** delete all file store data from database */
+  fun clean(client: DatabaseClient) {
+    client.delete()
+      .from(TABLE_YMD)
+      .fetch()
+      .rowsUpdated()
+      .block()!!
   }
 
-  /** Generate a next [Ymd] type */
-  fun nextType(): String {
-    return "type${nextId("type")}"
-  }
-
-  /** Generate a next [Ymd] id */
-  fun nextId(): String {
-    return "id${nextId("id")}"
+  /** insert one file store instance to database */
+  fun insert(
+    client: DatabaseClient,
+    ymd: Ymd = randomYmd()
+  ): Ymd {
+    return client.insert()
+      .into(TABLE_YMD)
+      .value("t", ymd.type)
+      .value("y", ymd.year)
+      .value("m", ymd.month)
+      .value("d", ymd.day)
+      .value("id", Ymd.uid(
+        type = ymd.type,
+        year = ymd.year,
+        month = ymd.month,
+        day = ymd.day
+      ))
+      .fetch()
+      .rowsUpdated()
+      .map { ymd }
+      .block()!!
   }
 }
