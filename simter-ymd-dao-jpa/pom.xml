@@ -19,6 +19,7 @@
     <db.username>tester</db.username>
     <db.password>password</db.password>
     <db.url>~</db.url>
+    <db.protocol>~</db.protocol>
     <db.driver-class>~</db.driver-class>
     <db.init-mode>never</db.init-mode>
     <db.jpa-ddl-auto>none</db.jpa-ddl-auto>
@@ -46,7 +47,6 @@
     <dependency>
       <groupId>tech.simter</groupId>
       <artifactId>simter-jpa-ext</artifactId>
-      <version>1.2.0-M1</version>
     </dependency>
     <dependency>
       <groupId>tech.simter.reactive</groupId>
@@ -61,12 +61,6 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <optional>true</optional>
-    </dependency>
-    <!-- json jsr353 provider-->
-    <dependency>
-      <groupId>org.glassfish</groupId>
-      <artifactId>javax.json</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
