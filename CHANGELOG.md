@@ -1,5 +1,11 @@
 # simter-ymd changelog
 
+## 1.0.0 - 2020-11-23
+
+- Upgrade to simter-2.0.0 (spring-boot-2.3.6)
+- First stable version
+- Add module simter-ymd-service-impl
+
 ## 0.9.0 2020-04-20
 
 - Rename `YmdService|Dao.save(...)` to `.create(...)` - this is a broken api change

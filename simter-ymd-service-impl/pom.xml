@@ -8,24 +8,29 @@
     <version>${revision}</version>
     <relativePath>../simter-ymd-parent</relativePath>
   </parent>
-  <artifactId>simter-ymd-core</artifactId>
+  <artifactId>simter-ymd-service-impl</artifactId>
   <packaging>jar</packaging>
-  <description>Core API</description>
+  <description>Service Implementation</description>
   <dependencies>
     <dependency>
-      <groupId>tech.simter</groupId>
-      <artifactId>simter-exception</artifactId>
+      <groupId>tech.simter.ymd</groupId>
+      <artifactId>simter-ymd-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>tech.simter</groupId>
-      <artifactId>simter-kotlin</artifactId>
+      <groupId>tech.simter.ymd</groupId>
+      <artifactId>simter-ymd-test</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains.kotlinx</groupId>
-      <artifactId>kotlinx-serialization-runtime</artifactId>
+      <groupId>tech.simter.reactive</groupId>
+      <artifactId>simter-reactive-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
     </dependency>
   </dependencies>
-  <url>https://github.com/simter/simter-ymd/tree/master/simter-ymd-core</url>
+  <url>https://github.com/simter/simter-ymd/tree/master/simter-ymd-service-impl</url>
   <scm>
     <url>https://github.com/simter/simter-ymd.git</url>
   </scm>

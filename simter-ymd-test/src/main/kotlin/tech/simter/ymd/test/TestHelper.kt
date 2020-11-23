@@ -1,6 +1,5 @@
 package tech.simter.ymd.test
 
-import tech.simter.reactive.context.SystemContext
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.core.Ymd
@@ -13,15 +12,6 @@ import java.time.Month
  * @author RJ
  */
 object TestHelper {
-  /** Create a random authenticated user */
-  fun randomAuthenticatedUser(
-    id: Int = randomInt(),
-    account: String = randomString(),
-    name: String = randomString()
-  ): SystemContext.User {
-    return SystemContext.User(id = id, account = account, name = name)
-  }
-
   /** Create a random type */
   fun randomType(): String {
     return randomString(len = 6)
