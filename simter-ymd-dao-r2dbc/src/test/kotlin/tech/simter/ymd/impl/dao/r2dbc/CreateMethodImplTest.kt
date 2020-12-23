@@ -1,20 +1,18 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
+import io.r2dbc.spi.Row
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.Sort
-import org.springframework.data.r2dbc.core.DatabaseClient
-import org.springframework.data.r2dbc.core.isEquals
-import org.springframework.data.r2dbc.query.Criteria.where
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
+import org.springframework.r2dbc.core.DatabaseClient
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
 import tech.simter.ymd.TABLE_YMD
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdDao
+import tech.simter.ymd.impl.ImmutableYmd
 import tech.simter.ymd.impl.dao.r2dbc.TestHelper.clean
 import tech.simter.ymd.test.TestHelper.randomYmd
 
@@ -23,11 +21,11 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  *
  * @author RJ
  */
-@SpringBootTest(classes = [UnitTestConfiguration::class])
-@ExtendWith(SpringExtension::class)
+@SpringJUnitConfig(UnitTestConfiguration::class)
+@DataR2dbcTest
 class CreateMethodImplTest @Autowired constructor(
   private val client: DatabaseClient,
-  val dao: YmdDao
+  private val dao: YmdDao
 ) {
   @BeforeEach
   fun clean() {
@@ -37,7 +35,7 @@ class CreateMethodImplTest @Autowired constructor(
   @Test
   fun `Create nothing`() {
     dao.create().test().verifyComplete()
-    client.execute("select count(*) from $TABLE_YMD")
+    client.sql("select count(*) from $TABLE_YMD")
       .map { row -> row.get(0, Long::class.javaObjectType) }
       .one()
       .test()
@@ -53,15 +51,12 @@ class CreateMethodImplTest @Autowired constructor(
     dao.create(ymd).test().verifyComplete()
 
     // verify saved
-    client.select()
-      .from(TABLE_YMD)
-      .matching(where("t").isEquals(ymd.type))
-      .`as`(YmdPo::class.java)
-      .fetch()
+    client.sql("select * from $TABLE_YMD where t = :t")
+      .bind("t", ymd.type)
+      .map(this::rowMapper4Ymd)
       .one()
-      .map { it as Ymd }
       .test()
-      .assertNext { assertThat(ymd).isEqualToComparingFieldByField(it) }
+      .assertNext { assertThat(ymd).usingRecursiveComparison().isEqualTo(it) }
       .verifyComplete()
   }
 
@@ -75,16 +70,21 @@ class CreateMethodImplTest @Autowired constructor(
     dao.create(ymd1, ymd2).test().verifyComplete()
 
     // verify saved
-    client.select()
-      .from(TABLE_YMD)
-      .orderBy(Sort.Order.asc("y"))
-      .`as`(YmdPo::class.java)
-      .fetch()
+    client.sql("select * from $TABLE_YMD order by y asc")
+      .map(this::rowMapper4Ymd)
       .all()
-      .map { it as Ymd }
       .test()
-      .assertNext { assertThat(ymd1).isEqualToComparingFieldByField(it) }
-      .assertNext { assertThat(ymd2).isEqualToComparingFieldByField(it) }
+      .assertNext { assertThat(ymd1).usingRecursiveComparison().isEqualTo(it) }
+      .assertNext { assertThat(ymd2).usingRecursiveComparison().isEqualTo(it) }
       .verifyComplete()
+  }
+
+  private fun rowMapper4Ymd(row: Row): Ymd {
+    return ImmutableYmd(
+      type = row.get("t", String::class.java)!!,
+      year = row.get("y", Short::class.javaObjectType)!!.toInt(),
+      month = row.get("m", Short::class.javaObjectType)!!.toInt(),
+      day = row.get("d", Short::class.javaObjectType)!!.toInt()
+    )
   }
 }
