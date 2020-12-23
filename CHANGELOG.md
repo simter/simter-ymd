@@ -1,5 +1,13 @@
 # simter-ymd changelog
 
+## 2.0.0-M1 - 2020-12-23
+
+- Upgrade to simter-3.0.0-M1 (spring-boot-2.4.1)
+- Add `@Transactional` config on `YmdServiceImpl`
+- Use new DatabaseClient code (spring-5.3)
+- Move ImmutableX to X.of(...)
+- Remove kotlinx-serialization-json
+
 ## 1.0.0 - 2020-11-23
 
 - Upgrade to simter-2.0.0 (spring-boot-2.3.6)
