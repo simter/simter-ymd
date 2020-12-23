@@ -11,9 +11,6 @@ import tech.simter.ymd.AUTHORIZER_KEY
 import tech.simter.ymd.OPERATION_READ
 import tech.simter.ymd.OPERATION_SAVE
 import tech.simter.ymd.core.*
-import tech.simter.ymd.impl.ImmutableMonthWithItsDays
-import tech.simter.ymd.impl.ImmutableYearWithItsMonthDays
-import tech.simter.ymd.impl.ImmutableYearWithItsMonths
 
 /**
  * The Service implementation of [YmdService].
@@ -66,11 +63,11 @@ class YmdServiceImpl @Autowired constructor(
             val latestYear = years[0]
             val latestYearWithMonths: Mono<YearWithItsMonths> = dao.findMonths(type = type, year = latestYear)
               .collectList()
-              .map { ImmutableYearWithItsMonths(year = latestYear, months = if (it.isEmpty()) null else it) }
+              .map { YearWithItsMonths.of(year = latestYear, months = if (it.isEmpty()) null else it) }
 
             // concat with the rest of years
             latestYearWithMonths.map {
-              listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> ImmutableYearWithItsMonths(year = y) })
+              listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> YearWithItsMonths.of(year = y) })
             }
           }
         }.flatMapIterable { it }
@@ -94,11 +91,11 @@ class YmdServiceImpl @Autowired constructor(
           val latestMonth = months[0]
           val latestMonthWithDays = dao.findDays(type = type, year = year, month = latestMonth)
             .collectList()
-            .map { ImmutableMonthWithItsDays(month = latestMonth, days = if (it.isEmpty()) null else it) }
+            .map { MonthWithItsDays.of(month = latestMonth, days = if (it.isEmpty()) null else it) }
 
           // concat with the rest of months
           latestMonthWithDays.map {
-            listOf(it).plus(months.filterIndexed { index, _ -> index > 0 }.map { m -> ImmutableMonthWithItsDays(month = m) })
+            listOf(it).plus(months.filterIndexed { index, _ -> index > 0 }.map { m -> MonthWithItsDays.of(month = m) })
           }
         }
       }.flatMapIterable { it }
@@ -117,16 +114,15 @@ class YmdServiceImpl @Autowired constructor(
             val latestYearWithMonths = findMonthsWithLatestMonthDays2(type = type, year = latestYear)
               .collectList()
               .map {
-                @Suppress("UNCHECKED_CAST")
-                ImmutableYearWithItsMonthDays(
+                YearWithItsMonthDays.of(
                   year = latestYear,
-                  months = if (it.isEmpty()) null else it as List<ImmutableMonthWithItsDays>
-                ) as YearWithItsMonthDays
+                  months = if (it.isEmpty()) null else it as List<MonthWithItsDays>
+                )
               }
 
             // concat with the rest of years
             latestYearWithMonths.map {
-              listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> ImmutableYearWithItsMonthDays(year = y) })
+              listOf(it).plus(years.filterIndexed { index, _ -> index > 0 }.map { y -> YearWithItsMonthDays.of(year = y) })
             }
           }
         }.flatMapIterable { it }
