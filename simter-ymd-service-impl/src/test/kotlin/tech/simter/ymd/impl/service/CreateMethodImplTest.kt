@@ -12,7 +12,7 @@ import tech.simter.ymd.OPERATION_SAVE
 import tech.simter.ymd.UnitTestConfiguration
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.core.YmdService
-import tech.simter.ymd.impl.service.TestHelper.randomYmd
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Test [YmdServiceImpl.create].

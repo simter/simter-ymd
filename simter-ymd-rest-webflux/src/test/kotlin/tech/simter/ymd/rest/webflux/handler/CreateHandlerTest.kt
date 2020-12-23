@@ -12,8 +12,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Mono
 import tech.simter.ymd.core.YmdService
-import tech.simter.ymd.rest.webflux.TestHelper.randomYmd
 import tech.simter.ymd.rest.webflux.UnitTestConfiguration
+import tech.simter.ymd.test.TestHelper.randomYmd
 import javax.json.Json
 
 /**

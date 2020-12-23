@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
-import tech.simter.ymd.impl.ImmutableYmd
+import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.test.TestHelper.randomType
 import javax.json.Json
 
@@ -26,8 +26,8 @@ class BatchCreateByTypeTest @Autowired constructor(
   fun `Success with data`() {
     // mock
     val list = listOf(
-      ImmutableYmd(type = type, year = 2001, month = 1, day = 1),
-      ImmutableYmd(type = type, year = 2001, month = 1, day = 2)
+      Ymd.of(type = type, year = 2001, month = 1, day = 1),
+      Ymd.of(type = type, year = 2001, month = 1, day = 2)
     )
     val data = Json.createArrayBuilder()
     list.forEach {

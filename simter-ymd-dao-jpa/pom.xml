@@ -45,6 +45,11 @@
       <artifactId>simter-ymd-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>tech.simter.ymd</groupId>
+      <artifactId>simter-ymd-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>tech.simter</groupId>
       <artifactId>simter-jpa-ext</artifactId>
     </dependency>

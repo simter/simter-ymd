@@ -1,7 +1,7 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -26,13 +26,12 @@ class YmdDaoImpl @Autowired constructor(
   }
 
   private fun create(ymd: Ymd): Mono<Int> {
-    return databaseClient.insert()
-      .into(TABLE_YMD)
-      .value("t", ymd.type)
-      .value("y", ymd.year)
-      .value("m", ymd.month)
-      .value("d", ymd.day)
-      .value("id", Ymd.uid(
+    return databaseClient.sql("insert into $TABLE_YMD(t, y, m, d, id) values (:t, :y, :m, :d, :id)")
+      .bind("t", ymd.type)
+      .bind("y", ymd.year)
+      .bind("m", ymd.month)
+      .bind("d", ymd.day)
+      .bind("id", Ymd.uid(
         type = ymd.type,
         year = ymd.year,
         month = ymd.month,
@@ -44,7 +43,7 @@ class YmdDaoImpl @Autowired constructor(
 
   override fun findYears(type: String): Flux<Int> {
     return databaseClient
-      .execute("select distinct y from $TABLE_YMD" +
+      .sql("select distinct y from $TABLE_YMD" +
         " where t = :type" +
         " order by y desc")
       .bind("type", type)
@@ -54,7 +53,7 @@ class YmdDaoImpl @Autowired constructor(
 
   override fun findMonths(type: String, year: Int): Flux<Int> {
     return databaseClient
-      .execute("select distinct m from $TABLE_YMD" +
+      .sql("select distinct m from $TABLE_YMD" +
         " where t = :type and y = :year" +
         " order by m desc")
       .bind("type", type)
@@ -65,7 +64,7 @@ class YmdDaoImpl @Autowired constructor(
 
   override fun findDays(type: String, year: Int, month: Int): Flux<Int> {
     return databaseClient
-      .execute("select distinct d from $TABLE_YMD" +
+      .sql("select distinct d from $TABLE_YMD" +
         " where t = :type and  y = :year and m = :month" +
         " order by d desc")
       .bind("type", type)

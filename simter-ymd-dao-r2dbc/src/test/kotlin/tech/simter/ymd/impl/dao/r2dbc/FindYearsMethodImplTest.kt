@@ -1,11 +1,10 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.r2dbc.core.DatabaseClient
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
+import org.springframework.r2dbc.core.DatabaseClient
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.impl.dao.r2dbc.TestHelper.insert
@@ -17,11 +16,11 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  *
  * @author RJ
  */
-@SpringBootTest(classes = [UnitTestConfiguration::class])
-@ExtendWith(SpringExtension::class)
+@SpringJUnitConfig(UnitTestConfiguration::class)
+@DataR2dbcTest
 class FindYearsMethodImplTest @Autowired constructor(
   private val client: DatabaseClient,
-  val dao: YmdDao
+  private val dao: YmdDao
 ) {
   @Test
   fun `Found nothing`() {

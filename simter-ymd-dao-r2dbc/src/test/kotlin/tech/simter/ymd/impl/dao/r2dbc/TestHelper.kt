@@ -1,6 +1,6 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
-import org.springframework.data.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.DatabaseClient
 import tech.simter.ymd.TABLE_YMD
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.test.TestHelper.randomYmd
@@ -13,8 +13,7 @@ import tech.simter.ymd.test.TestHelper.randomYmd
 object TestHelper {
   /** delete all file store data from database */
   fun clean(client: DatabaseClient) {
-    client.delete()
-      .from(TABLE_YMD)
+    client.sql("delete from $TABLE_YMD")
       .fetch()
       .rowsUpdated()
       .block()!!
@@ -25,13 +24,12 @@ object TestHelper {
     client: DatabaseClient,
     ymd: Ymd = randomYmd()
   ): Ymd {
-    return client.insert()
-      .into(TABLE_YMD)
-      .value("t", ymd.type)
-      .value("y", ymd.year)
-      .value("m", ymd.month)
-      .value("d", ymd.day)
-      .value("id", Ymd.uid(
+    return client.sql("insert into $TABLE_YMD(t, y, m, d, id) values (:t, :y, :m, :d, :id)")
+      .bind("t", ymd.type)
+      .bind("y", ymd.year)
+      .bind("m", ymd.month)
+      .bind("d", ymd.day)
+      .bind("id", Ymd.uid(
         type = ymd.type,
         year = ymd.year,
         month = ymd.month,

@@ -31,11 +31,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains.kotlinx</groupId>
-      <artifactId>kotlinx-serialization-runtime</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>tech.simter.reactive</groupId>
       <artifactId>simter-reactive-web</artifactId>
       <scope>test</scope>

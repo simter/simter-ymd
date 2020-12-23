@@ -10,10 +10,10 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 import tech.simter.util.RandomUtils.randomString
+import tech.simter.ymd.core.MonthWithItsDays
+import tech.simter.ymd.core.YearWithItsMonthDays
+import tech.simter.ymd.core.YearWithItsMonths
 import tech.simter.ymd.core.YmdService
-import tech.simter.ymd.impl.ImmutableMonthWithItsDays
-import tech.simter.ymd.impl.ImmutableYearWithItsMonthDays
-import tech.simter.ymd.impl.ImmutableYearWithItsMonths
 import tech.simter.ymd.rest.webflux.UnitTestConfiguration
 
 /**
@@ -70,8 +70,8 @@ class FindYearsHandlerTest @Autowired constructor(
     val type = randomString()
     val latestYearMonths = listOf(2, 1)
     val years = listOf(
-      ImmutableYearWithItsMonths(year = 2009, months = latestYearMonths),
-      ImmutableYearWithItsMonths(year = 2008)
+      YearWithItsMonths.of(year = 2009, months = latestYearMonths),
+      YearWithItsMonths.of(year = 2008)
     )
     every { ymdService.findYearsWithLatestYearMonths(type) } returns Flux.just(*years.toTypedArray())
 
@@ -100,12 +100,12 @@ class FindYearsHandlerTest @Autowired constructor(
     // mock
     val type = randomString()
     val latestYearMonths = listOf(
-      ImmutableMonthWithItsDays(month = 2, days = listOf(9, 8)),
-      ImmutableMonthWithItsDays(month = 1)
+      MonthWithItsDays.of(month = 2, days = listOf(9, 8)),
+      MonthWithItsDays.of(month = 1)
     )
     val years = listOf(
-      ImmutableYearWithItsMonthDays(year = 2009, months = latestYearMonths),
-      ImmutableYearWithItsMonthDays(year = 2008)
+      YearWithItsMonthDays.of(year = 2009, months = latestYearMonths),
+      YearWithItsMonthDays.of(year = 2008)
     )
     every { ymdService.findYearsWithLatestMonthDays(type) } returns Flux.just(*years.toTypedArray())
 

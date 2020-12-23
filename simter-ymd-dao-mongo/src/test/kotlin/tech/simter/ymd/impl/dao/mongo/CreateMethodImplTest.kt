@@ -7,7 +7,8 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.mongo.TestHelper.randomYmd
+import tech.simter.ymd.impl.dao.mongo.po.YmdPo
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Test [YmdDaoImpl.create].
@@ -34,7 +35,7 @@ class CreateMethodImplTest @Autowired constructor(
   @Test
   fun `Create one`() {
     // init data
-    val po = randomYmd()
+    val po = YmdPo.from(randomYmd())
 
     // invoke and verify
     dao.create(po).test().verifyComplete()
@@ -44,8 +45,8 @@ class CreateMethodImplTest @Autowired constructor(
   @Test
   fun `Create two`() {
     // init data
-    val po1 = randomYmd()
-    val po2 = randomYmd()
+    val po1 = YmdPo.from(randomYmd())
+    val po2 = YmdPo.from(randomYmd())
 
     // invoke
     dao.create(po1, po2).test().verifyComplete()
