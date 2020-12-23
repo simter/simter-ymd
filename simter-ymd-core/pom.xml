@@ -20,11 +20,6 @@
       <groupId>tech.simter</groupId>
       <artifactId>simter-kotlin</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlinx</groupId>
-      <artifactId>kotlinx-serialization-json</artifactId>
-      <type>pom</type>
-    </dependency>
   </dependencies>
   <url>https://github.com/simter/simter-ymd/tree/master/simter-ymd-core</url>
   <scm>
