@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import reactor.core.publisher.Mono
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdService
-import tech.simter.ymd.impl.ImmutableYmd
 
 /**
  * The [HandlerFunction] for batch create multiple [Ymd] records.
@@ -28,7 +27,7 @@ class BatchCreateByTypeHandler @Autowired constructor(
       // convert to ymd
       .map { list ->
         list.map {
-          ImmutableYmd(
+          Ymd.of(
             type = type,
             year = it["year"] as Int,
             month = (it["month"] as? Int) ?: 0,

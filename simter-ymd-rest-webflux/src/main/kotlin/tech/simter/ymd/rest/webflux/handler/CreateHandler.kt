@@ -14,7 +14,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.noContent
 import reactor.core.publisher.Mono
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdService
-import tech.simter.ymd.impl.ImmutableYmd
 
 /**
  * The [HandlerFunction] for create a new [Ymd] record.
@@ -35,7 +34,7 @@ class CreateHandler @Autowired constructor(
       }
       // convert to ymd
       .map {
-        ImmutableYmd(
+        Ymd.of(
           type = it["type"] as String,
           year = it["year"] as Int,
           month = (it["month"] as? Int) ?: 0,

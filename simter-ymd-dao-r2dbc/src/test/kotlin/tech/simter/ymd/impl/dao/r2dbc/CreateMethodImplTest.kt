@@ -12,7 +12,6 @@ import reactor.kotlin.test.test
 import tech.simter.ymd.TABLE_YMD
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.ImmutableYmd
 import tech.simter.ymd.impl.dao.r2dbc.TestHelper.clean
 import tech.simter.ymd.test.TestHelper.randomYmd
 
@@ -80,7 +79,7 @@ class CreateMethodImplTest @Autowired constructor(
   }
 
   private fun rowMapper4Ymd(row: Row): Ymd {
-    return ImmutableYmd(
+    return Ymd.of(
       type = row.get("t", String::class.java)!!,
       year = row.get("y", Short::class.javaObjectType)!!.toInt(),
       month = row.get("m", Short::class.javaObjectType)!!.toInt(),

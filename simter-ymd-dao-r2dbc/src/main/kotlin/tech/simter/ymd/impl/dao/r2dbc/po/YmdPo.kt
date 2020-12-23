@@ -1,4 +1,4 @@
-package tech.simter.ymd.impl.dao.r2dbc
+package tech.simter.ymd.impl.dao.r2dbc.po
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.domain.Persistable
@@ -32,5 +32,17 @@ data class YmdPo(
 
   override fun isNew(): Boolean {
     return true
+  }
+
+  companion object {
+    fun from(ymd: Ymd): YmdPo {
+      return if (ymd is YmdPo) ymd
+      else YmdPo(
+        type = ymd.type,
+        year = ymd.year,
+        month = ymd.month,
+        day = ymd.day
+      )
+    }
   }
 }

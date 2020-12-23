@@ -7,8 +7,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
 import tech.simter.reactive.test.jpa.TestEntityManager
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.jpa.TestHelper.randomType
-import tech.simter.ymd.impl.dao.jpa.TestHelper.randomYmd
+import tech.simter.ymd.impl.dao.jpa.po.YmdPo
+import tech.simter.ymd.test.TestHelper.randomType
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Test [YmdDaoImpl.findMonths]
@@ -30,10 +31,10 @@ class FindMonthsMethodImplTest @Autowired constructor(
   @Test
   fun `Found something`() {
     // init data
-    val t1y1m1 = randomYmd(type = randomType(), year = 2001, month = 1)
-    val t1y1m2 = randomYmd(type = t1y1m1.type, year = 2001, month = 2)
-    val t1y2m = randomYmd(type = t1y1m1.type, year = 2002, month = 3) // another year
-    val t2ym = randomYmd(type = randomType(), year = 2003, month = 4) // another type
+    val t1y1m1 = YmdPo.from(randomYmd(type = randomType(), year = 2001, month = 1))
+    val t1y1m2 = YmdPo.from(randomYmd(type = t1y1m1.type, year = 2001, month = 2))
+    val t1y2m = YmdPo.from(randomYmd(type = t1y1m1.type, year = 2002, month = 3)) // another year
+    val t2ym = YmdPo.from(randomYmd(type = randomType(), year = 2003, month = 4)) // another type
     rem.persist(t1y1m1, t1y1m2, t1y2m, t2ym)
 
     // invoke and verify with desc order

@@ -7,8 +7,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
 import tech.simter.reactive.test.jpa.TestEntityManager
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.jpa.TestHelper.randomType
-import tech.simter.ymd.impl.dao.jpa.TestHelper.randomYmd
+import tech.simter.ymd.impl.dao.jpa.po.YmdPo
+import tech.simter.ymd.test.TestHelper.randomType
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Test [YmdDaoImpl.create].
@@ -29,9 +30,9 @@ class FindYearsMethodImplTest @Autowired constructor(
   @Test
   fun `Found something`() {
     // init data
-    val t1y1 = randomYmd(type = randomType(), year = 2000)
-    val t1y2 = randomYmd(type = t1y1.type, year = 2001)
-    val t2y1 = randomYmd(type = randomType(), year = 2018) // another type
+    val t1y1 = YmdPo.from(randomYmd(type = randomType(), year = 2000))
+    val t1y2 = YmdPo.from(randomYmd(type = t1y1.type, year = 2001))
+    val t2y1 = YmdPo.from(randomYmd(type = randomType(), year = 2018)) // another type
     rem.persist(t1y1, t1y2, t2y1)
 
     // invoke and verify with desc order

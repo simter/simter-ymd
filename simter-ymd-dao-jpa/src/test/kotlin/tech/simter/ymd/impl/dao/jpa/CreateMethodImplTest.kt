@@ -8,8 +8,8 @@ import reactor.kotlin.test.test
 import tech.simter.reactive.test.jpa.ReactiveDataJpaTest
 import tech.simter.reactive.test.jpa.TestEntityManager
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.jpa.TestHelper.randomYmd
 import tech.simter.ymd.impl.dao.jpa.po.YmdPo
+import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
  * Test [YmdDaoImpl.create].
@@ -36,7 +36,7 @@ class CreateMethodImplTest @Autowired constructor(
   @Test
   fun `Create one`() {
     // init data
-    val po = randomYmd()
+    val po = YmdPo.from(randomYmd())
 
     // invoke and verify
     dao.create(po).test().verifyComplete()
@@ -46,8 +46,8 @@ class CreateMethodImplTest @Autowired constructor(
   @Test
   fun `Create two`() {
     // init data
-    val po1 = randomYmd()
-    val po2 = randomYmd()
+    val po1 = YmdPo.from(randomYmd())
+    val po2 = YmdPo.from(randomYmd())
 
     // invoke and verify
     dao.create(po1, po2).test().verifyComplete()

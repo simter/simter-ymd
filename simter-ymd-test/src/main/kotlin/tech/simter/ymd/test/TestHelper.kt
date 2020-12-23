@@ -3,7 +3,6 @@ package tech.simter.ymd.test
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
 import tech.simter.ymd.core.Ymd
-import tech.simter.ymd.impl.ImmutableYmd
 import java.time.Month
 
 /**
@@ -40,7 +39,7 @@ object TestHelper {
     day: Int = randomDay()
   ): Ymd {
     val maxDay = Month.of(month).maxLength()
-    return ImmutableYmd(
+    return Ymd.of(
       type = type,
       year = year,
       month = month,
