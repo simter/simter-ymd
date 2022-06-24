@@ -1,5 +1,10 @@
 # simter-ymd changelog
 
+## 2.0.0 - 2022-06-24
+
+- Upgrade to simter-3.0.0 (spring-boot-2.7.0 and Java-17)
+- Remove embedded database profiles on starter
+
 ## 2.0.0-M1 - 2020-12-23
 
 - Upgrade to simter-3.0.0-M1 (spring-boot-2.4.1)
