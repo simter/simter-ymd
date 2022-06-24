@@ -34,10 +34,9 @@ This will run all the integration test on each rest-api define in <[rest-api.md]
 
 Want to run the integration test on the real server, just add specific param:
 
-| ParamName  | Remark         | Default value
-|------------|----------------|---------------
-| server.url | server address | http://127.0.0.1:8084/ymd
-
+| ParamName  | Remark         | Default value             |
+|------------|----------------|---------------------------|
+| server.url | server address | http://127.0.0.1:8084/ymd |
 
 [TestHelper.kt]: https://github.com/simter/simter-ymd/blob/master/simter-ymd-test/src/main/kotlin/tech/simter/ymd/test/TestHelper.kt
 [rest-api.md]: https://github.com/simter/simter-ymd/blob/master/docs/rest-api.md

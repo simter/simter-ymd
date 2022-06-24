@@ -19,7 +19,6 @@
     <db.username>tester</db.username>
     <db.password>password</db.password>
     <db.url>~</db.url>
-    <db.protocol>~</db.protocol>
     <db.driver-class>~</db.driver-class>
     <db.init-mode>never</db.init-mode>
     <db.jpa-ddl-auto>none</db.jpa-ddl-auto>
