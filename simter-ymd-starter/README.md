@@ -35,14 +35,14 @@ mvn spring-boot:run -P r2dbc-embedded-postgres
 
 ## Maven Properties
 
-| Property Name | Default Value | Remark
-|---------------|---------------|--------
-| port          | 8084          | Web server port
-| db.host       | localhost     | Database host
-| db.name       | testdb        | Database name
-| db.username   | tester        | Database connect username
-| db.password   | password      | Database connect password
-| db.init-mode  | always        | Init database by `spring.datasource.schema/data` config. `never` or `always`
+| Property Name | Default Value | Remark                                                                       |
+|---------------|---------------|------------------------------------------------------------------------------|
+| port          | 8084          | Web server port                                                              |
+| db.host       | localhost     | Database host                                                                |
+| db.name       | testdb        | Database name                                                                |
+| db.username   | tester        | Database connect username                                                    |
+| db.password   | password      | Database connect password                                                    |
+| db.init-mode  | always        | Init database by `spring.datasource.schema/data` config. `never` or `always` |
 
 Use `-D {property-name}={property-value}` to override default value. Such as:
 
