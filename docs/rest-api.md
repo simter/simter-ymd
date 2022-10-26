@@ -1,14 +1,14 @@
 ## Rest API
 
-| Sn | Method | Url__________________________________| Description
-|----|--------|--------------------------------------|-------------
-| 1  | GET    | /{type}/year                         | Find all years of the specific type
-| 2  | GET    | /{type}/{year}/month                 | Find all months of the specific type and year
-| 3  | GET    | /{type}/{year}/{month}/day           | Find all days of the specific type, year and month
-| 4  | GET    | /{type}/year?with-latest-year-months | Find all years of the specific type, also load all months of the latest year
-| 5  | GET    | /{type}/year?with-latest-month-days  | Find all years of the specific type, also load all months of the latest year and all days of the latest month
-| 6  | POST   | /                                    | Create a new Ymd record
-| 7  | POST   | /{type}                              | Batch create multiple Ymd records for a specify type
+| Sn  | Method | Url                                  | Description                                                                                                   |
+|-----|--------|--------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| 1   | GET    | /{type}/year                         | Find all years of the specific type                                                                           |
+| 2   | GET    | /{type}/{year}/month                 | Find all months of the specific type and year                                                                 |
+| 3   | GET    | /{type}/{year}/{month}/day           | Find all days of the specific type, year and month                                                            |
+| 4   | GET    | /{type}/year?with-latest-year-months | Find all years of the specific type, also load all months of the latest year                                  |
+| 5   | GET    | /{type}/year?with-latest-month-days  | Find all years of the specific type, also load all months of the latest year and all days of the latest month |
+| 6   | POST   | /                                    | Create a new Ymd record                                                                                       |
+| 7   | POST   | /{type}                              | Batch create multiple Ymd records for a specify type                                                          |
 
 ### 1. Find all years of the specific type
 
@@ -18,9 +18,9 @@
 GET {context-path}/{type}/year
 ```
 
-| Name | Require | Description
-|------|---------|-------------
-| type | true    | 
+| Name | Require | Description |
+|------|---------|-------------|
+| type | true    |             |
 
 **Response：**
 
@@ -41,10 +41,10 @@ Content-Type : application/json;charset=utf-8
 GET {context-path}/{type}/{year}/month
 ```
 
-| Name | Require | Description
-|------|---------|-------------
-| type | true    | 
-| year | true    | 4 digits year, such as 2018
+| Name | Require | Description                 |
+|------|---------|-----------------------------|
+| type | true    |                             |
+| year | true    | 4 digits year, such as 2018 |
 
 **Response：**
 
@@ -65,11 +65,11 @@ Content-Type : application/json;charset=utf-8
 GET {context-path}/{type}/{year}/{month}/day
 ```
 
-| Name  | Require | Description
-|-------|---------|-------------
-| type  | true    | 
-| year  | true    | 6 digits year, such as 2018
-| month | true    | 1 or 2 digits month, such as 1 or 12
+| Name  | Require | Description                          |
+|-------|---------|--------------------------------------|
+| type  | true    |                                      |
+| year  | true    | 6 digits year, such as 2018          |
+| month | true    | 1 or 2 digits month, such as 1 or 12 |
 
 **Response：**
 
@@ -90,10 +90,10 @@ Content-Type : application/json;charset=utf-8
 GET {context-path}/{type}/year?with-latest-year-months
 ```
 
-| Name                    | Require | Description
-|-------------------------|---------|-------------
-| type                    | true    | 
-| with-latest-year-months | false   | given or set to true means also load the latest year's months
+| Name                    | Require | Description                                                   |
+|-------------------------|---------|---------------------------------------------------------------|
+| type                    | true    |                                                               |
+| with-latest-year-months | false   | given or set to true means also load the latest year's months |
 
 **Response：**
 
@@ -126,10 +126,10 @@ Response body example:
 GET {context-path}/{type}/year?with-latest-month-days
 ```
 
-| Name                   | Require | Description
-|------------------------|---------|-------------
-| type                   | true    | 
-| with-latest-month-days | false   | given or set to true means load to latest month's days
+| Name                   | Require | Description                                            |
+|------------------------|---------|--------------------------------------------------------|
+| type                   | true    |                                                        |
+| with-latest-month-days | false   | given or set to true means load to latest month's days |
 
 **Response：**
 
@@ -170,12 +170,12 @@ Content-Type : application/json;charset=UTF-8
 {type, year, month, day}
 ```
 
-| Name  | Require | Description
-|-------|---------|-------------
-| type  | true    | Max len 50 char string
-| year  | true    | 4 digits year number
-| month | false   | from 1 to 12 number, default 0 means ignored
-| day   | false   | from 1 to max 31 number (base on the max month day), default 0 means ignored
+| Name  | Require | Description                                                                  |
+|-------|---------|------------------------------------------------------------------------------|
+| type  | true    | Max len 50 char string                                                       |
+| year  | true    | 4 digits year number                                                         |
+| month | false   | from 1 to 12 number, default 0 means ignored                                 |
+| day   | false   | from 1 to max 31 number (base on the max month day), default 0 means ignored |
 
 **Response：(Success)**
 
@@ -202,12 +202,12 @@ Content-Type : application/json;charset=UTF-8
 [{year, month, day}, ...]
 ```
 
-| Name  | Require | Description
-|-------|---------|-------------
-| type  | true    | Max len 50 char string
-| year  | true    | 4 digits year number
-| month | false   | from 1 to 12 number, default 0 means ignored
-| day   | false   | from 1 to max 31 number (base on the max month day), default 0 means ignored
+| Name  | Require | Description                                                                  |
+|-------|---------|------------------------------------------------------------------------------|
+| type  | true    | Max len 50 char string                                                       |
+| year  | true    | 4 digits year number                                                         |
+| month | false   | from 1 to 12 number, default 0 means ignored                                 |
+| day   | false   | from 1 to max 31 number (base on the max month day), default 0 means ignored |
 
 **Response：(Success)**
 
