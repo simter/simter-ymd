@@ -18,7 +18,7 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @DataJpaTest
-class FindYearsMethodImplTest @Autowired constructor(
+class FindYearsTest @Autowired constructor(
   val rem: TestEntityManager,
   val dao: YmdDao
 ) {

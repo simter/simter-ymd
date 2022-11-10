@@ -19,7 +19,7 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @DataJpaTest
-class FindDaysMethodImplTest @Autowired constructor(
+class FindDaysTest @Autowired constructor(
   val rem: TestEntityManager,
   val dao: YmdDao
 ) {

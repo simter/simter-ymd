@@ -18,7 +18,7 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @ReactiveDataJpaTest
-class CreateMethodImplTest @Autowired constructor(
+class CreateTest @Autowired constructor(
   val rem: TestEntityManager,
   val dao: YmdDao
 ) {
@@ -36,21 +36,24 @@ class CreateMethodImplTest @Autowired constructor(
   @Test
   fun `Create one`() {
     // init data
-    val po = YmdPo.from(randomYmd())
+    val ymd = randomYmd()
+    val po = YmdPo.from(ymd)
 
     // invoke and verify
-    dao.create(po).test().verifyComplete()
+    dao.create(ymd).test().verifyComplete()
     assertEquals(po, rem.find(YmdPo::class.java, po.id).get())
   }
 
   @Test
   fun `Create two`() {
     // init data
-    val po1 = YmdPo.from(randomYmd())
-    val po2 = YmdPo.from(randomYmd())
+    val ymd1 = randomYmd()
+    val po1 = YmdPo.from(ymd1)
+    val ymd2 = randomYmd()
+    val po2 = YmdPo.from(ymd2)
 
     // invoke and verify
-    dao.create(po1, po2).test().verifyComplete()
+    dao.create(ymd1, ymd2).test().verifyComplete()
     assertEquals(po1, rem.find(YmdPo::class.java, po1.id).get())
     assertEquals(po2, rem.find(YmdPo::class.java, po2.id).get())
   }
