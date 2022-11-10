@@ -76,45 +76,6 @@ class CreateTest @Autowired constructor(
   }
 
   @Test
-  fun `Failed by missing type`() {
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .bodyValue("""{"year": 2019, "month": 1}""")
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
-      }
-
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .bodyValue("{}") // empty json
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
-      }
-  }
-
-  @Test
-  fun `Failed by missing year`() {
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .bodyValue("""{"type": "test", "month": 1}""")
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing year value!", responseBody)
-      }
-  }
-
-  @Test
   fun `Failed by empty body`() {
     // invoke and verify
     client.post().uri("/")
@@ -124,7 +85,7 @@ class CreateTest @Autowired constructor(
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
       .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
+        assertEquals("Empty body!", responseBody)
       }
   }
 
@@ -137,7 +98,7 @@ class CreateTest @Autowired constructor(
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
       .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
+        assertEquals("Empty body!", responseBody)
       }
   }
 }

@@ -1,6 +1,8 @@
 package tech.simter.ymd.rest.webflux.handler
 
 
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -22,25 +24,14 @@ import tech.simter.ymd.core.YmdService
  */
 @Component
 class CreateHandler @Autowired constructor(
-  private val service: YmdService
+  private val json: Json,
+  private val service: YmdService,
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
-    return request.bodyToMono<Map<String, Any>>()
-      .switchIfEmpty(Mono.just(mapOf())) // no body
-      // verify
-      .doOnNext {
-        if (!it.containsKey("type")) throw IllegalStateException("Missing type value!")
-        if (!it.containsKey("year")) throw IllegalStateException("Missing year value!")
-      }
+    return request.bodyToMono<String>()
+      .switchIfEmpty(Mono.error(IllegalStateException("Empty body!")))
       // convert to ymd
-      .map {
-        Ymd.of(
-          type = it["type"] as String,
-          year = it["year"] as Int,
-          month = (it["month"] as? Int) ?: 0,
-          day = (it["day"] as? Int) ?: 0
-        )
-      }
+      .map { json.decodeFromString(it) as Ymd }
       // save
       .flatMap { service.create(it) }
       // response

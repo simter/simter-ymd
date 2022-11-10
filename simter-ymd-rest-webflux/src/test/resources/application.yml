@@ -5,3 +5,9 @@ logging:
     root: ERROR
     tech.simter.ymd: ERROR
 simter-ymd.rest-context-path: /
+simter:
+  jackson.disabled: true
+  kotlinx-serialization:
+    disabled: false
+    remove-class-discriminator: false
+    class-discriminator: "#class" # default 'type'

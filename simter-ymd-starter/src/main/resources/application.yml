@@ -22,6 +22,11 @@ simter:
     secret-key: @simter.jwt.secret-key@
     require-authorized: @simter.jwt.require-authorized@
     exclude-paths: /static, /scheduler, /favicon.ico
+  jackson.disabled: true
+  kotlinx-serialization:
+    disabled: false
+    remove-class-discriminator: false
+    class-discriminator: "#class" # default 'type'
   mongodb:
     enabled-logging-event-listener: ${debug:false}
 spring:
