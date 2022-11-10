@@ -8,7 +8,7 @@ simter-ymd.authorization:
     DELETE:
       roles: ["DELETER", "MANAGER"]
       strategy: "And"
-    SAVE.roles: "MANAGER"
+    EDIT.roles: "MANAGER"
 logging:
   file.name: target/test.log
   level: # TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF

@@ -8,8 +8,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.core.publisher.Mono
 import reactor.kotlin.test.test
 import tech.simter.reactive.security.ModuleAuthorizer
-import tech.simter.ymd.OPERATION_SAVE
 import tech.simter.ymd.UnitTestConfiguration
+import tech.simter.ymd.core.Ymd.Companion.OPERATION_EDIT
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.core.YmdService
 import tech.simter.ymd.test.TestHelper.randomYmd
@@ -20,7 +20,7 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
-class CreateMethodImplTest @Autowired constructor(
+class CreateTest @Autowired constructor(
   private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao,
   private val service: YmdService
@@ -29,12 +29,12 @@ class CreateMethodImplTest @Autowired constructor(
   fun `Create nothing`() {
     // mock
     every { dao.create() } returns Mono.empty()
-    every { moduleAuthorizer.verifyHasPermission(OPERATION_SAVE) } returns Mono.empty()
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_EDIT) } returns Mono.empty()
 
     // invoke and verify
     service.create().test().verifyComplete()
     verify(exactly = 1) {
-      moduleAuthorizer.verifyHasPermission(OPERATION_SAVE)
+      moduleAuthorizer.verifyHasPermission(OPERATION_EDIT)
       dao.create()
     }
   }
@@ -44,12 +44,12 @@ class CreateMethodImplTest @Autowired constructor(
     // mock
     val po = randomYmd()
     every { dao.create(po) } returns Mono.empty()
-    every { moduleAuthorizer.verifyHasPermission(OPERATION_SAVE) } returns Mono.empty()
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_EDIT) } returns Mono.empty()
 
     // invoke and verify
     service.create(po).test().verifyComplete()
     verify(exactly = 1) {
-      moduleAuthorizer.verifyHasPermission(OPERATION_SAVE)
+      moduleAuthorizer.verifyHasPermission(OPERATION_EDIT)
       dao.create(po)
     }
   }
@@ -60,12 +60,12 @@ class CreateMethodImplTest @Autowired constructor(
     val po1 = randomYmd()
     val po2 = randomYmd()
     every { dao.create(po1, po2) } returns Mono.empty()
-    every { moduleAuthorizer.verifyHasPermission(OPERATION_SAVE) } returns Mono.empty()
+    every { moduleAuthorizer.verifyHasPermission(OPERATION_EDIT) } returns Mono.empty()
 
     // invoke and verify
     service.create(po1, po2).test().verifyComplete()
     verify(exactly = 1) {
-      moduleAuthorizer.verifyHasPermission(OPERATION_SAVE)
+      moduleAuthorizer.verifyHasPermission(OPERATION_EDIT)
       dao.create(po1, po2)
     }
   }
