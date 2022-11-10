@@ -19,7 +19,7 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @DataMongoTest
-class FindMonthsMethodImplTest @Autowired constructor(
+class FindMonthsTest @Autowired constructor(
   private val repository: YmdRepository,
   private val dao: YmdDao
 ) {
