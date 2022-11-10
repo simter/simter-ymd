@@ -39,7 +39,7 @@ object TestHelper {
     day: Int = randomDay()
   ): Ymd {
     val maxDay = Month.of(month).maxLength()
-    return Ymd.of(
+    return Ymd(
       type = type,
       year = year,
       month = month,

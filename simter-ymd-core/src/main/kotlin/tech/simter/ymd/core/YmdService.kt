@@ -61,7 +61,7 @@ interface YmdService {
    * Find all years of the specific [type].
    *
    * Also find all months of the latest year if it exists.
-   * Then if the latest year has one month at least, continue find all days of the latest month.
+   * Then, if the latest year has one month at least, continue find all days of the latest month.
    *
    * The result is ordered by year desc, month desc, day desc.
    */
