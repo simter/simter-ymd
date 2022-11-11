@@ -1,5 +1,10 @@
 # simter-ymd changelog
 
+## 2.2.0 - 2022-11-11
+
+- Refactor domain interface to data class
+- Remove jackson dependencies globally
+
 ## 2.1.0 - 2022-10-11
 
 - Upgrade to simter-3.3.0 (spring-boot-2.7.4)
