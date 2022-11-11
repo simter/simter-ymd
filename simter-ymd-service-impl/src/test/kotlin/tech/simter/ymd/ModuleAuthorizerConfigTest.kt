@@ -16,6 +16,9 @@ import tech.simter.reactive.security.ReactiveSecurityService
 import tech.simter.reactive.security.properties.LogicStrategy
 import tech.simter.reactive.security.properties.ModuleAuthorizeProperties
 import tech.simter.reactive.security.properties.PermissionStrategy
+import tech.simter.ymd.core.Ymd.Companion.OPERATION_DELETE
+import tech.simter.ymd.core.Ymd.Companion.OPERATION_EDIT
+import tech.simter.ymd.core.Ymd.Companion.OPERATION_READ
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.core.YmdService
 import tech.simter.ymd.impl.service.ModuleConfiguration
@@ -51,7 +54,7 @@ class ModuleAuthorizerConfigTest @Autowired constructor(
     assertEquals(listOf("DELETER", "MANAGER"), operation.roles)
 
     // 4. save
-    operation = properties.operations.getValue(OPERATION_SAVE)
+    operation = properties.operations.getValue(OPERATION_EDIT)
     assertEquals(LogicStrategy.Or, operation.strategy)
     assertEquals(listOf("MANAGER"), operation.roles)
 

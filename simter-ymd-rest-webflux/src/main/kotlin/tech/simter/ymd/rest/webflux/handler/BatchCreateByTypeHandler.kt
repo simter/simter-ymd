@@ -1,6 +1,9 @@
 package tech.simter.ymd.rest.webflux.handler
 
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Component
@@ -19,19 +22,21 @@ import tech.simter.ymd.core.YmdService
  */
 @Component
 class BatchCreateByTypeHandler @Autowired constructor(
-  private val service: YmdService
+  private val json: Json,
+  private val service: YmdService,
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
     val type = request.pathVariable("type")
-    return request.bodyToMono<List<Map<String, Any>>>()
+    return request.bodyToMono<String>()
       // convert to ymd
-      .map { list ->
+      .map { jsonArrayStr ->
+        val list: List<YmdWithoutType> = json.decodeFromString(jsonArrayStr)
         list.map {
-          Ymd.of(
+          Ymd(
             type = type,
-            year = it["year"] as Int,
-            month = (it["month"] as? Int) ?: 0,
-            day = (it["day"] as? Int) ?: 0
+            year = it.year,
+            month = it.month,
+            day = it.day,
           )
         }
       }
@@ -44,4 +49,14 @@ class BatchCreateByTypeHandler @Autowired constructor(
   companion object {
     val REQUEST_PREDICATE: RequestPredicate = POST("/{type}").and(contentType(APPLICATION_JSON))
   }
+
+  @Serializable
+  private data class YmdWithoutType(
+    /** 4 digits year, such as 2018 */
+    val year: Int,
+    /** month from 1 to 12. 0 means ignored */
+    val month: Int = 0,
+    /** day from 1 to 31. 0 means ignored */
+    val day: Int = 0,
+  )
 }

@@ -32,8 +32,8 @@ class BatchCreateByTypeHandlerTest @Autowired constructor(
   fun `Success with data`() {
     // mock
     val list = listOf(
-      Ymd.of(type = type, year = 2001, month = 1, day = 1),
-      Ymd.of(type = type, year = 2001, month = 1, day = 2)
+      Ymd(type = type, year = 2001, month = 1, day = 1),
+      Ymd(type = type, year = 2001, month = 1, day = 2)
     )
     val data = Json.createArrayBuilder()
     list.forEach {

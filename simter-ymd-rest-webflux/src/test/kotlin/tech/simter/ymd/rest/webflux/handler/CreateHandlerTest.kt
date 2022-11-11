@@ -85,54 +85,6 @@ class CreateHandlerTest @Autowired constructor(
   }
 
   @Test
-  fun `Failed by missing type`() {
-    // mock
-    every { service.create(any()) } returns Mono.empty()
-
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .bodyValue("""{"year": 2019, "month": 1}""")
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
-      }
-    verify(exactly = 0) { service.create(any()) }
-
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .bodyValue("{}") // empty json
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
-      }
-    verify(exactly = 0) { service.create(any()) }
-  }
-
-  @Test
-  fun `Failed by missing year`() {
-    // mock
-    every { service.create(any()) } returns Mono.empty()
-
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .bodyValue("""{"type": "test", "month": 1}""")
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing year value!", responseBody)
-      }
-    verify(exactly = 0) { service.create(any()) }
-  }
-
-  @Test
   fun `Failed by empty body`() {
     // mock
     every { service.create(any()) } returns Mono.empty()
@@ -144,18 +96,7 @@ class CreateHandlerTest @Autowired constructor(
       .expectStatus().isBadRequest
       .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
       .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
-      }
-    verify(exactly = 0) { service.create(any()) }
-
-    // invoke and verify
-    client.post().uri("/")
-      .contentType(APPLICATION_JSON)
-      .exchange()
-      .expectStatus().isBadRequest
-      .expectHeader().contentType("${MediaType.TEXT_PLAIN_VALUE};charset=UTF-8")
-      .expectBody(String::class.java).returnResult().apply {
-        assertEquals("Missing type value!", responseBody)
+        assertEquals("Empty body!", responseBody)
       }
     verify(exactly = 0) { service.create(any()) }
   }

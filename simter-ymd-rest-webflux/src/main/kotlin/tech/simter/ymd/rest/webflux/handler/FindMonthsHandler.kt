@@ -1,5 +1,7 @@
 package tech.simter.ymd.rest.webflux.handler
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Component
@@ -21,7 +23,8 @@ import tech.simter.ymd.core.YmdService
  */
 @Component("tech.simter.ymd.rest.webflux.handler.FindMonthsHandler")
 class FindMonthsHandler @Autowired constructor(
-  private val ymdService: YmdService
+  private val json: Json,
+  private val ymdService: YmdService,
 ) : HandlerFunction<ServerResponse> {
   override fun handle(request: ServerRequest): Mono<ServerResponse> {
     val type = request.pathVariable("type")
@@ -30,7 +33,7 @@ class FindMonthsHandler @Autowired constructor(
     return ymdService.findMonths(type, year).collectList()
       .flatMap {
         if (it.isEmpty()) noContent().build() // 204
-        else ok().contentType(APPLICATION_JSON).bodyValue(it) // 200
+        else ok().contentType(APPLICATION_JSON).bodyValue(json.encodeToString(it)) // 200
       }
   }
 

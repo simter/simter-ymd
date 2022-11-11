@@ -7,7 +7,6 @@ import reactor.core.publisher.Mono
 import tech.simter.reactive.jpa.ReactiveJpaWrapper
 import tech.simter.ymd.core.Ymd
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.jpa.po.YmdPo
 
 /**
  * The JPA implementation of [YmdDao].
@@ -20,7 +19,7 @@ class YmdDaoImpl @Autowired constructor(
   private val wrapper: ReactiveJpaWrapper
 ) : YmdDao {
   override fun create(vararg ymd: Ymd): Mono<Void> {
-    return wrapper.fromRunnable { blockDao.save(*ymd.map { YmdPo.from(it) }.toTypedArray()) }
+    return wrapper.fromRunnable { blockDao.save(*ymd) }
   }
 
   override fun findYears(type: String): Flux<Int> {

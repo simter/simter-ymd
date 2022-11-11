@@ -1,13 +1,12 @@
 package tech.simter.ymd.impl.dao.r2dbc
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
-import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.r2dbc.TestHelper.insert
 import tech.simter.ymd.test.TestHelper.randomType
 import tech.simter.ymd.test.TestHelper.randomYmd
 
@@ -18,10 +17,15 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @DataR2dbcTest
-class FindMonthsMethodImplTest @Autowired constructor(
-  private val client: DatabaseClient,
+class FindMonthsTest @Autowired constructor(
+  private val helper: TestHelper,
   private val dao: YmdDao
 ) {
+  @BeforeEach
+  fun clean() {
+    helper.clean().test().verifyComplete()
+  }
+
   @Test
   fun `Found nothing`() {
     dao.findMonths(type = randomType(), year = 2000)
@@ -37,7 +41,7 @@ class FindMonthsMethodImplTest @Autowired constructor(
     val t1y2m = randomYmd(type = t1y1m1.type, year = 2002, month = 3) // another year
     val t2ym = randomYmd(type = randomType(), year = 2003, month = 4) // another type
     val all = listOf(t1y1m1, t1y1m2, t1y2m, t2ym)
-    all.forEach { insert(client = client, ymd = it) }
+    dao.create(*all.toTypedArray()).test().verifyComplete()
 
     // invoke and verify with desc order
     dao.findMonths(type = t1y1m1.type, year = t1y1m1.year)

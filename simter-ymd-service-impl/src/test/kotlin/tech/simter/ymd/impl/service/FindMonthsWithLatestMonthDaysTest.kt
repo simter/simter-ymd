@@ -13,8 +13,8 @@ import reactor.kotlin.test.test
 import tech.simter.reactive.security.ModuleAuthorizer
 import tech.simter.util.RandomUtils.randomInt
 import tech.simter.util.RandomUtils.randomString
-import tech.simter.ymd.OPERATION_READ
 import tech.simter.ymd.UnitTestConfiguration
+import tech.simter.ymd.core.Ymd.Companion.OPERATION_READ
 import tech.simter.ymd.core.YmdDao
 import tech.simter.ymd.core.YmdService
 import java.time.Month
@@ -25,7 +25,7 @@ import java.time.Month
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
-class FindMonthsWithLatestMonthDaysMethodImplTest @Autowired constructor(
+class FindMonthsWithLatestMonthDaysTest @Autowired constructor(
   private val moduleAuthorizer: ModuleAuthorizer,
   private val dao: YmdDao,
   private val service: YmdService

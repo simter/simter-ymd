@@ -1,33 +1,27 @@
-package tech.simter.ymd.impl.dao.mongo
+package tech.simter.ymd.impl.dao.jpa
 
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
+import tech.simter.reactive.test.jpa.TestEntityManager
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.mongo.TestHelper.nextId
-import tech.simter.ymd.impl.dao.mongo.po.YmdPo
+import tech.simter.ymd.impl.dao.jpa.po.YmdPo
 import tech.simter.ymd.test.TestHelper.randomType
 import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
- * Test [YmdDaoImpl.findYears].
+ * Test [YmdDaoImpl.create].
  *
  * @author RJ
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
-@DataMongoTest
-class FindYearsMethodImplTest @Autowired constructor(
-  private val repository: YmdRepository,
-  private val dao: YmdDao
+@DataJpaTest
+class FindYearsTest @Autowired constructor(
+  val rem: TestEntityManager,
+  val dao: YmdDao
 ) {
-  @BeforeEach
-  fun clean() {
-    repository.deleteAll().test().verifyComplete()
-  }
-
   @Test
   fun `Found nothing`() {
     dao.findYears(type = randomType()).test().verifyComplete()
@@ -38,12 +32,8 @@ class FindYearsMethodImplTest @Autowired constructor(
     // init data
     val t1y1 = YmdPo.from(randomYmd(type = randomType(), year = 2000))
     val t1y2 = YmdPo.from(randomYmd(type = t1y1.type, year = 2001))
-    val t1y2c = t1y2.copy(id = nextId())                   // duplicate with t1y2
     val t2y1 = YmdPo.from(randomYmd(type = randomType(), year = 2018)) // another type
-    val all = listOf(t1y1, t1y2, t1y2c, t2y1)
-    repository.saveAll(all).test()
-      .expectNextCount(all.size.toLong())
-      .verifyComplete()
+    rem.persist(t1y1, t1y2, t2y1)
 
     // invoke and verify with desc order
     dao.findYears(type = t1y1.type).test()

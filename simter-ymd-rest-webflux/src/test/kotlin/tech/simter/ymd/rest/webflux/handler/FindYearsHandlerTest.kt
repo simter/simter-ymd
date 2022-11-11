@@ -70,8 +70,8 @@ class FindYearsHandlerTest @Autowired constructor(
     val type = randomString()
     val latestYearMonths = listOf(2, 1)
     val years = listOf(
-      YearWithItsMonths.of(year = 2009, months = latestYearMonths),
-      YearWithItsMonths.of(year = 2008)
+      YearWithItsMonths(year = 2009, months = latestYearMonths),
+      YearWithItsMonths(year = 2008)
     )
     every { ymdService.findYearsWithLatestYearMonths(type) } returns Flux.just(*years.toTypedArray())
 
@@ -100,12 +100,12 @@ class FindYearsHandlerTest @Autowired constructor(
     // mock
     val type = randomString()
     val latestYearMonths = listOf(
-      MonthWithItsDays.of(month = 2, days = listOf(9, 8)),
-      MonthWithItsDays.of(month = 1)
+      MonthWithItsDays(month = 2, days = listOf(9, 8)),
+      MonthWithItsDays(month = 1)
     )
     val years = listOf(
-      YearWithItsMonthDays.of(year = 2009, months = latestYearMonths),
-      YearWithItsMonthDays.of(year = 2008)
+      YearWithItsMonthDays(year = 2009, months = latestYearMonths),
+      YearWithItsMonthDays(year = 2008)
     )
     every { ymdService.findYearsWithLatestMonthDays(type) } returns Flux.just(*years.toTypedArray())
 

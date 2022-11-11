@@ -9,10 +9,9 @@ import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import reactor.kotlin.test.test
-import tech.simter.ymd.TABLE_YMD
 import tech.simter.ymd.core.Ymd
+import tech.simter.ymd.core.Ymd.Companion.TABLE
 import tech.simter.ymd.core.YmdDao
-import tech.simter.ymd.impl.dao.r2dbc.TestHelper.clean
 import tech.simter.ymd.test.TestHelper.randomYmd
 
 /**
@@ -22,19 +21,20 @@ import tech.simter.ymd.test.TestHelper.randomYmd
  */
 @SpringJUnitConfig(UnitTestConfiguration::class)
 @DataR2dbcTest
-class CreateMethodImplTest @Autowired constructor(
+class CreateTest @Autowired constructor(
+  private val helper: TestHelper,
   private val client: DatabaseClient,
   private val dao: YmdDao
 ) {
   @BeforeEach
   fun clean() {
-    clean(client = client)
+    helper.clean().test().verifyComplete()
   }
 
   @Test
   fun `Create nothing`() {
     dao.create().test().verifyComplete()
-    client.sql("select count(*) from $TABLE_YMD")
+    client.sql("select count(*) from $TABLE")
       .map { row -> row.get(0, Long::class.javaObjectType) }
       .one()
       .test()
@@ -50,7 +50,7 @@ class CreateMethodImplTest @Autowired constructor(
     dao.create(ymd).test().verifyComplete()
 
     // verify saved
-    client.sql("select * from $TABLE_YMD where t = :t")
+    client.sql("select * from $TABLE where t = :t")
       .bind("t", ymd.type)
       .map(this::rowMapper4Ymd)
       .one()
@@ -69,17 +69,17 @@ class CreateMethodImplTest @Autowired constructor(
     dao.create(ymd1, ymd2).test().verifyComplete()
 
     // verify saved
-    client.sql("select * from $TABLE_YMD order by y asc")
+    client.sql("select * from $TABLE order by y asc")
       .map(this::rowMapper4Ymd)
       .all()
       .test()
-      .assertNext { assertThat(ymd1).usingRecursiveComparison().isEqualTo(it) }
-      .assertNext { assertThat(ymd2).usingRecursiveComparison().isEqualTo(it) }
+      .expectNext(ymd1)
+      .expectNext(ymd2)
       .verifyComplete()
   }
 
   private fun rowMapper4Ymd(row: Row): Ymd {
-    return Ymd.of(
+    return Ymd(
       type = row.get("t", String::class.java)!!,
       year = row.get("y", Short::class.javaObjectType)!!.toInt(),
       month = row.get("m", Short::class.javaObjectType)!!.toInt(),
